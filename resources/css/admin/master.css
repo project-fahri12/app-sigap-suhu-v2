@@ -1,0 +1,184 @@
+   :root {
+            --p-green: #198754;
+            --bg-body: #f4f7f6;
+            --sidebar-w: 260px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-body);
+            margin: 0;
+            overflow: hidden;
+            /* Mencegah double scrollbar di body */
+        }
+
+        /* --- LAYOUT STRUCTURE --- */
+        .layout-wrapper {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* --- SIDEBAR (SCROLLABLE) --- */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: white;
+            border-right: 1px solid #eef2f1;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            z-index: 1050;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-menu-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            /* Aktifkan scroll hanya di area menu */
+            padding: 0 1rem 2rem 1rem;
+        }
+
+        /* Custom Scrollbar untuk Sidebar */
+        .sidebar-menu-container::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-menu-container::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            /* Menghindari overflow pada flex item */
+            height: 100vh;
+        }
+
+        .content-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-custom .nav-link {
+            color: #64748b;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            transition: 0.2s;
+        }
+
+        .nav-custom .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .nav-custom .nav-link:hover,
+        .nav-custom .nav-link.active {
+            background: #f0fdf4;
+            color: var(--p-green);
+        }
+
+        .nav-custom .nav-link.active {
+            background: var(--p-green);
+            color: white;
+            box-shadow: 0 4px 12px rgba(25, 135, 84, 0.2);
+        }
+
+        .nav-header {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #cbd5e0;
+            margin: 20px 0 10px 15px;
+            letter-spacing: 1px;
+        }
+
+        /* --- NAVBAR & DROPDOWN --- */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #eef2f1;
+            padding: 0.75rem 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .profile-dropdown .dropdown-toggle::after {
+            display: none;
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 0.5rem;
+            min-width: 200px;
+        }
+
+        .dropdown-item {
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .dropdown-item:hover {
+            background: #f8faf9;
+            color: var(--p-green);
+        }
+
+        /* --- CARDS --- */
+        .module-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #edf2f7;
+            margin-bottom: 20px;
+        }
+
+        .master-switch-card {
+            background: linear-gradient(45deg, #1e293b, #334155);
+            color: white;
+            border-radius: 16px;
+            padding: 25px;
+        }
+
+        /* --- MOBILE RESPONSIVE --- */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                position: fixed;
+                left: calc(-1 * var(--sidebar-w));
+                height: 100vh;
+            }
+
+            .sidebar.is-active {
+                left: 0;
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1040;
+            }
+
+            .sidebar-overlay.is-active {
+                display: block;
+            }
+        }

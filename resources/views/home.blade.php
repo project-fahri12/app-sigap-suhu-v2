@@ -181,8 +181,8 @@
                     <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
                 </ul>
                 <div class="d-flex gap-2">
-                    <a href="login-pendaftar.html" class="btn btn-outline-success rounded-pill px-4" >Login</a>
-                    <a href="regist.html" class="btn btn-ppdb">Daftar PPDB</a>
+                    <a href="{{ route('auth.pendaftar')  }}" class="btn btn-outline-success rounded-pill px-4" >Login</a>
+                    <a href="{{ route('regist') }}" class="btn btn-ppdb">Daftar PPDB</a>
                 </div>
             </div>
         </div>

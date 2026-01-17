@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class UserPondok extends Model
+class UserSekolah extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_pondoks';
+    protected $table = 'user_sekolah';
 
     protected $fillable = [
         'user_id',
-        'pondok_id',
+        'sekolah_id',
     ];
 
     /* ================= RELATIONS ================= */
@@ -23,8 +23,8 @@ class UserPondok extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function pondok()
+    public function sekolah()
     {
-        return $this->belongsTo(Pondok::class, 'pondok_id');
+        return $this->belongsTo(Sekolah::class, 'sekolah_id');
     }
 }
