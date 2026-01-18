@@ -1,0 +1,5 @@
+@extends('errors.layout')
+@section('title', 'Akses Ditolak')
+@section('code', '401')
+@section('message', 'Sesi Berakhir')
+@section('description', 'Silakan login kembali untuk melanjutkan akses ke sistem.')

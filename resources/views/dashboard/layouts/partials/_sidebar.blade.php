@@ -1,5 +1,6 @@
   <nav class="nav-custom">
 
+                   @if(auth()->user()->hasRole('super-admin'))
                     <a href="{{ route('superadmin.dashboard') }}" class="nav-link {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
                         <i class="fas fa-th-large"></i> Dashboard
                     </a>
@@ -16,6 +17,9 @@
                     </a>
 
                     <div class="nav-header">Data Master</div>
+                    <a href="{{ route('superadmin.role.index') }}" class="nav-link {{ request()->routeIs('superadmin.role.index') ? 'active' : '' }} }}">
+                        <i class="fas fa-users-cog"></i> Role Manajemen
+                    </a>
                     <a href="{{ route('superadmin.manajemen-user.index') }}" class="nav-link {{ request()->routeIs('superadmin.manajemen-user.index') ? 'active' : '' }} }}">
                         <i class="fas fa-users-cog"></i> User Manajemen
                     </a>
@@ -44,5 +48,6 @@
                         <i class="fas fa-user-graduate"></i> Data Santri
                     </a>
 
+                   @endif
                     <div style="height:20px"></div>
                 </nav>

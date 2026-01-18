@@ -16,13 +16,24 @@ class UserManajemenController extends Controller
 {
     public function index()
     {
-        return view('dashboard.superadmin.manajemenuser.index', [
-            // Eager loading relasi Many-to-Many
-            'users' => User::with(['roles', 'sekolah', 'pondok'])->latest()->get(),
-            'roles' => Role::all(),
-            'sekolah' => Sekolah::all(),
-            'pondok' => Pondok::all(),
-        ]);
+        // Ambil user + relasi yang dipakai di blade
+        $users = User::with([
+            'roles:id,name,label',
+            'sekolah:id,nama_sekolah',
+            'pondok:id,nama_pondok',
+        ])->orderBy('name')->get();
+
+        // Data untuk modal
+        $roles = Role::select('id', 'name', 'label')->orderBy('label')->get();
+        $sekolahs = Sekolah::select('id', 'nama_sekolah')->orderBy('nama_sekolah')->get();
+        $pondoks = Pondok::select('id', 'nama_pondok')->orderBy('nama_pondok')->get();
+
+        return view('dashboard.superadmin.manajemenuser.index', compact(
+            'users',
+            'roles',
+            'sekolahs',
+            'pondoks'
+        ));
     }
 
     public function store(Request $request)
@@ -76,7 +87,7 @@ class UserManajemenController extends Controller
 
             // Jika ada sekolah_id, sinkronkan. Jika kosong, hapus akses sekolah.
             $user->sekolah()->sync($request->sekolah_id ? [$request->sekolah_id] : []);
-            
+
             // Jika ada pondok_id, sinkronkan. Jika kosong, hapus akses pondok.
             $user->pondok()->sync($request->pondok_id ? [$request->pondok_id] : []);
         });
@@ -91,10 +102,21 @@ class UserManajemenController extends Controller
             $user->roles()->detach();
             $user->sekolah()->detach();
             $user->pondok()->detach();
-            
+
             $user->delete();
         });
 
         return back()->with('success', 'User berhasil dihapus dari sistem');
+    }
+
+    public function toggle($id)
+    {
+        $user = User::findOrFail($id);
+
+        $newStatus = ($user->is_aktif == '1') ? '0' : '1';
+
+        $user->update(['is_aktif' => $newStatus]);
+
+        return back()->with('success', 'Status user berhasil diperbarui.');
     }
 }

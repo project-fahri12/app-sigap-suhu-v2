@@ -28,33 +28,32 @@ class User extends Authenticatable
         'is_aktif' => 'boolean',
     ];
 
-    /* ================= RELATIONS ================= */
+    /* Relasi */
 
-    // role user (via pivot model)
-    public function userRoles()
-    {
-        return $this->hasMany(UserRole::class, 'user_id');
-    }
-
+    // ROLE
     public function roles()
     {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    // SEKOLAH (langsung)
+    public function sekolah()
+    {
+        return $this->belongsToMany(Sekolah::class, 'user_sekolah');
+    }
+
+    // PONDOK (langsung)
+    public function pondok()
+    {
         return $this->belongsToMany(
-            Role::class,
-            'user_roles',
-            'user_id',
-            'role_id'
+            Pondok::class,
+            'user_pondoks'
         );
     }
 
-    // sekolah yang diakses user
-    public function userSekolah()
+    // helper untuk chek role dicntroler
+    public function hasRole($roleName)
     {
-        return $this->hasMany(UserSekolah::class, 'user_id');
-    }
-
-    // pondok yang diakses user
-    public function userPondoks()
-    {
-        return $this->hasMany(UserPondok::class, 'user_id');
+        return $this->roles()->where('name', $roleName)->exists();
     }
 }

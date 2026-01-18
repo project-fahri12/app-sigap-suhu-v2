@@ -1,0 +1,5 @@
+@extends('errors.layout')
+@section('title', 'Sedang Pemeliharaan')
+@section('code', '503')
+@section('message', 'Sistem Sedang Istirahat')
+@section('description', 'Kami sedang melakukan pembaruan rutin untuk memastikan sistem tetap kencang dan aman. Kami akan kembali secepatnya!')

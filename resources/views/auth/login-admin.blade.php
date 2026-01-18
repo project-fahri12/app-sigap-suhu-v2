@@ -1,32 +1,38 @@
 
-<!DOCTYPE html>
+<!DOCTPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Panel Login | Yayasan Pendidikan</title>
-
+     <meta charset="UTF-8">
+    
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Admin Panel Login | Yayasan Pendidikan</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <l
+ink href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font
+-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
+
             --admin-primary: #0a2b1c; 
             --admin-success: #198754;
-            --admin-bg: #f4f7f6;
+           --adminbg: #f4f7f6;
             --gradient-admin: linear-gradient(135deg, #0a2b1c 0%, #198754 100%);
         }
 
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--admin-bg);
+            back
+ground-color: var(--admin-bg);
             min-height: 100vh;
             display: flex;
-            align-items: center;
+           align-itms: center;
             justify-content: center;
             margin: 0;
             padding: 20px;
@@ -73,7 +79,7 @@
         .admin-header i {
             font-size: 3.5rem;
             margin-bottom: 15px;
-            color: #ffc107; /* Aksen Gold untuk simbol otoritas */
+            color: #ffc107; 
         }
 
         .admin-header h4 {
@@ -168,12 +174,12 @@
 
     <div class="admin-auth-wrapper animate__animated animate__fadeIn">
         
-        <div class="text-center mb-4">
+        <!-- <div class="text-center mb-4">
             <h5 class="fw-bold text-dark">
                 <i class="fas fa-shield-alt text-success me-2"></i>
                 PPDB SISTEM <span class="text-success">V4.0</span>
             </h5>
-        </div>
+        </div> -->
 
         <div class="admin-login-card">
             <div class="admin-header">
@@ -183,43 +189,65 @@
             </div>
 
             <div class="admin-body">
-                <form action="admin-dashboard.html" method="POST">
-                    
-                    <div class="mb-4">
-                        <label class="form-label">Email / Username Staf</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            <input type="text" class="form-control" placeholder="admin@yayasan.com" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label">Password Keamanan</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                            <input type="password" id="adminPass" class="form-control" placeholder="••••••••" required>
-                            <button class="btn btn-light border-0" type="button" onclick="toggleAdminPass()">
-                                <i class="fas fa-eye" id="adminEye"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <a href="/dashbaord superadmin/dashboard.html" class="btn btn-admin-login shadow-sm">
-                        MASUK PANEL ADMIN <i class="fas fa-sign-in-alt ms-2"></i>
-                    </a>
-
-                    <div class="text-center mt-4">
-                        <a href="index.html" class="text-decoration-none small text-muted hover-success">
-                            <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
-                        </a>
-                    </div>
-                </form>
-
-                <div class="security-badge">
-                    <i class="fas fa-lock"></i>
-                    <span>Encrypted Connection & Secure Session</span>
-                </div>
+    <form action="{{ route('auth.admin.store') }}" method="POST">
+        @csrf {{-- 2. Wajib untuk keamanan Laravel --}}
+        
+        {{-- 3. Alert jika terjadi kesalahan login --}}
+        @if($errors->has('login'))
+            <div class="alert alert-danger py-2 small border-0 mb-3" style="border-radius: 10px;">
+                <i class="fas fa-exclamation-circle me-2"></i> {{ $errors->first('login') }}
             </div>
+        @endif
+
+        <div class="mb-4">
+            <label class="form-label">Email / Username Staf</label>
+            <div class="input-group @error('login') border-danger @enderror">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                {{-- 4. Tambahkan name="login" dan value old() agar input tidak hilang saat gagal --}}
+                <input type="text" 
+                       name="login" 
+                       class="form-control" 
+                       placeholder="admin@yayasan.com" 
+                       value="{{ old('login') }}" 
+                       required 
+                       autofocus>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Password Keamanan</label>
+            <div class="input-group @error('password') border-danger @enderror">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                {{-- 5. Tambahkan name="password" --}}
+                <input type="password" 
+                       name="password" 
+                       id="adminPass" 
+                       class="form-control" 
+                       placeholder="••••••••" 
+                       required>
+                <button class="btn btn-light border-0" type="button" onclick="toggleAdminPass()">
+                    <i class="fas fa-eye" id="adminEye"></i>
+                </button>
+            </div>
+        </div>
+
+        {{-- 6. Ganti <a> menjadi <button type="submit"> --}}
+        <button type="submit" class="btn btn-admin-login shadow-sm border-0 w-100">
+            MASUK PANEL ADMIN <i class="fas fa-sign-in-alt ms-2"></i>
+        </button>
+
+        <div class="text-center mt-4">
+            <a href="{{ route('home') }}" class="text-decoration-none small text-muted hover-success">
+                <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
+            </a>
+        </div>
+    </form>
+
+    <div class="security-badge">
+        <i class="fas fa-lock"></i>
+        <span>Encrypted Connection & Secure Session</span>
+    </div>
+</div>
         </div>
 
         <p class="text-center mt-4 small text-muted">
