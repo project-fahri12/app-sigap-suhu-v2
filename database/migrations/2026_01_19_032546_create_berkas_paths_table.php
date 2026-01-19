@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('pondoks', function (Blueprint $table) {
+        Schema::create('berkas_paths', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_pondok')->unique();
-            $table->string('nama_pondok');
-            $table->string('yayasan_mitra')->nullable();
-            $table->string('jenis'); 
-            $table->string('pengasuh')->nullable();
+            $table->foreignId('pendaftar_id')->constrained('pendaftars')->onDelete('cascade');
+            $table->string('jenis_berkas'); // KK, Ijazah, dll
+            $table->string('path_file');
+            $table->string('status_berkas')->default('pending');
             $table->boolean('is_aktif')->default(true);
             $table->timestamps();
         });
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pondoks');
+        Schema::dropIfExists('berkas_paths');
     }
 };

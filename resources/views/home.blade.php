@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +8,13 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
     <style>
         :root {
@@ -38,17 +40,23 @@
             background: var(--glass-white) !important;
             backdrop-filter: blur(10px);
         }
+
         .navbar.scrolled {
             padding: 10px 0;
             border-bottom: 2px solid var(--primary-green);
         }
+
         .nav-link {
             font-weight: 600;
             color: #333 !important;
             margin: 0 10px;
             font-size: 0.95rem;
         }
-        .nav-link:hover { color: var(--primary-green) !important; }
+
+        .nav-link:hover {
+            color: var(--primary-green) !important;
+        }
+
         .btn-ppdb {
             background: var(--gradient-main);
             color: white !important;
@@ -58,7 +66,11 @@
             border: none;
             transition: transform 0.3s;
         }
-        .btn-ppdb:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(25, 135, 84, 0.4); }
+
+        .btn-ppdb:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(25, 135, 84, 0.4);
+        }
 
         /* --- HERO SECTION --- */
         .hero-section {
@@ -68,8 +80,18 @@
             position: relative;
             clip-path: ellipse(150% 100% at 50% 0%);
         }
-        .hero-title { font-weight: 800; font-size: 3.5rem; line-height: 1.2; }
-        @media (max-width: 768px) { .hero-title { font-size: 2.2rem; } }
+
+        .hero-title {
+            font-weight: 800;
+            font-size: 3.5rem;
+            line-height: 1.2;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+        }
 
         /* --- CARD INSTITUTION --- */
         .card-lembaga {
@@ -79,12 +101,14 @@
             background: white;
             height: 100%;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
+
         .card-lembaga:hover {
             transform: translateY(-12px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
+
         .status-badge {
             position: absolute;
             top: 20px;
@@ -97,7 +121,11 @@
         }
 
         /* --- STEPS PPDB --- */
-        .step-item { position: relative; text-align: center; }
+        .step-item {
+            position: relative;
+            text-align: center;
+        }
+
         .step-number {
             width: 60px;
             height: 60px;
@@ -114,6 +142,7 @@
             z-index: 2;
             position: relative;
         }
+
         .step-item::after {
             content: '';
             position: absolute;
@@ -124,13 +153,21 @@
             background: #dee2e6;
             z-index: 1;
         }
-        .step-item:last-child::after { display: none; }
-        @media (max-width: 768px) { .step-item::after { display: none; } }
+
+        .step-item:last-child::after {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .step-item::after {
+                display: none;
+            }
+        }
 
         /* --- PARALLAX CTA --- */
         .parallax-cta {
-            background-image: linear-gradient(rgba(13, 82, 51, 0.85), rgba(13, 82, 51, 0.85)), 
-                              url('https://images.unsplash.com/photo-1541339907198-e08756ebafe3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-image: linear-gradient(rgba(13, 82, 51, 0.85), rgba(13, 82, 51, 0.85)),
+                url('https://images.unsplash.com/photo-1541339907198-e08756ebafe3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-attachment: fixed;
             background-position: center;
             background-size: cover;
@@ -146,7 +183,12 @@
             border-radius: 15px;
             text-align: center;
         }
-        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--primary-green); }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-green);
+        }
 
         /* --- FAQ --- */
         .accordion-button:not(.collapsed) {
@@ -156,18 +198,39 @@
         }
 
         /* --- FOOTER --- */
-        .footer { background: #0a2b1c; color: #ecf0f1; padding: 80px 0 30px; }
-        .footer h5 { color: white; margin-bottom: 25px; font-weight: 700; }
-        .footer-link { color: #bdc3c7; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 12px; }
-        .footer-link:hover { color: var(--light-green); transform: translateX(5px); }
+        .footer {
+            background: #0a2b1c;
+            color: #ecf0f1;
+            padding: 80px 0 30px;
+        }
+
+        .footer h5 {
+            color: white;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .footer-link {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: 0.3s;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .footer-link:hover {
+            color: var(--light-green);
+            transform: translateX(5px);
+        }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="{{ asset('assets/ico/logo-sigap-brown.png') }}"  height="60" alt="Logo">
+                <img src="{{ asset('assets/ico/logo-sigap-brown.png') }}" height="60" alt="Logo">
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                 <i class="fas fa-bars text-success"></i>
@@ -181,7 +244,7 @@
                     <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
                 </ul>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('auth.pendaftar')  }}" class="btn btn-outline-success rounded-pill px-4" >Login</a>
+                    <a href="{{ route('auth.pendaftar') }}" class="btn btn-outline-success rounded-pill px-4">Login</a>
                     <a href="{{ route('regist') }}" class="btn btn-ppdb">Daftar PPDB</a>
                 </div>
             </div>
@@ -192,16 +255,20 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-7 animate__animated animate__fadeInLeft">
-                    <span class="badge bg-light text-success fw-bold px-3 py-2 mb-3">PENDAFTARAN T.A 2026/2027 DIBUKA</span>
-                    <h1 class="hero-title mb-4">Wujudkan Generasi <br><span class="text-warning">Cerdas & Berakhlak</span></h1>
-                    <p class="lead mb-5 opacity-90">Satu sistem terpadu untuk pendaftaran seluruh lembaga pendidikan di bawah naungan Yayasan Unggul. Cepat, Transparan, dan Modern.</p>
+                    <span class="badge bg-light text-success fw-bold px-3 py-2 mb-3">PENDAFTARAN T.A 2026/2027
+                        DIBUKA</span>
+                    <h1 class="hero-title mb-4">Wujudkan Generasi <br><span class="text-warning">Cerdas &
+                            Berakhlak</span></h1>
+                    <p class="lead mb-5 opacity-90">Satu sistem terpadu untuk pendaftaran seluruh lembaga pendidikan di
+                        bawah naungan Yayasan Unggul. Cepat, Transparan, dan Modern.</p>
                     <div class="d-flex gap-3 flex-wrap">
                         <a href="#lembaga" class="btn btn-warning btn-lg px-5 fw-bold rounded-pill">Daftar Sekarang</a>
                         <a href="#alur" class="btn btn-outline-light btn-lg px-5 rounded-pill">Lihat Alur</a>
                     </div>
                 </div>
                 <div class="col-lg-5 d-none d-lg-block animate__animated animate__zoomIn">
-                    <img src="https://illustrations.popsy.co/white/reading-a-book.svg" class="img-fluid" alt="Education">
+                    <img src="https://illustrations.popsy.co/white/reading-a-book.svg" class="img-fluid"
+                        alt="Education">
                 </div>
             </div>
         </div>
@@ -245,59 +312,58 @@
             </div>
 
             <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card-lembaga p-4 position-relative">
-                        <span class="status-badge bg-success text-white">🟢 Dibuka</span>
-                        <div class="mb-4 text-success"><i class="fas fa-child fa-3x"></i></div>
-                        <h4 class="fw-bold">TK Islam Terpadu</h4>
-                        <p class="text-muted small">Pendidikan karakter usia dini berbasis Al-Qur'an.</p>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="small text-muted">Kuota: <strong>60 Siswa</strong></span>
-                            <span class="small text-muted">TA: <strong>2026/2027</strong></span>
-                        </div>
-                        <div class="d-grid gap-2">
-                            <a href="#" class="btn btn-success fw-bold">Daftar Unit</a>
-                            <button class="btn btn-outline-secondary btn-sm">Brosur & Biaya</button>
-                        </div>
-                    </div>
-                </div>
+                @foreach ($lembagas as $lembaga)
+                    @php
+                        $gelombang = $lembaga->gelombang->first();
+                        $status = $gelombang ? $gelombang->getStatusPendaftaran() : 'BELUM_SET';
+                    @endphp
 
-                <div class="col-md-4">
-                    <div class="card-lembaga p-4 position-relative">
-                        <span class="status-badge bg-warning text-dark">🟡 Segera</span>
-                        <div class="mb-4 text-success"><i class="fas fa-school fa-3x"></i></div>
-                        <h4 class="fw-bold">SD Islam Unggul</h4>
-                        <p class="text-muted small">Kurikulum Merdeka terintegrasi nilai keislaman.</p>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="small text-muted">Kuota: <strong>120 Siswa</strong></span>
-                            <span class="small text-muted">TA: <strong>2026/2027</strong></span>
-                        </div>
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-secondary fw-bold" disabled>Belum Dibuka</button>
-                            <button class="btn btn-outline-secondary btn-sm">Brosur & Biaya</button>
-                        </div>
-                    </div>
-                </div>
+                    <div class="col-md-4">
+                        <div class="card-lembaga p-4 position-relative">
+                            @if ($status == 'BUKA')
+                                <span class="status-badge bg-success text-white">🟢 Dibuka</span>
+                            {{-- @elseif($status == 'SEGERA')
+                                <span class="status-badge bg-warning text-dark">🟡 Segera</span>
+                            @elseif($status == 'FULL')
+                                <span class="status-badge bg-danger text-white">🔴 Penuh</span>
+                            @elseif($status == 'TUTUP')
+                                <span class="status-badge bg-secondary text-white">⚪ Tutup</span> --}}
+                            @else
+                                <span class="status-badge bg-warning text-dark">🟡 Segera</span>
+                            @endif
 
-                <div class="col-md-4">
-                    <div class="card-lembaga p-4 position-relative">
-                        <span class="status-badge bg-success text-white">🟢 Dibuka</span>
-                        <div class="mb-4 text-success"><i class="fas fa-mosque fa-3x"></i></div>
-                        <h4 class="fw-bold">SMP & Pesantren</h4>
-                        <p class="text-muted small">Program Tahfidz 30 Juz & Sains Modern.</p>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="small text-muted">Kuota: <strong>80 Santri</strong></span>
-                            <span class="small text-muted">TA: <strong>2026/2027</strong></span>
-                        </div>
-                        <div class="d-grid gap-2">
-                            <a href="#" class="btn btn-success fw-bold">Daftar Unit</a>
-                            <button class="btn btn-outline-secondary btn-sm">Brosur & Biaya</button>
+                            <div class="mb-4 text-success">
+                                <i class="fas {{ $lembaga->icon ?? 'fa-school' }} fa-3x"></i>
+                            </div>
+
+                            <h4 class="fw-bold">{{ $lembaga->nama_sekolah }}</h4>
+                            <p class="text-muted small">
+                                {{ $lembaga->deskripsi ?? 'Pendidikan berkualitas berbasis nilai Islami.' }}</p>
+                            <hr>
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="small text-muted">
+                                    Kuota: <strong>{{ $gelombang->kuota ?? '-' }}</strong>
+                                </span>
+                                <span class="small text-muted">
+                                    Sisa:
+                                    <strong>{{ $gelombang ? $gelombang->kuota - $gelombang->pendaftars_count : '-' }}</strong>
+                                </span>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                @if ($status == 'BUKA' )
+                                    <a href="{{ route('regist', ['sekolah' => $lembaga->id]) }}"
+                                        class="btn btn-success fw-bold">Daftar Unit</a>
+                                @else
+                                    <button class="btn btn-secondary fw-bold" disabled>Belum Tersedia</button>
+                                @endif
+
+                                <a href="#" class="btn btn-outline-secondary btn-sm">Brosur & Biaya</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -336,7 +402,8 @@
             </div>
             <div class="alert alert-success mt-4 d-flex align-items-center rounded-pill px-4" role="alert">
                 <i class="fas fa-info-circle me-3"></i>
-                <div class="small">Data statistik diperbarui secara otomatis setiap 5 menit berdasarkan sistem database pusat.</div>
+                <div class="small">Data statistik diperbarui secara otomatis setiap 5 menit berdasarkan sistem
+                    database pusat.</div>
             </div>
         </div>
     </section>
@@ -357,26 +424,33 @@
                         </div>
                         <div class="card-body p-4">
                             <h5 class="fw-bold text-success">Fokus Kitab Kuning</h5>
-                            <p class="small text-muted">Pendalaman literatur klasik (Turats) meliputi Nahwu, Shorof, Fiqih, dan Ushul Fiqih untuk membentuk nalar hukum Islam yang kuat.</p>
+                            <p class="small text-muted">Pendalaman literatur klasik (Turats) meliputi Nahwu, Shorof,
+                                Fiqih, dan Ushul Fiqih untuk membentuk nalar hukum Islam yang kuat.</p>
                             <ul class="list-unstyled small">
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Kajian Fathul Qorib & Imrithi</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Metode Sorogan & Bandongan</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Kajian Fathul Qorib
+                                    & Imrithi</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Metode Sorogan &
+                                    Bandongan</li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden border-top border-success border-4">
+                    <div
+                        class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden border-top border-success border-4">
                         <div class="p-4 bg-white text-center">
                             <i class="fas fa-quran fa-3x mb-3 text-success"></i>
                             <h4 class="fw-bold mb-0 text-success">Tahfidzul Qur'an</h4>
                         </div>
                         <div class="card-body p-4">
                             <h5 class="fw-bold text-dark">Fokus Al-Qur'an</h5>
-                            <p class="small text-muted">Program akselerasi menghafal Al-Qur'an 30 Juz dengan tajwid yang fasih dan pemahaman makna ayat (Tafsir).</p>
+                            <p class="small text-muted">Program akselerasi menghafal Al-Qur'an 30 Juz dengan tajwid
+                                yang fasih dan pemahaman makna ayat (Tafsir).</p>
                             <ul class="list-unstyled small">
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Target 30 Juz dalam 3 Tahun</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Sanad Tahfidz Matan Jazari</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Target 30 Juz dalam
+                                    3 Tahun</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Sanad Tahfidz Matan
+                                    Jazari</li>
                             </ul>
                         </div>
                     </div>
@@ -389,10 +463,13 @@
                         </div>
                         <div class="card-body p-4">
                             <h5 class="fw-bold text-dark">Fokus Thoriqoh & Adab</h5>
-                            <p class="small text-muted">Pembersihan jiwa melalui riyadhoh, dzikir terstruktur, dan penekanan adab (Akhlakul Karimah) di atas ilmu pengetahuan.</p>
+                            <p class="small text-muted">Pembersihan jiwa melalui riyadhoh, dzikir terstruktur, dan
+                                penekanan adab (Akhlakul Karimah) di atas ilmu pengetahuan.</p>
                             <ul class="list-unstyled small">
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Amaliyah Dzikir Pagi & Petang</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Bimbingan Mursyid/Kyai Langsung</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Amaliyah Dzikir Pagi
+                                    & Petang</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Bimbingan
+                                    Mursyid/Kyai Langsung</li>
                             </ul>
                         </div>
                     </div>
@@ -404,13 +481,16 @@
     <section class="py-5 bg-light" id="brosur">
         <div class="container">
             <div class="bg-success rounded-5 p-5 position-relative overflow-hidden shadow-lg">
-                <div class="position-absolute bg-white opacity-10 rounded-circle" style="width: 300px; height: 300px; top: -150px; right: -150px;"></div>
-                <div class="position-absolute bg-white opacity-10 rounded-circle" style="width: 200px; height: 200px; bottom: -100px; left: -100px;"></div>
-                
+                <div class="position-absolute bg-white opacity-10 rounded-circle"
+                    style="width: 300px; height: 300px; top: -150px; right: -150px;"></div>
+                <div class="position-absolute bg-white opacity-10 rounded-circle"
+                    style="width: 200px; height: 200px; bottom: -100px; left: -100px;"></div>
+
                 <div class="row align-items-center position-relative">
                     <div class="col-lg-8 text-white">
                         <h2 class="fw-bold mb-3">Butuh Informasi Lebih Detail?</h2>
-                        <p class="mb-0 opacity-90">Unduh brosur resmi kami untuk melihat rincian biaya pendidikan, fasilitas asrama, dan kurikulum lengkap tiap jenjang pendidikan.</p>
+                        <p class="mb-0 opacity-90">Unduh brosur resmi kami untuk melihat rincian biaya pendidikan,
+                            fasilitas asrama, dan kurikulum lengkap tiap jenjang pendidikan.</p>
                     </div>
                     <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
                         <a href="#" class="btn btn-warning btn-lg px-4 py-3 fw-bold rounded-pill shadow">
@@ -462,10 +542,12 @@
     <section class="parallax-cta text-center">
         <div class="container">
             <h2 class="display-4 fw-bold mb-4">Ayo Daftarkan Putra-Putri Anda!</h2>
-            <p class="lead mb-5 px-lg-5">Bergabunglah bersama ribuan santri lainnya untuk mencetak masa depan yang gemilang di dunia dan akhirat.</p>
+            <p class="lead mb-5 px-lg-5">Bergabunglah bersama ribuan santri lainnya untuk mencetak masa depan yang
+                gemilang di dunia dan akhirat.</p>
             <div class="d-flex justify-content-center gap-3">
                 <a href="#lembaga" class="btn btn-warning btn-lg px-5 rounded-pill fw-bold">Daftar Sekarang</a>
-                <a href="https://wa.me/62812345678" class="btn btn-outline-light btn-lg px-5 rounded-pill"><i class="fab fa-whatsapp me-2"></i>Hubungi Admin</a>
+                <a href="https://wa.me/62812345678" class="btn btn-outline-light btn-lg px-5 rounded-pill"><i
+                        class="fab fa-whatsapp me-2"></i>Hubungi Admin</a>
             </div>
         </div>
     </section>
@@ -475,29 +557,34 @@
             <div class="row">
                 <div class="col-lg-5">
                     <h2 class="fw-bold mb-4">Pertanyaan Sering <br><span class="text-success">Diajukan</span></h2>
-                    <p class="text-muted">Masih bingung dengan proses pendaftaran? Berikut jawaban atas pertanyaan yang paling sering muncul.</p>
+                    <p class="text-muted">Masih bingung dengan proses pendaftaran? Berikut jawaban atas pertanyaan yang
+                        paling sering muncul.</p>
                     <img src="https://illustrations.popsy.co/white/support.svg" width="300" alt="FAQ">
                 </div>
                 <div class="col-lg-7">
                     <div class="accordion accordion-flush shadow-sm rounded-4 overflow-hidden" id="ppdbFAQ">
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#f1">
                                     Bagaimana cara bayar biaya pendaftaran?
                                 </button>
                             </h2>
                             <div id="f1" class="accordion-collapse collapse show" data-bs-parent="#ppdbFAQ">
-                                <div class="accordion-body">Pembayaran dapat dilakukan melalui Virtual Account Bank Syariah Indonesia (BSI) yang muncul setelah Anda melakukan registrasi akun.</div>
+                                <div class="accordion-body">Pembayaran dapat dilakukan melalui Virtual Account Bank
+                                    Syariah Indonesia (BSI) yang muncul setelah Anda melakukan registrasi akun.</div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#f2">
                                     Apa saja dokumen yang harus diupload?
                                 </button>
                             </h2>
                             <div id="f2" class="accordion-collapse collapse" data-bs-parent="#ppdbFAQ">
-                                <div class="accordion-body">Dokumen utama meliputi Kartu Keluarga, Akta Kelahiran, Pas Foto Berwarna, dan Ijazah terakhir/SKL.</div>
+                                <div class="accordion-body">Dokumen utama meliputi Kartu Keluarga, Akta Kelahiran, Pas
+                                    Foto Berwarna, dan Ijazah terakhir/SKL.</div>
                             </div>
                         </div>
                     </div>
@@ -514,13 +601,15 @@
                         <h4 class="fw-bold">Login Sistem PPDB</h4>
                         <p class="text-muted small">Pilih pintu masuk akses Anda</p>
                     </div>
-                    
+
                     <ul class="nav nav-pills mb-4 justify-content-center" id="pills-tab">
                         <li class="nav-item w-50">
-                            <button class="nav-link active w-100 rounded-start-pill" data-bs-toggle="pill" data-bs-target="#login-santri">Pendaftar</button>
+                            <button class="nav-link active w-100 rounded-start-pill" data-bs-toggle="pill"
+                                data-bs-target="#login-santri">Pendaftar</button>
                         </li>
                         <li class="nav-item w-50">
-                            <button class="nav-link w-100 rounded-end-pill" data-bs-toggle="pill" data-bs-target="#login-admin">Admin</button>
+                            <button class="nav-link w-100 rounded-end-pill" data-bs-toggle="pill"
+                                data-bs-target="#login-admin">Admin</button>
                         </li>
                     </ul>
 
@@ -529,20 +618,23 @@
                             <form>
                                 <div class="mb-3">
                                     <label class="small fw-bold">No. Pendaftaran</label>
-                                    <input type="text" class="form-control rounded-pill" placeholder="PPDB2026xxxx">
+                                    <input type="text" class="form-control rounded-pill"
+                                        placeholder="PPDB2026xxxx">
                                 </div>
                                 <div class="mb-4">
                                     <label class="small fw-bold">Password (Tgl Lahir)</label>
                                     <input type="password" class="form-control rounded-pill" placeholder="DDMMYYYY">
                                 </div>
-                                <button class="btn btn-success w-100 rounded-pill py-2 fw-bold">MASUK DASHBOARD</button>
+                                <button class="btn btn-success w-100 rounded-pill py-2 fw-bold">MASUK
+                                    DASHBOARD</button>
                             </form>
                         </div>
                         <div class="tab-pane fade" id="login-admin">
                             <form>
                                 <div class="mb-3">
                                     <label class="small fw-bold">Email Admin</label>
-                                    <input type="email" class="form-control rounded-pill" placeholder="admin@yayasan.sch.id">
+                                    <input type="email" class="form-control rounded-pill"
+                                        placeholder="admin@yayasan.sch.id">
                                 </div>
                                 <div class="mb-4">
                                     <label class="small fw-bold">Password</label>
@@ -562,7 +654,8 @@
             <div class="row g-5">
                 <div class="col-lg-4">
                     <h5 class="text-uppercase">Tentang Yayasan</h5>
-                    <p class="text-muted small">Yayasan Pendidikan Unggul berkomitmen mencetak generasi Qur'ani yang menguasai ilmu pengetahuan dan teknologi modern.</p>
+                    <p class="text-muted small">Yayasan Pendidikan Unggul berkomitmen mencetak generasi Qur'ani yang
+                        menguasai ilmu pengetahuan dan teknologi modern.</p>
                     <div class="d-flex gap-3 mt-4">
                         <a href="#" class="text-white"><i class="fab fa-facebook fa-lg"></i></a>
                         <a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a>
@@ -584,9 +677,11 @@
                 </div>
                 <div class="col-lg-4" id="kontak">
                     <h5>Kontak Pusat</h5>
-                    <p class="small text-muted"><i class="fas fa-map-marker-alt me-2 text-success"></i> Jl. Pendidikan No. 123, Kota Pendidikan, Indonesia</p>
+                    <p class="small text-muted"><i class="fas fa-map-marker-alt me-2 text-success"></i> Jl. Pendidikan
+                        No. 123, Kota Pendidikan, Indonesia</p>
                     <p class="small text-muted"><i class="fas fa-phone me-2 text-success"></i> (021) 1234 5678</p>
-                    <p class="small text-muted"><i class="fas fa-envelope me-2 text-success"></i> info@yayasanunggul.sch.id</p>
+                    <p class="small text-muted"><i class="fas fa-envelope me-2 text-success"></i>
+                        info@yayasanunggul.sch.id</p>
                 </div>
             </div>
             <hr class="mt-5 opacity-10">
@@ -610,7 +705,7 @@
 
         // Smooth scrolling for links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
@@ -619,4 +714,5 @@
         });
     </script>
 </body>
+
 </html>

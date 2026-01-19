@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\UserSekolah;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -33,13 +32,13 @@ class User extends Authenticatable
     // ROLE
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_roles');
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
     }
 
     // SEKOLAH (langsung)
-    public function sekolah()
+    public function userSekolah()
     {
-        return $this->belongsToMany(Sekolah::class, 'user_sekolah');
+        return $this->hasOne(UserSekolah::class, 'user_id');
     }
 
     // PONDOK (langsung)
@@ -55,5 +54,12 @@ class User extends Authenticatable
     public function hasRole($roleName)
     {
         return $this->roles()->where('name', $roleName)->exists();
+    }
+
+    // Helper Accessor untuk mendapatkan sekolah_id
+    public function getSekolahIdAttribute()
+    {
+        // Memanggil relasi userSekolah lalu mengambil property sekolah_id
+        return $this->userSekolah ? $this->userSekolah->sekolah_id : null;
     }
 }

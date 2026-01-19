@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('kode_sekolah');
             $table->string('nama_sekolah');
-            $table->enum('jenjang', ['SLTA', 'SLTP']);
+            $table->string('jenjang', '20');
+            $table->enum('keterangan', ['tidak_wajib','wajib'])->default('wajib');
             $table->boolean('is_aktif')->default(true);
             $table->timestamps();
         });

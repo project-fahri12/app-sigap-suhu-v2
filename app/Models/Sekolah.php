@@ -11,6 +11,17 @@ class Sekolah extends Model
         'nama_sekolah',
         'keterangan',
         'jenjang',
-        'is_aktif'
+        'is_aktif',
     ];
+
+    public function gelombang()
+    {
+        // Menghubungkan Sekolah ke banyak Gelombang PPDB
+        return $this->hasMany(GelombangPPDB::class, 'sekolah_id');
+    }
+
+    public function pendaftar()
+    {
+        return $this->hasMany(Sekolah::class);
+    }
 }

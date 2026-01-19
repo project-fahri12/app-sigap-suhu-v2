@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -21,22 +20,43 @@
     <div class="layout-wrapper">
         <aside class="sidebar shadow-sm" id="mainSidebar">
             <div class="sidebar-header">
-                <div class="d-flex align-items-center text-success fw-800">
-                    <i class="fas fa-shield-alt me-2 fs-4"></i> SUPER ADMIN
+                <div class="d-flex align-items-center">
+                    {{-- Icon berubah warna berdasarkan role --}}
+                    <div
+                        class="{{ auth()->user()->role == 'superadmin' ? 'bg-primary' : 'bg-success' }} text-white px-3 py-1 rounded-3 me-2">
+                        <i
+                            class="fas {{ auth()->user()->role == 'superadmin' ? 'fa-shield-alt' : 'fa-university' }}"></i>
+                    </div>
+                    <div>
+                        {{-- Menampilkan Nama Sekolah/Lembaga dari Database --}}
+                        <h6 class="mb-0 fw-bold text-dark" style="font-size: 14px; text-transform: uppercase;">
+                            {{ auth()->user()->name ?? 'SISTEM PUSAT' }}
+                        </h6>
+
+                        {{-- Menampilkan Role dan Tahun Ajaran Aktif --}}
+                        <small class="text-muted fw-bold d-block" style="font-size: 9px; text-transform: uppercase;">
+                            {{ auth()->user()->role }}
+                            @php
+                                $taAktif = \App\Models\TahunAjaran::where('is_aktif', 1)->first();
+                            @endphp
+                            @if ($taAktif)
+                                <span class="text-success ms-1">| TA {{ $taAktif->nama }}</span>
+                            @endif
+                        </small>
+                    </div>
                 </div>
             </div>
 
             <div class="sidebar-menu-container">
-              @include('dashboard.layouts.partials._sidebar')
+                @include('dashboard.layouts.partials._sidebar')
             </div>
-            
         </aside>
-        
+
         <main class="main-content">
-            
+
             @include('dashboard.layouts.partials._navbar')
 
-           @yield('content')
+            @yield('content')
         </main>
     </div>
 

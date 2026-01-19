@@ -6,7 +6,7 @@
     <h6 class="mb-0 fw-800 text-dark">
         @if(auth()->user()->hasRole('super-admin'))
             Global System Control
-        @elseif(auth()->user()->hasRole('admin-sekolah'))
+        @elseif(auth()->user()->hasRole(roleName: 'admin-sekolah'))
             School Management System
         @else
             Staff Dashboard

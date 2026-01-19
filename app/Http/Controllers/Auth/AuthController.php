@@ -9,16 +9,19 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     // Tampilan login pendaftar
-    public function authpendaftar() {
-        return view("auth.login-pendaftar");
+    public function authpendaftar()
+    {
+        return view('auth.login-pendaftar');
     }
 
     // Tampilan login admin/staff
-    public function authadmin() {
+    public function authadmin()
+    {
         if (Auth::check()) {
             return $this->redirectUserByRole();
         }
-        return view("auth.login-admin");
+
+        return view('auth.login-admin');
     }
 
     // Proses Autentikasi Admin/Staff
@@ -26,7 +29,7 @@ class AuthController extends Controller
     {
         // 1. Validasi Input (Support Email atau Username)
         $credentials = $request->validate([
-            'login'    => 'required|string',
+            'login' => 'required|string',
             'password' => 'required|string',
         ], [
             'login.required' => 'Email atau Username wajib diisi.',
@@ -36,18 +39,26 @@ class AuthController extends Controller
         // 2. Deteksi apakah input login adalah email atau username
         $loginField = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        // 3. Eksekusi Login
-        if (Auth::attempt([$loginField => $request->login, 'password' => $request->password])) {
+        // 3. Eksekusi Login dengan Tambahan Kondisi (Hanya yang Aktif)
+        // Catatan: Ganti 'is_active' sesuai nama kolom di database Anda (misal: 'status')
+        $authCriteria = [
+            $loginField => $request->login,
+            'password' => $request->password,
+            'is_aktif' => 'aktif', 
+        ];
+
+        if (Auth::attempt($authCriteria)) {
+            // Jika Berhasil
             $request->session()->regenerate();
-            
+
             // 4. Redirect berdasarkan Role
             return $this->redirectUserByRole();
         }
 
-        // Jika Gagal Login
+        // Jika Gagal Login (Username/Password salah ATAU akun tidak aktif)
         return back()->withErrors([
-            'login' => 'Maaf, akun tidak ditemukan atau password salah.',
-        ])->withInput($request->only('auth.admin'));
+            'login' => 'Maaf, akun tidak ditemukan, password salah, atau akun Anda sudah tidak aktif.',
+        ])->withInput($request->only('login'));
     }
 
     /**
@@ -60,8 +71,8 @@ class AuthController extends Controller
 
         if ($user->hasRole('super-admin')) {
             return redirect()->route('superadmin.dashboard');
-        } 
-        
+        }
+
         if ($user->hasRole('admin-sekolah')) {
             return redirect()->route('adminsekolah.dashboard');
         }

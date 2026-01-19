@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\AdminPondok\DashboardAdminPondokController;
 use App\Http\Controllers\Dashboard\AdminSekolah\DashboardAdminSekolahController;
+use App\Http\Controllers\Dashboard\AdminSekolah\GelombangPpdbController;
 use App\Http\Controllers\Dashboard\PanitiaPpdb\DashboardPanitiaPpdbController;
 use App\Http\Controllers\Dashboard\SuperAdmin\DashboardSuperAdminController;
 use App\Http\Controllers\Dashboard\SuperAdmin\RoleController;
@@ -30,7 +31,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Super Admin (Hanya bisa diakses role 'superadmin')
     Route::middleware(['role:super-admin'])->prefix('super')->name('superadmin.')->group(function () {
         Route::get('/dashboard', [DashboardSuperAdminController::class, 'index'])->name('dashboard');
-        Route::resource('/tahun-ajaran', TahunAjaranController::class)->only(['index']);
+        Route::resource('/tahun-ajaran', TahunAjaranController::class)->only(['index', 'store', 'destroy', 'update']);
         Route::resource('/sekolah', SekolahController::class)->only(['index', 'update', 'destroy', 'store']);
         Route::resource('/pondok', PondokController::class)->only(['index', 'destroy', 'update', 'store']);
         Route::patch('pondok/{id}/toggle', [PondokController::class, 'toggleStatus'])->name('pondok.toggle');
@@ -42,6 +43,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Admin Sekolah (Hanya bisa diakses role 'admin_sekolah')
     Route::middleware(['role:admin-sekolah'])->prefix('sekolah')->name('adminsekolah.')->group(function () {
         Route::get('/dashboard', [DashboardAdminSekolahController::class, 'index'])->name('dashboard');
+        Route::resource('gelombang-ppdb', GelombangPpdbController::class);
     });
 
     // Admin Pondok (Hanya bisa diakses role 'admin_pondok')
