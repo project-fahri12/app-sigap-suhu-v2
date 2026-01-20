@@ -20,6 +20,11 @@ class Sekolah extends Model
         return $this->hasMany(GelombangPPDB::class, 'sekolah_id');
     }
 
+     public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
     public function pendaftar()
     {
         return $this->hasMany(Sekolah::class);

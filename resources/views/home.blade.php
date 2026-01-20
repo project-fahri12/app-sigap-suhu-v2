@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="id">
+<html ng="id">
 
 <head>
-    <meta charset="UTF-8">
+    <ma charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PPDB Terpadu | Yayasan Pendidikan Unggul</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap"
-        rel="stylesheet">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <li  nk
+                href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+                rel="stylesheet">
+        
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
@@ -22,46 +22,60 @@
             --light-green: #2ecc71;
             --dark-green: #0d5233;
             --soft-bg: #f8faf9;
-            --gradient-main: linear-gradient(135deg, #0d5233 0%, #198754 100%);
-            --glass-white: rgba(255, 255, 255, 0.9);
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--soft-bg);
-            color: #2c3e50;
-            overflow-x: hidden;
-        }
-
-        /* --- NAVIGATION --- */
-        .navbar {
-            transition: all 0.4s ease;
-            padding: 15px 0;
-            background: var(--glass-white) !important;
-            backdrop-filter: blur(10px);
-        }
-
-        .navbar.scrolled {
-            padding: 10px 0;
-            border-bottom: 2px solid var(--primary-green);
-        }
-
-        .nav-link {
-            font-weight: 600;
-            color: #333 !important;
-            margin: 0 10px;
-            font-size: 0.95rem;
-        }
-
-        .nav-link:hover {
-            color: var(--primary-green) !important;
-        }
-
-        .btn-ppdb {
-            background: var(--gradient-main);
+                    --gradient-main: linear-gradient(135deg, #0d5233 0%, #198754 100%);
+                    --glass-white: rgba(255, 255, 255, 0.9);
+                }
+           
+            
+                body {
+                     font-family:
+         'Plus Jakarta Sans', sans-serif;
+             
+                   background-color: var(--soft-bg);
+         
+                   color: #2c3e50;
+                    overflow-x: hidden;
+              
+          
+    }
+        
+                /* --- NAVIGATION --- */
+              .navbar {
+                    transition: all 0.4s ease;
+                    padding: 15px 0;
+                  background: va(-glass-white) !important;
+                    backdrop-filter: blur(10px);
+                }
+        
+                .navbar.scrolled {
+                    padding: 10px 0;
+                  border-bottom: 2x olid var(--primary-green);
+                }
+        
+              .nav-link {
+                    font-weight: 600;
+                    color: #333 !important;
+                      marin
+        :  1
+                0px;
+                            font-size: 0.95rem;
+                       }
+            
+                .nav-link:hover {
+         
+                   color: var(--primary-green) !important;
+             
+               }
+        
+    
+            .btn-ppdb {
+          
+          b
+ackground: var(--gradient-main);
             color: white !important;
             border-radius: 50px;
-            padding: 8px 25px;
+           
+ padding: 8px 25px;
             font-weight: 700;
             border: none;
             transition: transform 0.3s;
@@ -314,23 +328,28 @@
             <div class="row g-4">
                 @foreach ($lembagas as $lembaga)
                     @php
-                        $gelombang = $lembaga->gelombang->first();
-                        $status = $gelombang ? $gelombang->getStatusPendaftaran() : 'BELUM_SET';
-                    @endphp
+    $gelombang = $lembaga->gelombang->first();
+
+    if (!$gelombang) {
+        $status = 'BELUM_KONFIGURASI';
+    } elseif ($gelombang->is_aktif == 1) {
+        $status = 'BUKA';
+    } else {
+        $status = 'TUTUP';
+    }
+@endphp
+
 
                     <div class="col-md-4">
                         <div class="card-lembaga p-4 position-relative">
-                            @if ($status == 'BUKA')
-                                <span class="status-badge bg-success text-white">🟢 Dibuka</span>
-                            {{-- @elseif($status == 'SEGERA')
-                                <span class="status-badge bg-warning text-dark">🟡 Segera</span>
-                            @elseif($status == 'FULL')
-                                <span class="status-badge bg-danger text-white">🔴 Penuh</span>
-                            @elseif($status == 'TUTUP')
-                                <span class="status-badge bg-secondary text-white">⚪ Tutup</span> --}}
-                            @else
-                                <span class="status-badge bg-warning text-dark">🟡 Segera</span>
-                            @endif
+                            @if ($status === 'BUKA')
+    <span class="status-badge bg-success text-white">🟢 Dibuka</span>
+@elseif ($status === 'TUTUP')
+    <span class="status-badge bg-secondary text-white">⚪ Ditutup</span>
+@else
+    <span class="status-badge bg-warning text-dark">🟡 Belum Konfigurasi</span>
+@endif
+
 
                             <div class="mb-4 text-success">
                                 <i class="fas {{ $lembaga->icon ?? 'fa-school' }} fa-3x"></i>
@@ -341,15 +360,19 @@
                                 {{ $lembaga->deskripsi ?? 'Pendidikan berkualitas berbasis nilai Islami.' }}</p>
                             <hr>
 
-                            <div class="d-flex justify-content-between mb-3">
-                                <span class="small text-muted">
-                                    Kuota: <strong>{{ $gelombang->kuota ?? '-' }}</strong>
-                                </span>
-                                <span class="small text-muted">
-                                    Sisa:
-                                    <strong>{{ $gelombang ? $gelombang->kuota - $gelombang->pendaftars_count : '-' }}</strong>
-                                </span>
-                            </div>
+                            <<div class="d-flex justify-content-between mb-3">
+    <span class="small text-muted">
+        Kuota:
+        <strong>{{ $gelombang->kuota ?? '-' }}</strong>
+    </span>
+    <span class="small text-muted">
+        Sisa:
+        <strong>
+            {{ $gelombang ? max($gelombang->kuota - $gelombang->pendaftar_count, 0) : '-' }}
+        </strong>
+    </span>
+</div>
+
 
                             <div class="d-grid gap-2">
                                 @if ($status == 'BUKA' )

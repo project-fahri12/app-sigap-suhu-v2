@@ -8,7 +8,7 @@
         <div>
             <h5 class="fw-bold mb-1">Manajemen User & Hak Akses</h5>
             <p class="small text-muted mb-0">
-                Kelola status akun pengguna dan batasan akses unit Sekolah atau Pondok secara terpusat.
+                Kelola status akun pengguna dan batasan akses unit Sekolah secara terpusat.
             </p>
         </div>
         <button class="btn btn-success fw-bold px-4 rounded-pill"
@@ -41,50 +41,45 @@
                             <div class="text-muted" style="font-size:11px">{{ $user->email }}</div>
                         </td>
 
+                        {{-- ROLE --}}
                         <td>
-                            @foreach ($user->roles as $role)
-                                <span class="badge bg-info-subtle text-info px-3 py-2 rounded-pill">
-                                    {{ $role->label ?? $role->name }}
-                                </span>
-                            @endforeach
+                            <span class="badge bg-info-subtle text-info px-3 py-2 rounded-pill">
+                                {{ str_replace('-', ' ', $user->role) }}
+                            </span>
                         </td>
 
+                        {{-- AKSES SEKOLAH --}}
                         <td>
-                            {{-- Akses Sekolah --}}
-                            @foreach ($user->sekolah ?? [] as $s)
+                            @if ($user->sekolah)
                                 <div class="small fw-bold text-primary mb-1">
-                                    <i class="fas fa-school me-1"></i> {{ $s->nama_sekolah }}
+                                    <i class="fas fa-school me-1"></i> {{ $user->sekolah->nama_sekolah }}
                                 </div>
-                            @endforeach
-
-                            {{-- Akses Pondok --}}
-                            @foreach ($user->pondok ?? [] as $p)
-                                <div class="small fw-bold text-warning mb-1">
-                                    <i class="fas fa-mosque me-1"></i> {{ $p->nama_pondok }}
-                                </div>
-                            @endforeach
-
-                            @if(($user->sekolah?->isEmpty() ?? true) && ($user->pondok?->isEmpty() ?? true))
+                            @else
                                 <span class="text-muted small">Akses Global (Full)</span>
                             @endif
                         </td>
 
-                        {{-- TOGGLE AKTIF / OFF --}}
+                        {{-- STATUS --}}
                         <td>
-                            <form action="{{ route('superadmin.manajemen-user.toggle', $user->id) }}" method="POST" id="status-form-{{ $user->id }}">
+                            <form action="{{ route('superadmin.manajemen-user.toggle', $user->id) }}"
+                                  method="POST" id="status-form-{{ $user->id }}">
                                 @csrf
                                 @method('PATCH')
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" 
+                                    <input class="form-check-input"
+                                           type="checkbox"
                                            onchange="document.getElementById('status-form-{{ $user->id }}').submit()"
-                                           {{ $user->is_aktif ? 'checked' : '' }}>
-                                    <label class="form-check-label {{ $user->is_aktif ? 'text-success' : 'text-danger' }} fw-bold" style="font-size: 12px">
-                                        {{ $user->is_aktif ? 'Aktif' : 'Non-Aktif' }}
+                                           {{ $user->is_aktif === 'aktif' ? 'checked' : '' }}>
+                                    <label class="form-check-label fw-bold"
+                                           style="font-size:12px"
+                                           class="{{ $user->is_aktif === 'aktif' ? 'text-success' : 'text-danger' }}">
+                                        {{ $user->is_aktif === 'aktif' ? 'Aktif' : 'Non-Aktif' }}
                                     </label>
                                 </div>
                             </form>
                         </td>
 
+                        {{-- AKSI --}}
                         <td class="text-end pe-4">
                             <button class="btn btn-light btn-sm text-primary rounded-circle me-1"
                                     onclick='editUser(@json($user))'
@@ -105,7 +100,9 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted py-5">Belum ada data user.</td>
+                        <td colspan="5" class="text-center text-muted py-5">
+                            Belum ada data user.
+                        </td>
                     </tr>
                 @endforelse
                 </tbody>
@@ -114,7 +111,7 @@
     </div>
 </div>
 
-{{-- MODAL FORM --}}
+{{-- MODAL --}}
 <div class="modal fade" id="modalUser" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg" style="border-radius:20px">
@@ -123,33 +120,41 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <form method="POST" id="userForm" action="{{ route('superadmin.manajemen-user.store') }}">
+            <form method="POST" id="userForm"
+                  action="{{ route('superadmin.manajemen-user.store') }}">
                 @csrf
                 <div class="modal-body p-4">
                     <div class="row g-3">
+
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold text-dark">Nama Lengkap</label>
-                            <input type="text" name="name" id="name" class="form-control bg-light border-0" placeholder="Masukkan nama" required>
+                            <label class="form-label small fw-bold">Nama Lengkap</label>
+                            <input type="text" name="name" id="name"
+                                   class="form-control bg-light border-0" required>
                         </div>
+
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold text-dark">Email</label>
-                            <input type="email" name="email" id="email" class="form-control bg-light border-0" placeholder="user@example.com" required>
+                            <label class="form-label small fw-bold">Email</label>
+                            <input type="email" name="email" id="email"
+                                   class="form-control bg-light border-0" required>
                         </div>
 
                         <div class="col-md-12">
-                            <label class="form-label small fw-bold text-dark">Role / Peran</label>
-                            <select name="role_id" id="roleSelect" class="form-select bg-light border-0" onchange="handleRoleChange()" required>
+                            <label class="form-label small fw-bold">Role / Peran</label>
+                            <select name="role" id="roleSelect"
+                                    class="form-select bg-light border-0"
+                                    onchange="handleRoleChange()" required>
                                 <option value="">-- Pilih Role --</option>
-                                @foreach ($roles as $r)
-                                    <option value="{{ $r->id }}">{{ $r->label ?? $r->name }}</option>
+                                @foreach ($roles as $key => $label)
+                                    <option value="{{ $key }}">{{ $label }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        {{-- SELECTION UNIT --}}
+                        {{-- SEKOLAH --}}
                         <div class="col-md-12" id="aksesSekolahWrapper" style="display:none">
                             <label class="form-label small fw-bold text-primary">Unit Sekolah</label>
-                            <select name="sekolah_id" id="sekolah_id" class="form-select border-primary-subtle">
+                            <select name="sekolah_id" id="sekolah_id"
+                                    class="form-select border-primary-subtle">
                                 <option value="">-- Pilih Sekolah --</option>
                                 @foreach ($sekolahs as $s)
                                     <option value="{{ $s->id }}">{{ $s->nama_sekolah }}</option>
@@ -157,24 +162,19 @@
                             </select>
                         </div>
 
-                        <div class="col-md-12" id="aksesPondokWrapper" style="display:none">
-                            <label class="form-label small fw-bold text-warning">Unit Pondok</label>
-                            <select name="pondok_id" id="pondok_id" class="form-select border-warning-subtle">
-                                <option value="">-- Pilih Pondok --</option>
-                                @foreach ($pondoks as $p)
-                                    <option value="{{ $p->id }}">{{ $p->nama_pondok }}</option>
-                                @endforeach
-                            </select>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold">Password</label>
+                            <input type="password" name="password" id="password"
+                                   class="form-control bg-light border-0"
+                                   placeholder="Kosongkan jika tidak ingin mengubah password">
                         </div>
 
-                        <div class="col-md-12">
-                            <label class="form-label small fw-bold text-dark">Password</label>
-                            <input type="password" name="password" id="password" class="form-control bg-light border-0" placeholder="Kosongkan jika tidak ingin mengubah password">
-                        </div>
                     </div>
                 </div>
+
                 <div class="modal-footer border-0 p-4 pt-0">
-                    <button type="submit" class="btn btn-success w-100 fw-bold py-2 rounded-pill shadow-sm">
+                    <button type="submit"
+                            class="btn btn-success w-100 fw-bold py-2 rounded-pill shadow-sm">
                         <i class="fas fa-save me-2"></i> Simpan Data Pengguna
                     </button>
                 </div>
@@ -183,14 +183,15 @@
     </div>
 </div>
 
+{{-- SCRIPT --}}
 <script>
 function resetForm() {
     const form = document.getElementById('userForm');
     form.reset();
     form.action = "{{ route('superadmin.manajemen-user.store') }}";
-    
-    const methodInput = form.querySelector('input[name="_method"]');
-    if (methodInput) methodInput.remove();
+
+    const method = form.querySelector('input[name="_method"]');
+    if (method) method.remove();
 
     document.getElementById('modalTitle').innerText = 'Tambah User';
     handleRoleChange();
@@ -198,44 +199,32 @@ function resetForm() {
 
 function editUser(user) {
     resetForm();
-    document.getElementById('modalTitle').innerText = 'Update User & Hak Akses';
+
+    document.getElementById('modalTitle').innerText = 'Update User';
     document.getElementById('name').value = user.name;
     document.getElementById('email').value = user.email;
-    document.getElementById('userForm').action = `/superadmin/manajemen-user/${user.id}`;
+    document.getElementById('roleSelect').value = user.role;
+    document.getElementById('sekolah_id').value = user.sekolah_id ?? '';
 
-    // Tambah Method PUT
+    const form = document.getElementById('userForm');
+    form.action = `/superadmin/manajemen-user/${user.id}`;
+
     let method = document.createElement('input');
-    method.type = 'hidden'; 
-    method.name = '_method'; 
+    method.type = 'hidden';
+    method.name = '_method';
     method.value = 'PUT';
-    document.getElementById('userForm').appendChild(method);
-
-    // Set Role
-    if (user.roles && user.roles.length > 0) {
-        document.getElementById('roleSelect').value = user.roles[0].id;
-    }
+    form.appendChild(method);
 
     handleRoleChange();
-
-    // Set Unit Sekolah/Pondok
-    if (user.sekolah && user.sekolah.length > 0) {
-        document.getElementById('sekolah_id').value = user.sekolah[0].id;
-    }
-    if (user.pondok && user.pondok.length > 0) {
-        document.getElementById('pondok_id').value = user.pondok[0].id;
-    }
 }
 
 function handleRoleChange() {
-    let role = document.getElementById('roleSelect').value;
-    
-    // Sesuaikan dengan ID di tabel 'roles' Anda
-    // Contoh: 2 = Admin Sekolah, 3 = Admin Pondok, 4 = Panitia
-    const isSekolah = (role == 2 || role == 4);
-    const isPondok = (role == 3);
+    const role = document.getElementById('roleSelect').value;
+    const sekolah = document.getElementById('aksesSekolahWrapper');
 
-    document.getElementById('aksesSekolahWrapper').style.display = isSekolah ? 'block' : 'none';
-    document.getElementById('aksesPondokWrapper').style.display = isPondok ? 'block' : 'none';
+    sekolah.style.display = (role === 'admin-sekolah' || role === 'panitia-ppdb')
+        ? 'block'
+        : 'none';
 }
 </script>
 @endsection

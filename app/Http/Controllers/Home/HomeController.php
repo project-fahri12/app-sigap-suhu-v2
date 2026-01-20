@@ -9,14 +9,17 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Mengambil semua sekolah/lembaga beserta gelombang yang aktif/terbaru
-        $lembagas = Sekolah::with(['gelombang' => function ($query) {
-            $query->where('is_aktif', 1)
-                ->withCount('pendaftar'); 
-        }])->get();
+        $lembagas = Sekolah::with([
+            'gelombang' => function ($query) {
+                $query->where('is_aktif', 1)
+                    ->latest()
+                    ->withCount('pendaftar');
+            }
+        ])->get();
 
         return view('home', compact('lembagas'));
     }
+
 
     public function regist()
     {

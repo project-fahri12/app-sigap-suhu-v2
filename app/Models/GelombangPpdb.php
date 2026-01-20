@@ -4,11 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class GelombangPpdb extends Model
+class GelombangPPDB extends Model
 {
-    protected $table = 'gelombang_ppdb';
+    protected $table = 'gelombang_ppdbs';
 
-    protected $fillable = ['sekolah_id', 'tahun_ajaran_id', 'nama_gelombang', 'tanggal_buka', 'tanggal_tutup', 'kuota', 'is_aktif'];
+    protected $fillable = [
+        'sekolah_id',
+        'tahun_ajaran_id',
+        'nama_gelombang',
+        'tanggal_buka',
+        'tanggal_tutup',
+        'kuota',
+        'is_aktif',
+    ];
+
+    /* ================= RELASI ================= */
 
     public function tahunAjaran()
     {
@@ -17,30 +27,16 @@ class GelombangPpdb extends Model
 
     public function pendaftar()
     {
-        return $this->hasMany(pendaftar::class);
+        return $this->hasMany(Pendaftar::class, 'gelombang_ppdb_id');
     }
 
-    public function pendaftars()
+    public function getStatusPendaftaranAttribute()
     {
-        return $this->hasMany(Pendaftar::class, 'gelombang_id');
-    }
-
-    public function getStatusPendaftaran()
-    {
-        $sekarang = now();
-
-        if ($this->pendaftars_count >= $this->kuota) {
-            return 'FULL';
-        }
-
-        if ($sekarang < $this->tanggal_buka) {
-            return 'SEGERA';
-        }
-
-        if ($sekarang >= $this->tanggal_buka && $sekarang <= $this->tanggal_tutup) {
+        if ($this->is_aktif == 1) {
             return 'BUKA';
         }
 
         return 'TUTUP';
     }
+
 }
