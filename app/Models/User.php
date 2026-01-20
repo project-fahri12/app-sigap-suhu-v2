@@ -16,6 +16,7 @@ class User extends Authenticatable
         'password',
         'role',
         'sekolah_id',
+        'pondok_id',
         'is_aktif',
     ];
 
@@ -33,6 +34,11 @@ class User extends Authenticatable
     public function sekolah()
     {
         return $this->belongsTo(Sekolah::class, 'sekolah_id');
+    }
+
+    public function pondok() 
+    {
+        return $this->belongsTo(Pondok::class,'pondok_id');
     }
 
     // ================= HELPER ROLE =================

@@ -2,6 +2,16 @@
 
 @section('content')
     <div class="content-body">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h5 class="fw-bold mb-1">Data Pondok Pesantren</h5>
@@ -132,11 +142,6 @@
                     @csrf
                     <div class="modal-body p-4">
                         <div class="row g-3 mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label small fw-bold text-muted text-uppercase">Kode</label>
-                                <input type="text" name="kode_pondok" id="kode_pondok" class="form-control"
-                                    placeholder="P01" required>
-                            </div>
                             <div class="col-md-8">
                                 <label class="form-label small fw-bold text-muted text-uppercase">Nama Pondok</label>
                                 <input type="text" name="nama_pondok" id="nama_pondok" class="form-control" required>

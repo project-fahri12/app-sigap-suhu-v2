@@ -53,7 +53,7 @@
         </aside>
 
         <main class="main-content">
-
+            
             @include('dashboard.layouts.partials._navbar')
 
             @yield('content')

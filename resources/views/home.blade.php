@@ -3,240 +3,267 @@
 
 <head>
     <ma charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPDB Terpadu | Yayasan Pendidikan Unggul</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PPDB Terpadu | Yayasan Pendidikan Unggul</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <li  nk
-                href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap"
-                rel="stylesheet">
-        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <li nk
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+            rel="stylesheet">
+
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    <style>
-        :root {
-            --primary-green: #198754;
-            --light-green: #2ecc71;
-            --dark-green: #0d5233;
-            --soft-bg: #f8faf9;
+            <style>
+                :root {
+                    --primary-green: #198754;
+                    --light-green: #2ecc71;
+                    --dark-green: #0d5233;
+                    --soft-bg: #f8faf9;
                     --gradient-main: linear-gradient(135deg, #0d5233 0%, #198754 100%);
                     --glass-white: rgba(255, 255, 255, 0.9);
                 }
-           
-            
+
+
                 body {
-                     font-family:
-         'Plus Jakarta Sans', sans-serif;
-             
-                   background-color: var(--soft-bg);
-         
-                   color: #2c3e50;
+                    font-family:
+                        'Plus Jakarta Sans', sans-serif;
+
+                    background-color: var(--soft-bg);
+
+                    color: #2c3e50;
                     overflow-x: hidden;
-              
-          
-    }
-        
+
+
+                }
+
                 /* --- NAVIGATION --- */
-              .navbar {
-                    transition: all 0.4s ease;
-                    padding: 15px 0;
-                  background: va(-glass-white) !important;
-                    backdrop-filter: blur(10px);
-                }
-        
-                .navbar.scrolled {
-                    padding: 10px 0;
-                  border-bottom: 2x olid var(--primary-green);
-                }
-        
-              .nav-link {
-                    font-weight: 600;
-                    color: #333 !important;
-                      marin
-        :  1
-                0px;
-                            font-size: 0.95rem;
-                       }
-            
-                .nav-link:hover {
-         
-                   color: var(--primary-green) !important;
-             
-               }
-        
+.navbar {
+    transition: all 0.4s ease;
+    padding: 15px 0;
+    /* Perbaikan: 'var' bukan 'va', pastikan variabel --glass-white sudah didefinisikan */
+    background: var(--glass-white, rgba(255, 255, 255, 0.8)) !important; 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Dukungan Safari */
+}
+
+.navbar.scrolled {
+    padding: 10px 0;
+    /* Perbaikan: '2px solid' bukan '2x olid' */
+    border-bottom: 2px solid var(--primary-green);
+    background: white !important; /* Warna putih solid saat di-scroll */
+}
+
+.nav-link {
+    font-weight: 600;
+    color: #333 !important;
+    /* Perbaikan: 'margin' bukan 'marin' */
+    margin: 0 10px;
+    font-size: 0.95rem;
+}
+
+.nav-link:hover {
+    color: var(--primary-green) !important;
+}
+
+/* Button PPDB */
+.btn-ppdb {
+    /* Perbaikan: 'background' bukan 'b ackground' */
+    background: var(--gradient-main, linear-gradient(135deg, #198754, #20c997));
+    color: white !important;
+    border-radius: 50px;
+    padding: 8px 25px;
+    font-weight: 700;
+    border: none;
+    transition: all 0.3s;
+}
+
+.btn-ppdb:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.4);
+    filter: brightness(1.1);
+}
+
+/* --- HERO SECTION --- */
+.hero-section {
+    /* Padding responsif: Atas lebih besar untuk menghindari tumpukan dengan navbar */
+    padding: 180px 0 120px;
+    background: var(--gradient-main), url('https://www.transparenttextures.com/patterns/cubes.png');
+    color: white;
+    position: relative;
+    /* Membuat bentuk lengkung di bawah */
+    clip-path: ellipse(150% 100% at 50% 0%);
+    overflow: hidden;
+}
+
+.hero-title {
+    font-weight: 800;
+    font-size: 3.5rem;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 992px) {
+    .navbar {
+        background: white !important; /* Mobile menu biasanya lebih baik solid white */
+    }
     
-            .btn-ppdb {
-          
-          b
-ackground: var(--gradient-main);
-            color: white !important;
-            border-radius: 50px;
-           
- padding: 8px 25px;
-            font-weight: 700;
-            border: none;
-            transition: transform 0.3s;
-        }
+    .nav-link {
+        margin: 5px 0;
+        padding: 10px;
+    }
+}
 
-        .btn-ppdb:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(25, 135, 84, 0.4);
-        }
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 140px 0 80px;
+        clip-path: none; /* Menghilangkan clip-path di mobile agar konten tidak terpotong */
+        text-align: center;
+    }
 
-        /* --- HERO SECTION --- */
-        .hero-section {
-            padding: 160px 0 100px;
-            background: var(--gradient-main), url('https://www.transparenttextures.com/patterns/cubes.png');
-            color: white;
-            position: relative;
-            clip-path: ellipse(150% 100% at 50% 0%);
-        }
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .btn-ppdb {
+        width: 100%; /* Tombol full width di mobile jika diperlukan */
+        max-width: 300px;
+    }
+}
 
-        .hero-title {
-            font-weight: 800;
-            font-size: 3.5rem;
-            line-height: 1.2;
-        }
+                /* --- CARD INSTITUTION --- */
+                .card-lembaga {
+                    border: none;
+                    border-radius: 20px;
+                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    background: white;
+                    height: 100%;
+                    overflow: hidden;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                }
 
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.2rem;
-            }
-        }
+                .card-lembaga:hover {
+                    transform: translateY(-12px);
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+                }
 
-        /* --- CARD INSTITUTION --- */
-        .card-lembaga {
-            border: none;
-            border-radius: 20px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: white;
-            height: 100%;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        }
+                .status-badge {
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                    padding: 5px 15px;
+                    border-radius: 50px;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                }
 
-        .card-lembaga:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
+                /* --- STEPS PPDB --- */
+                .step-item {
+                    position: relative;
+                    text-align: center;
+                }
 
-        .status-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
+                .step-number {
+                    width: 60px;
+                    height: 60px;
+                    background: white;
+                    color: var(--primary-green);
+                    border: 3px solid var(--primary-green);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    margin: 0 auto 20px;
+                    z-index: 2;
+                    position: relative;
+                }
 
-        /* --- STEPS PPDB --- */
-        .step-item {
-            position: relative;
-            text-align: center;
-        }
+                .step-item::after {
+                    content: '';
+                    position: absolute;
+                    top: 30px;
+                    left: 50%;
+                    width: 100%;
+                    height: 2px;
+                    background: #dee2e6;
+                    z-index: 1;
+                }
 
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: white;
-            color: var(--primary-green);
-            border: 3px solid var(--primary-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin: 0 auto 20px;
-            z-index: 2;
-            position: relative;
-        }
+                .step-item:last-child::after {
+                    display: none;
+                }
 
-        .step-item::after {
-            content: '';
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            width: 100%;
-            height: 2px;
-            background: #dee2e6;
-            z-index: 1;
-        }
+                @media (max-width: 768px) {
+                    .step-item::after {
+                        display: none;
+                    }
+                }
 
-        .step-item:last-child::after {
-            display: none;
-        }
+                /* --- PARALLAX CTA --- */
+                .parallax-cta {
+                    background-image: linear-gradient(rgba(13, 82, 51, 0.85), rgba(13, 82, 51, 0.85)),
+                        url('https://images.unsplash.com/photo-1541339907198-e08756ebafe3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+                    background-attachment: fixed;
+                    background-position: center;
+                    background-size: cover;
+                    padding: 120px 0;
+                    color: white;
+                }
 
-        @media (max-width: 768px) {
-            .step-item::after {
-                display: none;
-            }
-        }
+                /* --- STATS CARD --- */
+                .stat-box {
+                    background: white;
+                    border-bottom: 5px solid var(--primary-green);
+                    padding: 30px;
+                    border-radius: 15px;
+                    text-align: center;
+                }
 
-        /* --- PARALLAX CTA --- */
-        .parallax-cta {
-            background-image: linear-gradient(rgba(13, 82, 51, 0.85), rgba(13, 82, 51, 0.85)),
-                url('https://images.unsplash.com/photo-1541339907198-e08756ebafe3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-attachment: fixed;
-            background-position: center;
-            background-size: cover;
-            padding: 120px 0;
-            color: white;
-        }
+                .stat-number {
+                    font-size: 2.5rem;
+                    font-weight: 800;
+                    color: var(--primary-green);
+                }
 
-        /* --- STATS CARD --- */
-        .stat-box {
-            background: white;
-            border-bottom: 5px solid var(--primary-green);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-        }
+                /* --- FAQ --- */
+                .accordion-button:not(.collapsed) {
+                    background-color: var(--soft-bg);
+                    color: var(--primary-green);
+                    font-weight: 700;
+                }
 
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary-green);
-        }
+                /* --- FOOTER --- */
+                .footer {
+                    background: #0a2b1c;
+                    color: #ecf0f1;
+                    padding: 80px 0 30px;
+                }
 
-        /* --- FAQ --- */
-        .accordion-button:not(.collapsed) {
-            background-color: var(--soft-bg);
-            color: var(--primary-green);
-            font-weight: 700;
-        }
+                .footer h5 {
+                    color: white;
+                    margin-bottom: 25px;
+                    font-weight: 700;
+                }
 
-        /* --- FOOTER --- */
-        .footer {
-            background: #0a2b1c;
-            color: #ecf0f1;
-            padding: 80px 0 30px;
-        }
+                .footer-link {
+                    color: #bdc3c7;
+                    text-decoration: none;
+                    transition: 0.3s;
+                    display: block;
+                    margin-bottom: 12px;
+                }
 
-        .footer h5 {
-            color: white;
-            margin-bottom: 25px;
-            font-weight: 700;
-        }
-
-        .footer-link {
-            color: #bdc3c7;
-            text-decoration: none;
-            transition: 0.3s;
-            display: block;
-            margin-bottom: 12px;
-        }
-
-        .footer-link:hover {
-            color: var(--light-green);
-            transform: translateX(5px);
-        }
-    </style>
+                .footer-link:hover {
+                    color: var(--light-green);
+                    transform: translateX(5px);
+                }
+            </style>
 </head>
 
 <body>
@@ -259,7 +286,7 @@ ackground: var(--gradient-main);
                 </ul>
                 <div class="d-flex gap-2">
                     <a href="{{ route('auth.pendaftar') }}" class="btn btn-outline-success rounded-pill px-4">Login</a>
-                    <a href="{{ route('regist') }}" class="btn btn-ppdb">Daftar PPDB</a>
+                    <a href="#lembaga" class="btn btn-ppdb">Daftar PPDB</a>
                 </div>
             </div>
         </div>
@@ -328,27 +355,27 @@ ackground: var(--gradient-main);
             <div class="row g-4">
                 @foreach ($lembagas as $lembaga)
                     @php
-    $gelombang = $lembaga->gelombang->first();
+                        $gelombang = $lembaga->gelombang->first();
 
-    if (!$gelombang) {
-        $status = 'BELUM_KONFIGURASI';
-    } elseif ($gelombang->is_aktif == 1) {
-        $status = 'BUKA';
-    } else {
-        $status = 'TUTUP';
-    }
-@endphp
+                        if (!$gelombang) {
+                            $status = 'BELUM_KONFIGURASI';
+                        } elseif ($gelombang->is_aktif == 1) {
+                            $status = 'BUKA';
+                        } else {
+                            $status = 'TUTUP';
+                        }
+                    @endphp
 
 
                     <div class="col-md-4">
                         <div class="card-lembaga p-4 position-relative">
                             @if ($status === 'BUKA')
-    <span class="status-badge bg-success text-white">🟢 Dibuka</span>
-@elseif ($status === 'TUTUP')
-    <span class="status-badge bg-secondary text-white">⚪ Ditutup</span>
-@else
-    <span class="status-badge bg-warning text-dark">🟡 Belum Konfigurasi</span>
-@endif
+                                <span class="status-badge bg-success text-white">🟢 Dibuka</span>
+                            @elseif ($status === 'TUTUP')
+                                <span class="status-badge bg-secondary text-white">⚪ Ditutup</span>
+                            @else
+                                <span class="status-badge bg-warning text-dark">🟡 Belum Konfigurasi</span>
+                            @endif
 
 
                             <div class="mb-4 text-success">
@@ -361,33 +388,33 @@ ackground: var(--gradient-main);
                             <hr>
 
                             <<div class="d-flex justify-content-between mb-3">
-    <span class="small text-muted">
-        Kuota:
-        <strong>{{ $gelombang->kuota ?? '-' }}</strong>
-    </span>
-    <span class="small text-muted">
-        Sisa:
-        <strong>
-            {{ $gelombang ? max($gelombang->kuota - $gelombang->pendaftar_count, 0) : '-' }}
-        </strong>
-    </span>
-</div>
+                                <span class="small text-muted">
+                                    Kuota:
+                                    <strong>{{ $gelombang->kuota ?? '-' }}</strong>
+                                </span>
+                                <span class="small text-muted">
+                                    Sisa:
+                                    <strong>
+                                        {{ $gelombang ? max($gelombang->kuota - $gelombang->pendaftar_count, 0) : '-' }}
+                                    </strong>
+                                </span>
+                        </div>
 
 
-                            <div class="d-grid gap-2">
-                                @if ($status == 'BUKA' )
-                                    <a href="{{ route('regist', ['sekolah' => $lembaga->id]) }}"
-                                        class="btn btn-success fw-bold">Daftar Unit</a>
-                                @else
-                                    <button class="btn btn-secondary fw-bold" disabled>Belum Tersedia</button>
-                                @endif
+                        <div class="d-grid gap-2">
+                            @if ($status == 'BUKA')
+                                <a href="{{ route('regist', ['sekolah' => $lembaga->id]) }}"
+                                    class="btn btn-success fw-bold">Daftar Unit</a>
+                            @else
+                                <button class="btn btn-secondary fw-bold" disabled>Belum Tersedia</button>
+                            @endif
 
-                                <a href="#" class="btn btn-outline-secondary btn-sm">Brosur & Biaya</a>
-                            </div>
+                            <a href="#" class="btn btn-outline-secondary btn-sm">Brosur & Biaya</a>
                         </div>
                     </div>
-                @endforeach
             </div>
+            @endforeach
+        </div>
         </div>
     </section>
 

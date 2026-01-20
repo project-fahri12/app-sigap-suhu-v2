@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 //Route Public 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/regist', [HomeController::class, 'regist'])->name('regist');
+Route::post('/regist', [HomeController::class, 'registStore'])->name('regist.store');
+// Route untuk menampilkan halaman sukses pendaftaran
+Route::get('/pendaftaran/success/{kode}', [HomeController::class, 'registSuccess'])
+    ->name('pendaftaran.success');
 
 //Auth
 Route::get('auth/pendaftar', [AuthController::class, 'authpendaftar'])->name('auth.pendaftar');
@@ -37,7 +41,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::patch('pondok/{id}/toggle', [PondokController::class, 'toggleStatus'])->name('pondok.toggle');
         Route::resource('/manajemen-user', UserManajemenController::class);
         Route::patch('/manajemen-user/{id}/toggle', [UserManajemenController::class, 'toggle'])->name('manajemen-user.toggle');
-        Route::resource('role', RoleController::class);
     });
 
     // Admin Sekolah (Hanya bisa diakses role 'admin_sekolah')

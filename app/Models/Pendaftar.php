@@ -7,7 +7,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pendaftar extends Model
 {
-    protected $guarded = ['id'];
+// app/Models/Pendaftar.php
+protected $fillable = [
+    'kode_pendaftaran', 'tahun_ajaran_id', 'sekolah_id', 'pondok_id', 
+    'gelombang_ppdb_id', 'nama_lengkap', 'nik', 'nisn', 'nomor_kk', 
+    'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'anak_ke', 
+    'jumlah_saudara', 'berkebutuhan_khusus', 'domisili_santri', 
+    'alamat_lengkap', 'rt', 'rw', 'provinsi', 'kabupaten', 
+    'kecamatan', 'desa', 'kode_pos', 'sekolah_asal', 
+    'npsn_sekolah', 'status_sekolah', 'status_pendaftaran'
+];
 
     // Relasi ke Tahun Ajaran
     public function tahunAjaran(): BelongsTo

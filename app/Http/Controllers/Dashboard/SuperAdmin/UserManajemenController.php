@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Dashboard\SuperAdmin;
 
 use App\Models\User;
 use App\Models\Sekolah;
+use App\Models\Pondok;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -14,11 +15,13 @@ class UserManajemenController extends Controller
 {
     public function index()
     {
-        $users = User::with('sekolah')
-            ->orderBy('name')
+        // Perbaikan: Tambahkan parameter arah 'asc' agar tidak error
+        $users = User::with(['sekolah', 'pondok'])
+            ->orderBy('name', 'asc') 
             ->get();
 
-        $sekolahs = Sekolah::orderBy('nama_sekolah')->get();
+        $sekolahs = Sekolah::orderBy('nama_sekolah', 'asc')->get();
+        $pondoks = Pondok::orderBy('nama_pondok', 'asc')->get();
 
         $roles = [
             'super-admin'   => 'Super Admin',
@@ -29,9 +32,7 @@ class UserManajemenController extends Controller
         ];
 
         return view('dashboard.superadmin.manajemenuser.index', compact(
-            'users',
-            'roles',
-            'sekolahs'
+            'users', 'roles', 'sekolahs', 'pondoks'
         ));
     }
 
@@ -42,7 +43,13 @@ class UserManajemenController extends Controller
             'email'      => 'required|email|unique:users,email',
             'password'   => 'required|min:6',
             'role'       => 'required',
-            'sekolah_id' => 'nullable|exists:sekolahs,id',
+            // Wajib pilih sekolah jika admin-sekolah atau panitia
+            'sekolah_id' => 'required_if:role,admin-sekolah,panitia-ppdb|nullable|exists:sekolahs,id',
+            // Wajib pilih pondok jika admin-pondok
+            'pondok_id'  => 'required_if:role,admin-pondok|nullable|exists:pondoks,id',
+        ], [
+            'sekolah_id.required_if' => 'Unit Sekolah wajib dipilih untuk peran ini.',
+            'pondok_id.required_if'  => 'Unit Pondok wajib dipilih untuk peran ini.',
         ]);
 
         User::create([
@@ -50,7 +57,9 @@ class UserManajemenController extends Controller
             'email'      => $request->email,
             'password'   => Hash::make($request->password),
             'role'       => $request->role,
-            'sekolah_id' => $request->sekolah_id,
+            // Simpan ID sesuai role, lainnya null
+            'sekolah_id' => in_array($request->role, ['admin-sekolah', 'panitia-ppdb']) ? $request->sekolah_id : null,
+            'pondok_id'  => ($request->role === 'admin-pondok') ? $request->pondok_id : null,
             'is_aktif'   => 'aktif',
         ]);
 
@@ -63,21 +72,44 @@ class UserManajemenController extends Controller
             'name'       => 'required|string|max:255',
             'email'      => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'role'       => 'required',
-            'sekolah_id' => 'nullable|exists:sekolahs,id',
+            'sekolah_id' => 'required_if:role,admin-sekolah,panitia-ppdb|nullable|exists:sekolahs,id',
+            'pondok_id'  => 'required_if:role,admin-pondok|nullable|exists:pondoks,id',
+            'password'   => 'nullable|min:6',
+        ], [
+            'sekolah_id.required_if' => 'Unit Sekolah wajib dipilih.',
+            'pondok_id.required_if'  => 'Unit Pondok wajib dipilih.',
         ]);
 
-        $user->update([
+        $data = [
             'name'       => $request->name,
             'email'      => $request->email,
             'role'       => $request->role,
-            'sekolah_id' => $request->sekolah_id,
-        ]);
+            'sekolah_id' => in_array($request->role, ['admin-sekolah', 'panitia-ppdb']) ? $request->sekolah_id : null,
+            'pondok_id'  => ($request->role === 'admin-pondok') ? $request->pondok_id : null,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
 
         return back()->with('success', 'User berhasil diperbarui');
     }
 
-    public function destroy(User $user)
+    /**
+     * PERBAIKAN DELETE: 
+     * Menggunakan ID langsung untuk menghindari konflik tipe data di editor
+     */
+    public function destroy($id)
     {
+        $user = User::findOrFail($id);
+        
+        // Mencegah menghapus diri sendiri
+        if ($user->id === Auth::id()) {
+            return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
+
         $user->delete();
 
         return back()->with('success', 'User berhasil dihapus');
@@ -86,7 +118,6 @@ class UserManajemenController extends Controller
     public function toggle($id)
     {
         $user = User::findOrFail($id);
-
         $user->update([
             'is_aktif' => $user->is_aktif === 'aktif' ? 'non_aktif' : 'aktif'
         ]);
