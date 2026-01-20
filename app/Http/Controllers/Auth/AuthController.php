@@ -20,6 +20,28 @@ class AuthController extends Controller
         return view('auth.login-pendaftar');
     }
 
+    public function storePendaftar(Request $request)
+{
+    $request->validate([
+        'kode_pendaftaran' => 'required|string',
+    ]);
+
+    // Credential: email/username adalah kode_pendaftaran, password juga kode_pendaftaran
+    $credentials = [
+        'password'         => $request->kode_pendaftaran, 
+        'role'             => 'pendaftar',
+    ];
+
+    if (Auth::attempt($credentials, $request->has('remember'))) {
+        $request->session()->regenerate();
+        return redirect()->route('pendaftar.dashboard');
+    }
+
+    return back()->withErrors([
+        'kode_pendaftaran' => 'ID Pendaftaran tidak ditemukan atau tidak sesuai.',
+    ])->withInput();
+}
+
     // Login Admin / Staff
     public function authadmin()
     {

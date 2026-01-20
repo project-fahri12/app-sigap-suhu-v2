@@ -7,9 +7,14 @@ use App\Models\GelombangPpdb;
 use App\Models\Pendaftar;
 use App\Models\Pondok;
 use App\Models\Sekolah;
+use App\Models\OrangTua;
+use App\Models\Wali;
+use App\Models\InformasiKontak;
 use App\Models\TahunAjaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
@@ -29,7 +34,7 @@ class HomeController extends Controller
     public function regist(Request $request)
     {
         $sekolahId = $request->query('sekolah');
-        if (! $sekolahId) {
+        if (!$sekolahId) {
             abort(404);
         }
 
@@ -45,73 +50,108 @@ class HomeController extends Controller
 
     public function registStore(Request $request)
     {
-        // // 1. Validasi Data
-        // $validated = $request->validate([
-        //     'nama_lengkap' => 'required|string|max:255',
-        //     'nik' => 'required|digits:16',
-        //     'nisn' => 'required|digits:10',
-        //     'nomor_kk' => 'required|digits:16',
-        //     'tempat_lahir' => 'required|string|max:255',
-        //     'tanggal_lahir' => 'required|date',
-        //     'jenis_kelamin' => 'required|in:L,P',
-        //     'anak_ke' => 'required|numeric',
-        //     'jumlah_saudara' => 'required|numeric',
-        //     'sekolah_id' => 'required|exists:sekolahs,id',
-        //     'pondok_id' => 'nullable|exists:pondoks,id',
-        //     'alamat_lengkap' => 'required|string',
-        //     'rt' => 'required|max:5',
-        //     'rw' => 'required|max:5',
-        //     'provinsi' => 'required|string',
-        //     'kabupaten' => 'required|string',
-        //     'kecamatan' => 'required|string',
-        //     'desa' => 'required|string',
-        //     'kode_pos' => 'nullable|digits:5',
-        //     'sekolah_asal' => 'required|string|max:255',
-        //     'status_sekolah' => 'required|string',
-        //     'nama_ayah' => 'required|string|max:255',
-        //     'nik_ayah' => 'required|digits:16',
-        //     'nama_ibu' => 'required|string|max:255',
-        //     'nik_ibu' => 'required|digits:16',
-        //     'no_wa' => 'required|string|max:15',
-        //     'email' => 'required|email|max:255',
-        // ]);
+        DB::beginTransaction();
 
+        try {
+            $gelombang = GelombangPpdb::where('sekolah_id', $request->sekolah_id)
+                ->where('is_aktif', 1)
+                ->first();
 
-        $gelombang = GelombangPpdb::where('sekolah_id', $request->sekolah_id)
-            ->where('is_aktif', 1)
-            ->first();
+            $tahunAjaran = TahunAjaran::where('is_aktif', 1)->first();
 
-        Pendaftar::create([
-            'kode_pendaftaran' => 'YYPPSH-'.date('Y').strtoupper(Str::random(5)),
-            'tahun_ajaran_id' => TahunAjaran::where('is_aktif', 1),
-            'gelombang_ppdb_id' => $gelombang->id ?? null,
-            'domisili_santri' => ($request->domisili_santri == 'Mukim') ? 'tetap' : 'nduduk',
-            'status_pendaftaran' => 'pendaftar',
-            'nama_lengkap'=> $request->nama_lengkap,
-            'nik'=> $request->nik,
-            'nisn'=> $request->nisn,
-            'nomor_kk'=> $request->nomor_kk,
-            'tempat_lahir'=> $request->tempat_lahir,
-            'tanggal_lahir'=> $request->tanggal_lahir,
-            'jenis_kelamin'=> $request->jenis_kelamin,
-            'anak_ke'=> $request->anak_ke,
-            'jumlah_saudara'=> $request->jumlah_saudara,
-            'berkebutuhan_khusus'=> $request->berkebutuhan_khusus,
-            'sekolah_id'=> $request->sekolah_id,
-            'pondok_id'=> $request->pondok_id,
-            'alamat_lengkap'=> $request->alamat_lengkap,
-            'provinsi'=> $request->provinsi,
-            'kabupaten'=> $request->kabupaten,
-            'kecamatan'=> $request->kecamatan,
-            'desa'=> $request->desa,
-            'kode_pos'=> $request->kode_pos,
-            'sekolah_asal'=> $request->sekolah_asal,
-            'npsn_sekolah'=> $request->npsn_sekolah,
-            'status_sekolah'=> $request->status_sekolah,
-        ]);
+            $kodePendaftaran = 'YYPPSH-' . date('Y') . strtoupper(Str::random(5));
 
-        return redirect()->back()->with('success','selamat, anda berhasil terdaftar disistem kami');
+            // 1. Simpan Pendaftar
+            $pendaftar = Pendaftar::create([
+                'kode_pendaftaran' => $kodePendaftaran,
+                'tahun_ajaran_id' => $tahunAjaran->id ?? 1,
+                'gelombang_ppdb_id' => $gelombang->id ?? null,
+                'domisili_santri' => ($request->domisili_santri == 'Mukim') ? 'tetap' : 'nduduk',
+                'status_pendaftaran' => 'pendaftar',
+                'nama_lengkap' => $request->nama_lengkap,
+                'nik' => $request->nik,
+                'nisn' => $request->nisn,
+                'nomor_kk' => $request->nomor_kk,
+                'tempat_lahir' => $request->tempat_lahir,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'anak_ke' => $request->anak_ke,
+                'jumlah_saudara' => $request->jumlah_saudara,
+                'berkebutuhan_khusus' => $request->berkebutuhan_khusus,
+                'sekolah_id' => $request->sekolah_id,
+                'pondok_id' => $request->pondok_id,
+                'alamat_lengkap' => $request->alamat_lengkap ?? '-',
+                'rt' => $request->rt,
+                'rw' => $request->rw,
+                'provinsi' => $request->provinsi,
+                'kabupaten' => $request->kabupaten,
+                'kecamatan' => $request->kecamatan,
+                'desa' => $request->desa,
+                'kode_pos' => $request->kode_pos,
+                'sekolah_asal' => $request->sekolah_asal,
+                'npsn_sekolah' => $request->npsn_sekolah ?? '-', // Mencegah Error 1048
+                'status_sekolah' => $request->status_sekolah,
+            ]);
 
+            // 2. Simpan Orang Tua
+            OrangTua::create([
+                'pendaftaran_id' => $pendaftar->id, // Sesuaikan dengan nama kolom di migration
+                'nama_ayah' => $request->nama_ayah,
+                'nik_ayah' => $request->nik_ayah,
+                'pendidikan_terakhir_ayah' => $request->pendidikan_terakhir_ayah,
+                'status_ayah' => $request->status_ayah,
+                'pekerjaan_ayah' => $request->pekerjaan_ayah,
+                'penghasilan_ayah' => $request->penghasilan_ayah,
+                'nama_ibu' => $request->nama_ibu,
+                'nik_ibu' => $request->nik_ibu,
+                'pendidikan_terakhir_ibu' => $request->pendidikan_terakhir_ibu,
+                'status_ibu' => $request->status_ibu,
+                'pekerjaan_ibu' => $request->pekerjaan_ibu,
+                'penghasilan_ibu' => $request->penghasilan_ibu,
+            ]);
+
+            // 3. Simpan Wali (Jika nama_wali diisi)
+            if ($request->filled('nama_wali')) {
+                Wali::create([
+                    'pendaftar_id' => $pendaftar->id,
+                    'nama_wali' => $request->nama_wali,
+                    'nik_wali' => $request->nik_wali,
+                    'hubungan' => $request->hubungan,
+                    'pendidikan_terakhir' => $request->pendidikan_terakhir,
+                    'pekerjaan_wali' => $request->pekerjaan_wali,
+                    'penghasilan_wali' => $request->penghasilan_wali,
+                    'alamat_lengkap' => $request->domisili_sekarang ?? '-',
+                ]);
+            }
+
+            // 4. Simpan Kontak
+            InformasiKontak::create([
+                'pendaftar_id' => $pendaftar->id,
+                'no_hp_ayah' => $request->no_hp_ayah,
+                'no_hp_ibu' => $request->no_hp_ibu,
+                'no_hp_wali' => $request->no_hp_wali,
+                'no_wa' => $request->no_wa,
+                'email' => $request->email,
+            ]);
+
+            User::create([
+                'pendaftar_id'  => $pendaftar->id,
+                'name'  => $request->nama_lengkap,
+                'email' => $request->email,
+                'password'  => Hash::make($kodePendaftaran)
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('pendaftaran.success', ['kode' => $pendaftar->kode_pendaftaran])
+                ->with('success', 'Pendaftaran Berhasil!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log error untuk debug
+            \Log::error('Gagal Simpan Pendaftaran: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function registSuccess($kode)

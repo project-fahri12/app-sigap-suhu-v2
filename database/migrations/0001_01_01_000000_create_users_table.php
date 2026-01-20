@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('role', ['super-admin', 'admin-sekolah', 'admin-pondok', 'panitia-ppdb','pendaftar']);
             $table->foreignId('sekolah_id')->nullable()->constrained('sekolahs')->onDelete('cascade');
             $table->foreignId('pondok_id')->nullable()->constrained('pondoks')->onDelete('cascade');
+            $table->foreignId('pendaftar_id')->nullable()->constrained('pendaftars')->onDelete('cascade');
             $table->enum('is_aktif', ['aktif', 'non_aktif'])->default('non_aktif');
             $table->rememberToken();
             $table->timestamps();
