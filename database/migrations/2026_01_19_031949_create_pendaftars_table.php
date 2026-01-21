@@ -29,6 +29,8 @@ return new class extends Migration
     $table->date('tanggal_lahir');
     $table->enum('jenis_kelamin', ['L', 'P']);
     $table->integer('anak_ke');
+    $table->integer('jumlah_saudara');
+    $table->string('domisili_santri');  
     $table->string('berkebutuhan_khusus')->nullable();
     
     // Alamat

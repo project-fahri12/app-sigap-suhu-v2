@@ -34,7 +34,7 @@ class AuthController extends Controller
 
     if (Auth::attempt($credentials, $request->has('remember'))) {
         $request->session()->regenerate();
-        return redirect()->route('pendaftar.dashboard');
+        return redirect()->route('pendaftar.panduan.index');
     }
 
     return back()->withErrors([
@@ -91,8 +91,8 @@ class AuthController extends Controller
             'super-admin'   => redirect()->route('superadmin.dashboard'),
             'admin-sekolah' => redirect()->route('adminsekolah.dashboard'),
             'admin-pondok'  => redirect()->route('adminpondok.dashboard'),
-            'panitia-ppdb'  => redirect()->route('panitia.dashboard'),
-            'pendaftar'     => redirect()->route('pendaftar.dashboard'),
+            // 'panitia-ppdb'  => redirect()->route('panitia.dashboard'),
+            'pendaftar'     => redirect()->route('pendaftar.panduan.index'),
             default         => redirect()->route('home'),
         };
     }
@@ -107,6 +107,18 @@ class AuthController extends Controller
 
         return redirect()
             ->route('auth.admin')
+            ->with('success', 'Berhasil keluar dari sistem.');
+    }
+
+    public function logoutPendaftar(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()
+            ->route('pendaftar.logout')
             ->with('success', 'Berhasil keluar dari sistem.');
     }
 }

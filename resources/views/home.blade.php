@@ -40,99 +40,104 @@
                 }
 
                 /* --- NAVIGATION --- */
-.navbar {
-    transition: all 0.4s ease;
-    padding: 15px 0;
-    /* Perbaikan: 'var' bukan 'va', pastikan variabel --glass-white sudah didefinisikan */
-    background: var(--glass-white, rgba(255, 255, 255, 0.8)) !important; 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px); /* Dukungan Safari */
-}
+                .navbar {
+                    transition: all 0.4s ease;
+                    padding: 15px 0;
+                    /* Perbaikan: 'var' bukan 'va', pastikan variabel --glass-white sudah didefinisikan */
+                    background: var(--glass-white, rgba(255, 255, 255, 0.8)) !important;
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
+                    /* Dukungan Safari */
+                }
 
-.navbar.scrolled {
-    padding: 10px 0;
-    /* Perbaikan: '2px solid' bukan '2x olid' */
-    border-bottom: 2px solid var(--primary-green);
-    background: white !important; /* Warna putih solid saat di-scroll */
-}
+                .navbar.scrolled {
+                    padding: 10px 0;
+                    /* Perbaikan: '2px solid' bukan '2x olid' */
+                    border-bottom: 2px solid var(--primary-green);
+                    background: white !important;
+                    /* Warna putih solid saat di-scroll */
+                }
 
-.nav-link {
-    font-weight: 600;
-    color: #333 !important;
-    /* Perbaikan: 'margin' bukan 'marin' */
-    margin: 0 10px;
-    font-size: 0.95rem;
-}
+                .nav-link {
+                    font-weight: 600;
+                    color: #333 !important;
+                    /* Perbaikan: 'margin' bukan 'marin' */
+                    margin: 0 10px;
+                    font-size: 0.95rem;
+                }
 
-.nav-link:hover {
-    color: var(--primary-green) !important;
-}
+                .nav-link:hover {
+                    color: var(--primary-green) !important;
+                }
 
-/* Button PPDB */
-.btn-ppdb {
-    /* Perbaikan: 'background' bukan 'b ackground' */
-    background: var(--gradient-main, linear-gradient(135deg, #198754, #20c997));
-    color: white !important;
-    border-radius: 50px;
-    padding: 8px 25px;
-    font-weight: 700;
-    border: none;
-    transition: all 0.3s;
-}
+                /* Button PPDB */
+                .btn-ppdb {
+                    /* Perbaikan: 'background' bukan 'b ackground' */
+                    background: var(--gradient-main, linear-gradient(135deg, #198754, #20c997));
+                    color: white !important;
+                    border-radius: 50px;
+                    padding: 8px 25px;
+                    font-weight: 700;
+                    border: none;
+                    transition: all 0.3s;
+                }
 
-.btn-ppdb:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.4);
-    filter: brightness(1.1);
-}
+                .btn-ppdb:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.4);
+                    filter: brightness(1.1);
+                }
 
-/* --- HERO SECTION --- */
-.hero-section {
-    /* Padding responsif: Atas lebih besar untuk menghindari tumpukan dengan navbar */
-    padding: 180px 0 120px;
-    background: var(--gradient-main), url('https://www.transparenttextures.com/patterns/cubes.png');
-    color: white;
-    position: relative;
-    /* Membuat bentuk lengkung di bawah */
-    clip-path: ellipse(150% 100% at 50% 0%);
-    overflow: hidden;
-}
+                /* --- HERO SECTION --- */
+                .hero-section {
+                    /* Padding responsif: Atas lebih besar untuk menghindari tumpukan dengan navbar */
+                    padding: 180px 0 120px;
+                    background: var(--gradient-main), url('https://www.transparenttextures.com/patterns/cubes.png');
+                    color: white;
+                    position: relative;
+                    /* Membuat bentuk lengkung di bawah */
+                    clip-path: ellipse(150% 100% at 50% 0%);
+                    overflow: hidden;
+                }
 
-.hero-title {
-    font-weight: 800;
-    font-size: 3.5rem;
-    line-height: 1.2;
-    margin-bottom: 20px;
-}
+                .hero-title {
+                    font-weight: 800;
+                    font-size: 3.5rem;
+                    line-height: 1.2;
+                    margin-bottom: 20px;
+                }
 
-/* --- RESPONSIVE ADJUSTMENTS --- */
-@media (max-width: 992px) {
-    .navbar {
-        background: white !important; /* Mobile menu biasanya lebih baik solid white */
-    }
-    
-    .nav-link {
-        margin: 5px 0;
-        padding: 10px;
-    }
-}
+                /* --- RESPONSIVE ADJUSTMENTS --- */
+                @media (max-width: 992px) {
+                    .navbar {
+                        background: white !important;
+                        /* Mobile menu biasanya lebih baik solid white */
+                    }
 
-@media (max-width: 768px) {
-    .hero-section {
-        padding: 140px 0 80px;
-        clip-path: none; /* Menghilangkan clip-path di mobile agar konten tidak terpotong */
-        text-align: center;
-    }
+                    .nav-link {
+                        margin: 5px 0;
+                        padding: 10px;
+                    }
+                }
 
-    .hero-title {
-        font-size: 2.2rem;
-    }
-    
-    .btn-ppdb {
-        width: 100%; /* Tombol full width di mobile jika diperlukan */
-        max-width: 300px;
-    }
-}
+                @media (max-width: 768px) {
+                    .hero-section {
+                        padding: 140px 0 80px;
+                        clip-path: none;
+                        /* Menghilangkan clip-path di mobile agar konten tidak terpotong */
+                        text-align: center;
+                    }
+
+                    .hero-title {
+                        font-size: 2.2rem;
+                    }
+
+                    .btn-ppdb {
+                        width: 100%;
+                        /* Tombol full width di mobile jika diperlukan */
+                        max-width: 300px;
+                    }
+                }
 
                 /* --- CARD INSTITUTION --- */
                 .card-lembaga {
@@ -353,7 +358,7 @@
             </div>
 
             <div class="row g-4">
-                @foreach ($lembagas as $lembaga)
+                @forelse ($lembagas as $lembaga)
                     @php
                         $gelombang = $lembaga->gelombang->first();
 
@@ -413,7 +418,12 @@
                         </div>
                     </div>
             </div>
-            @endforeach
+        @empty
+            <div class="alert alert-info mt-4 d-flex text-center  align-items-center rounded-pill px-4" role="alert">
+                <i class="fas fa-info-circle me-3"></i>
+                <div class="small">Tidak ada lembaga yang tersedia</div>
+            </div>
+            @endforelse
         </div>
         </div>
     </section>

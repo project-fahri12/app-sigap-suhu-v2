@@ -17,6 +17,7 @@ class User extends Authenticatable
         'role',
         'sekolah_id',
         'pondok_id',
+        'pendaftar_id',
         'is_aktif',
     ];
 
@@ -40,6 +41,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Pondok::class,'pondok_id');
     }
+
+    public function pendaftar()
+{
+    // Jika di tabel pendaftars kolomnya adalah user_id
+    return $this->hasOne(Pendaftar::class, 'pendaftar_id', 'id');
+}
 
     // ================= HELPER ROLE =================
 

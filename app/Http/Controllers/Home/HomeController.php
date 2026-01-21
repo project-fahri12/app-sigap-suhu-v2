@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Home;
 
-use App\Http\Controllers\Controller;
-use App\Models\GelombangPpdb;
-use App\Models\Pendaftar;
+use App\Models\User;
+use App\Models\Wali;
 use App\Models\Pondok;
 use App\Models\Sekolah;
 use App\Models\OrangTua;
-use App\Models\Wali;
-use App\Models\InformasiKontak;
+use App\Models\Pendaftar;
 use App\Models\TahunAjaran;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\GelombangPpdb;
+use App\Models\InformasiKontak;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
@@ -138,18 +140,18 @@ class HomeController extends Controller
                 'pendaftar_id'  => $pendaftar->id,
                 'name'  => $request->nama_lengkap,
                 'email' => $request->email,
-                'password'  => Hash::make($kodePendaftaran)
+                'password'  => Hash::make($kodePendaftaran),
             ]);
 
             DB::commit();
 
             return redirect()->route('pendaftaran.success', ['kode' => $pendaftar->kode_pendaftaran])
                 ->with('success', 'Pendaftaran Berhasil!');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
+            } catch (\Exception $e) {
+                dd($e);
+                DB::rollBack();
             // Log error untuk debug
-            \Log::error('Gagal Simpan Pendaftaran: ' . $e->getMessage());
+            Log::error('Gagal Simpan Pendaftaran: ' . $e->getMessage());
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
         }
     }

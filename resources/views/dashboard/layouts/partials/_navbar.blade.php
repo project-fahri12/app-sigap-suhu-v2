@@ -14,7 +14,7 @@
             @elseif (auth()->user()->role === 'panitia-ppdb')
                 PPDB Management System
             @else
-                Staff Dashboard
+                Dashboard Pendaftar
             @endif
         @endauth
     </h6>

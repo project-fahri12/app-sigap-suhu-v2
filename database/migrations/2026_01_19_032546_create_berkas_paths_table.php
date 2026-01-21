@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('jenis_berkas'); // KK, Ijazah, dll
             $table->string('path_file');
             $table->string('status_berkas')->default('pending');
-            $table->boolean('is_aktif')->default(true);
+            $table->string('keetrangan')->nullable();
             $table->timestamps();
         });
     }
