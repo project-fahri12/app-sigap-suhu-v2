@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('pendaftar_id')
-                ->constrained('pendaftarans')
+                ->constrained('pendaftars')
                 ->cascadeOnDelete();
 
             $table->integer('tagihan');
@@ -20,14 +20,14 @@ return new class extends Migration
 
             $table->enum('status_pembayaran', [
                 'belum_bayar',
-                'kurang',
-                'lunas'
+                'dispensasi',
+                'lunas',
             ])->default('belum_bayar');
 
             $table->string('keterangan', 150)->nullable();
-
             $table->timestamps();
         });
+
     }
 
     public function down(): void

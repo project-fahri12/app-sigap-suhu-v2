@@ -16,7 +16,7 @@ class VerifikasiBerkasController extends Controller
     // Pisahkan data untuk Tab
     $pending = $pendaftars->where('status_pendaftaran', 'pending');
     $lulus = $pendaftars->where('status_pendaftaran', 'lulus_verifikasi');
-
+    
     return view('dashboard.admin-sekolah.verifikasi-berkas.index', compact('pending', 'lulus'));
 }
 
@@ -44,7 +44,6 @@ class VerifikasiBerkasController extends Controller
         $pendaftar = Pendaftar::findOrFail($id);
         $pendaftar->update([
             'status_pendaftaran' => $request->status_pendaftaran,
-            'status_sekolah' => ($request->status_pendaftaran == 'lulus_verifikasi') ? 'terverifikasi' : 'proses'
         ]);
 
         return back()->with('success', 'Status pendaftaran ' . $pendaftar->nama_lengkap . ' berhasil diperbarui.');

@@ -3,17 +3,20 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\AdminPondok\DashboardAdminPondokController;
 use App\Http\Controllers\Dashboard\AdminSekolah\DashboardAdminSekolahController;
+use App\Http\Controllers\Dashboard\AdminSekolah\DataSiswaController;
 use App\Http\Controllers\Dashboard\AdminSekolah\GelombangPpdbController;
+use App\Http\Controllers\Dashboard\AdminSekolah\KelasController;
+use App\Http\Controllers\Dashboard\AdminSekolah\RombelController;
 use App\Http\Controllers\Dashboard\AdminSekolah\VerifikasiBerkasController;
 use App\Http\Controllers\Dashboard\PanitiaPpdb\DashboardPanitiaPpdbController;
 use App\Http\Controllers\Dashboard\Pendaftar\PanduanController;
 use App\Http\Controllers\Dashboard\Pendaftar\UploadBerkasController;
+use App\Http\Controllers\Dashboard\SuperAdmin\DaftarUlangController;
 use App\Http\Controllers\Dashboard\SuperAdmin\DashboardSuperAdminController;
 use App\Http\Controllers\Dashboard\SuperAdmin\PondokController;
 use App\Http\Controllers\Dashboard\SuperAdmin\SekolahController;
 use App\Http\Controllers\Dashboard\SuperAdmin\TahunAjaranController;
 use App\Http\Controllers\Dashboard\SuperAdmin\UserManajemenController;
-use App\Http\Controllers\Dashboard\SuperAdmin\DaftarUlangController;
 use App\Http\Controllers\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +35,7 @@ Route::post('auth/admin', [AuthController::class, 'storeAdmin'])->name('auth.adm
 
 // Dashboard Group dengan Proteksi
 Route::middleware(['auth'])->prefix('admin')->group(function () {
-    
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     // Super Admin (Hanya bisa diakses role 'superadmin')
     Route::middleware(['role:super-admin'])->prefix('super')->name('superadmin.')->group(function () {
@@ -51,21 +54,18 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::get('/dashboard', [DashboardAdminSekolahController::class, 'index'])->name('dashboard');
         Route::resource('gelombang-ppdb', GelombangPpdbController::class);
         Route::get('verifikasi-berkas', [VerifikasiBerkasController::class, 'index'])->name('verifikasi-berkas.index');
-    // Route AJAX untuk simpan status/catatan berkas saat diubah
-    Route::patch('verifikasi-berkas/update-item/{id}', [VerifikasiBerkasController::class, 'updateItem'])->name('verifikasi-berkas.update-item');
-    // Route Final untuk status pendaftaran
-    Route::put('verifikasi-berkas/final/{id}', [VerifikasiBerkasController::class, 'updateFinal'])->name('verifikasi-berkas.final');
+        Route::patch('verifikasi-berkas/update-item/{id}', [VerifikasiBerkasController::class, 'updateItem'])->name('verifikasi-berkas.update-item');
+        Route::put('verifikasi-berkas/final/{id}', [VerifikasiBerkasController::class, 'updateFinal'])->name('verifikasi-berkas.final');
+        Route::resource('data-siswa', DataSiswaController::class);
+        Route::resource('kelola-rombel', RombelController::class);
+        Route::resource('kelola-kelas', KelasController::class);
+
     });
 
     // Admin Pondok (Hanya bisa diakses role 'admin_pondok')
     Route::middleware(['role:admin-pondok'])->prefix('pondok')->name('adminpondok.')->group(function () {
         Route::get('/dashboard', [DashboardAdminPondokController::class, 'index'])->name('dashboard');
     });
-
-    // Panitia PPDB (Hanya bisa diakses role 'panitia')
-    // Route::middleware(['role:panitia-ppdb'])->prefix('panitia')->name('panitia.')->group(function () {
-    //     Route::get('/dashboard', [DashboardPanitiaPpdbController::class, 'index'])->name('dashboard');
-    // });
 
 });
 
@@ -74,6 +74,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 Route::middleware(['role:pendaftar', 'auth'])->prefix('pendaftar')->name('pendaftar.')->group(function () {
     Route::post('/logout', [AuthController::class, 'logoutPendaftar'])->name('logout');
 
-    Route::resource('/panduan', PanduanController::class, );
-    Route::resource('/upload-berkas', UploadBerkasController::class, );
+    Route::resource('/panduan', PanduanController::class);
+    Route::resource('/upload-berkas', UploadBerkasController::class);
 });

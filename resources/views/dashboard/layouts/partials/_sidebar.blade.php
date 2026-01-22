@@ -52,7 +52,7 @@
 
     <div class="nav-header">Manajemen PPDB</div>
     
-    <a href="{{ route('adminsekolah.verifikasi-berkas.index') }}" class="nav-link">
+    <a href="{{ route('adminsekolah.verifikasi-berkas.index') }}" class="nav-link {{ request()->routeIs('adminsekolah.verifikasi-berkas.index') ? 'active' : '' }}">
         <i class="fas fa-check-double"></i> Verifikasi Berkas
     </a>
 
@@ -67,15 +67,11 @@
 
             <div class="nav-header">Akademik & Siswa</div>
 
-            <a href="#" class="nav-link">
-                <i class="fas fa-user-clock"></i> Aktivasi Siswa
-            </a>
-
-            <a href="#" class="nav-link">
+            {{-- <a href="#" class="nav-link">
                 <i class="fas fa-user-graduate"></i> Calon Siswa
-            </a>
+            </a> --}}
 
-            <a href="#" class="nav-link">
+            <a href="{{ route('adminsekolah.data-siswa.index') }}" class="nav-link {{ request()->routeIs('adminsekolah.data-siswa.index') ? 'active' : '' }}">
                 <i class="fas fa-users"></i> Data Siswa (Dapodik)
             </a>
 
@@ -85,7 +81,7 @@
                 <i class="fas fa-school"></i> Data Kelas
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="{{ route('adminsekolah.kelola-rombel.index') }}" class="nav-link">
                 <i class="fas fa-door-open"></i> Data Rombel
             </a>
 

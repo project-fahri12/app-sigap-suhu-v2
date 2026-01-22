@@ -91,7 +91,7 @@ class HomeController extends Controller
                 'desa' => $request->desa,
                 'kode_pos' => $request->kode_pos,
                 'sekolah_asal' => $request->sekolah_asal,
-                'npsn_sekolah' => $request->npsn_sekolah ?? '-', // Mencegah Error 1048
+                'npsn_sekolah' => $request->npsn_sekolah ?? '-', 
                 'status_sekolah' => $request->status_sekolah,
             ]);
 

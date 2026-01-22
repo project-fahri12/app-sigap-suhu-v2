@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pendaftar extends Model
 {
-// app/Models/Pendaftar.php
-protected $fillable = [
-    'kode_pendaftaran', 'tahun_ajaran_id', 'sekolah_id', 'pondok_id', 
-    'gelombang_ppdb_id', 'nama_lengkap', 'nik', 'nisn', 'nomor_kk', 
-    'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'anak_ke', 
-    'jumlah_saudara', 'berkebutuhan_khusus', 'domisili_santri', 
-    'alamat_lengkap', 'rt', 'rw', 'provinsi', 'kabupaten', 
-    'kecamatan', 'desa', 'kode_pos', 'sekolah_asal', 
-    'npsn_sekolah', 'status_sekolah', 'status_pendaftaran'
-];
+    // app/Models/Pendaftar.php
+    protected $fillable = [
+        'kode_pendaftaran', 'tahun_ajaran_id', 'sekolah_id', 'pondok_id',
+        'gelombang_ppdb_id', 'nama_lengkap', 'nik', 'nisn', 'nomor_kk',
+        'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'anak_ke',
+        'jumlah_saudara', 'berkebutuhan_khusus', 'domisili_santri',
+        'alamat_lengkap', 'rt', 'rw', 'provinsi', 'kabupaten',
+        'kecamatan', 'desa', 'kode_pos', 'sekolah_asal',
+        'npsn_sekolah', 'status_sekolah', 'status_pendaftaran',
+    ];
 
     // Relasi ke Tahun Ajaran
     public function tahunAjaran(): BelongsTo
@@ -29,22 +29,29 @@ protected $fillable = [
         return $this->hasOne(OrangTua::class, 'pendaftaran_id');
     }
 
-    public function informasiKontak() {
+    public function informasiKontak()
+    {
         return $this->hasOne(InformasiKontak::class);
     }
 
-    public function berkas() {
+    public function berkas()
+    {
         return $this->hasMany(BerkasPath::class, 'pendaftar_id', 'id');
     }
 
-    public function gelombang() {
+    public function gelombang()
+    {
         return $this->belongsTo(GelombangPpdb::class);
     }
 
     public function daftarUlang()
-{
-    // Pastikan nama tabel dan foreign key sesuai
-    return $this->hasMany(DaftarUlang::class, 'pendaftar_id');
-}
+    {
+        // Pastikan nama tabel dan foreign key sesuai
+        return $this->hasMany(DaftarUlang::class, 'pendaftar_id');
+    }
 
+    public function siswa() 
+    {
+        return $this->belongsTo(Siswa::class,'pendaftar_id');
+    }
 }
