@@ -44,61 +44,61 @@
 @endif
 
         {{-- ADMIN SEKOLAH --}}
-@if (auth()->user()->role === 'admin-sekolah')
-    <a href="{{ route('adminsekolah.dashboard') }}"
-        class="nav-link {{ request()->routeIs('adminsekolah.dashboard') ? 'active' : '' }}">
-        <i class="fas fa-th-large"></i> Dashboard
-    </a>
+        @if (auth()->user()->role === 'admin-sekolah')
+            <a href="{{ route('adminsekolah.dashboard') }}"
+                class="nav-link {{ request()->routeIs('adminsekolah.dashboard') ? 'active' : '' }}">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
 
     <div class="nav-header">Manajemen PPDB</div>
     
-    <a href="{{ route('adminsekolah.verifikasi-berkas.index') }}" class="nav-link {{ request()->routeIs('adminsekolah.verifikasi-berkas.index') ? 'active' : ''  }}">
+    <a href="{{ route('adminsekolah.verifikasi-berkas.index') }}" class="nav-link">
         <i class="fas fa-check-double"></i> Verifikasi Berkas
     </a>
 
-    <a href="#" class="nav-link">
-        <i class="fas fa-desktop"></i> Monitoring Pendaftar
-    </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-desktop"></i> Monitoring Pendaftar
+            </a>
 
-    <a href="{{ route('adminsekolah.gelombang-ppdb.index') }}"
-        class="nav-link {{ request()->routeIs('adminsekolah.gelombang-ppdb.index') ? 'active' : '' }}">
-        <i class="fas fa-calendar-alt"></i> Informasi Gelombang
-    </a>
+            <a href="{{ route('adminsekolah.gelombang-ppdb.index') }}"
+                class="nav-link {{ request()->routeIs('adminsekolah.gelombang-ppdb.index') ? 'active' : '' }}">
+                <i class="fas fa-calendar-alt"></i> Informasi Gelombang
+            </a>
 
-    <div class="nav-header">Akademik & Siswa</div>
+            <div class="nav-header">Akademik & Siswa</div>
 
-    <a href="#" class="nav-link">
-        <i class="fas fa-user-clock"></i> Aktivasi Siswa
-    </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-user-clock"></i> Aktivasi Siswa
+            </a>
 
-    <a href="#" class="nav-link">
-        <i class="fas fa-user-graduate"></i> Calon Siswa
-    </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-user-graduate"></i> Calon Siswa
+            </a>
 
-    <a href="#" class="nav-link">
-        <i class="fas fa-users"></i> Data Siswa (Dapodik)
-    </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-users"></i> Data Siswa (Dapodik)
+            </a>
 
-    <div class="nav-header">Rombel & Kelas</div>
+            <div class="nav-header">Rombel & Kelas</div>
 
-    <a href="#" class="nav-link">
-        <i class="fas fa-school"></i> Data Kelas
-    </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-school"></i> Data Kelas
+            </a>
 
-    <a href="#" class="nav-link">
-        <i class="fas fa-door-open"></i> Data Rombel
-    </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-door-open"></i> Data Rombel
+            </a>
 
-    <a href="#" class="nav-link">
-        <i class="fas fa-user-tag"></i> Tentukan Rombel
-    </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-user-tag"></i> Tentukan Rombel
+            </a>
 
-    <div class="nav-header">Laporan</div>
+            <div class="nav-header">Laporan</div>
 
-    <a href="#" class="nav-link">
-        <i class="fas fa-print"></i> Laporan PPDB
-    </a>
-@endif
+            <a href="#" class="nav-link">
+                <i class="fas fa-print"></i> Laporan PPDB
+            </a>
+        @endif
 
         @if (auth()->user()->role == 'pendaftar')
             <a href="{{ route('pendaftar.panduan.index') }}"
