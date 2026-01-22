@@ -34,6 +34,17 @@ protected $fillable = [
     }
 
     public function berkas() {
-        return $this->hasMany(BerkasPath::class);
+        return $this->hasMany(BerkasPath::class, 'pendaftar_id', 'id');
     }
+
+    public function gelombang() {
+        return $this->belongsTo(GelombangPpdb::class);
+    }
+
+    public function daftarUlang()
+{
+    // Pastikan nama tabel dan foreign key sesuai
+    return $this->hasMany(DaftarUlang::class, 'pendaftar_id');
+}
+
 }

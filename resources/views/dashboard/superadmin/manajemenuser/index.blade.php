@@ -60,9 +60,14 @@
                                         </div>
                                     @endif
 
-                                    @if (!$user->sekolah && !$user->pondok)
+                                    @if (!$user->sekolah && !$user->pondok )
                                         <span class="text-muted small italic">Akses Global (Full)</span>
                                     @endif
+
+                                    @if (!$user->sekolah && !$user->pondok )
+                                        <span class="text-muted small italic">Akses Global (Full)</span>
+                                    @endif
+
                                 </td>
 
                                 {{-- STATUS --}}

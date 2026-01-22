@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\SuperAdmin\PondokController;
 use App\Http\Controllers\Dashboard\SuperAdmin\SekolahController;
 use App\Http\Controllers\Dashboard\SuperAdmin\TahunAjaranController;
 use App\Http\Controllers\Dashboard\SuperAdmin\UserManajemenController;
+use App\Http\Controllers\Dashboard\SuperAdmin\DaftarUlangController;
 use App\Http\Controllers\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,13 +43,18 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::patch('pondok/{id}/toggle', [PondokController::class, 'toggleStatus'])->name('pondok.toggle');
         Route::resource('/manajemen-user', UserManajemenController::class);
         Route::patch('/manajemen-user/{id}/toggle', [UserManajemenController::class, 'toggle'])->name('manajemen-user.toggle');
+        Route::resource('daftar-ulang', DaftarUlangController::class);
     });
 
     // Admin Sekolah (Hanya bisa diakses role 'admin_sekolah')
     Route::middleware(['role:admin-sekolah'])->prefix('sekolah')->name('adminsekolah.')->group(function () {
         Route::get('/dashboard', [DashboardAdminSekolahController::class, 'index'])->name('dashboard');
         Route::resource('gelombang-ppdb', GelombangPpdbController::class);
-        Route::resource('verifikasi-berkas', VerifikasiBerkasController::class);
+        Route::get('verifikasi-berkas', [VerifikasiBerkasController::class, 'index'])->name('verifikasi-berkas.index');
+    // Route AJAX untuk simpan status/catatan berkas saat diubah
+    Route::patch('verifikasi-berkas/update-item/{id}', [VerifikasiBerkasController::class, 'updateItem'])->name('verifikasi-berkas.update-item');
+    // Route Final untuk status pendaftaran
+    Route::put('verifikasi-berkas/final/{id}', [VerifikasiBerkasController::class, 'updateFinal'])->name('verifikasi-berkas.final');
     });
 
     // Admin Pondok (Hanya bisa diakses role 'admin_pondok')

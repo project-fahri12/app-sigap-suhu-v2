@@ -17,6 +17,7 @@ class UserManajemenController extends Controller
     {
         // Perbaikan: Tambahkan parameter arah 'asc' agar tidak error
         $users = User::with(['sekolah', 'pondok'])
+            ->where('role', '!=', 'pendaftar')
             ->orderBy('name', 'asc') 
             ->get();
 

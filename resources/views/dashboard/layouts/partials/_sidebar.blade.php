@@ -1,41 +1,47 @@
 <nav class="nav-custom">
 
     @auth
-        {{-- SUPER ADMIN --}}
-        @if (auth()->user()->role === 'super-admin')
-            <a href="{{ route('superadmin.dashboard') }}"
-                class="nav-link {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
-                <i class="fas fa-th-large"></i> Dashboard
-            </a>
+      {{-- SUPER ADMIN --}}
+@if (auth()->user()->role === 'super-admin')
+    <a href="{{ route('superadmin.dashboard') }}"
+        class="nav-link {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
+        <i class="fas fa-th-large"></i> Dashboard
+    </a>
 
-            <div class="nav-header">Konfigurasi Yayasan</div>
-            <a href="{{ route('superadmin.tahun-ajaran.index') }}"
-                class="nav-link {{ request()->routeIs('superadmin.tahun-ajaran.index') ? 'active' : '' }}">
-                <i class="fas fa-calendar-alt"></i> Tahun Ajaran
-            </a>
-            <a href="{{ route('superadmin.sekolah.index') }}"
-                class="nav-link {{ request()->routeIs('superadmin.sekolah.index') ? 'active' : '' }}">
-                <i class="fas fa-school"></i> Unit Sekolah
-            </a>
-            <a href="{{ route('superadmin.pondok.index') }}"
-                class="nav-link {{ request()->routeIs('superadmin.pondok.index') ? 'active' : '' }}">
-                <i class="fas fa-mosque"></i> Pondok Pesantren
-            </a>
+    <div class="nav-header">Konfigurasi Yayasan</div>
+    <a href="{{ route('superadmin.tahun-ajaran.index') }}"
+        class="nav-link {{ request()->routeIs('superadmin.tahun-ajaran.index') ? 'active' : '' }}">
+        <i class="fas fa-calendar-alt"></i> Tahun Ajaran
+    </a>
+    <a href="{{ route('superadmin.sekolah.index') }}"
+        class="nav-link {{ request()->routeIs('superadmin.sekolah.index') ? 'active' : '' }}">
+        <i class="fas fa-school"></i> Unit Sekolah
+    </a>
+    <a href="{{ route('superadmin.pondok.index') }}"
+        class="nav-link {{ request()->routeIs('superadmin.pondok.index') ? 'active' : '' }}">
+        <i class="fas fa-mosque"></i> Pondok Pesantren
+    </a>
 
-            <div class="nav-header">Data Master</div>
-            <a href="{{ route('superadmin.manajemen-user.index') }}"
-                class="nav-link {{ request()->routeIs('superadmin.manajemen-user.index') ? 'active' : '' }}">
-                <i class="fas fa-users-cog"></i> User Manajemen
-            </a>
+    <div class="nav-header">Data Master</div>
+    <a href="{{ route('superadmin.manajemen-user.index') }}"
+        class="nav-link {{ request()->routeIs('superadmin.manajemen-user.index') ? 'active' : '' }}">
+        <i class="fas fa-users-cog"></i> User Manajemen
+    </a>
 
-            <div class="nav-header">Monitoring & Laporan</div>
-            <a href="#" class="nav-link">
-                <i class="fas fa-file-signature"></i> Rekap Pendaftaran
-            </a>
-            <a href="#" class="nav-link">
-                <i class="fas fa-chart-line"></i> Laporan Global
-            </a>
-        @endif
+    <div class="nav-header">Monitoring & Laporan</div>
+    {{-- MENU BARU: DAFTAR ULANG --}}
+    <a href="{{ route('superadmin.daftar-ulang.index') }}" 
+        class="nav-link {{ request()->routeIs('superadmin.daftar-ulang.*') ? 'active' : '' }}">
+        <i class="fas fa-user-check"></i> Daftar Ulang
+    </a>
+
+    <a href="#" class="nav-link">
+        <i class="fas fa-file-signature"></i> Rekap Pendaftaran
+    </a>
+    <a href="#" class="nav-link">
+        <i class="fas fa-chart-line"></i> Laporan Global
+    </a>
+@endif
 
         {{-- ADMIN SEKOLAH --}}
 @if (auth()->user()->role === 'admin-sekolah')
@@ -46,7 +52,7 @@
 
     <div class="nav-header">Manajemen PPDB</div>
     
-    <a href="{{ route('adminsekolah.verifikasi-berkas.index') }}" class="nav-link">
+    <a href="{{ route('adminsekolah.verifikasi-berkas.index') }}" class="nav-link {{ request()->routeIs('adminsekolah.verifikasi-berkas.index') ? 'active' : ''  }}">
         <i class="fas fa-check-double"></i> Verifikasi Berkas
     </a>
 
