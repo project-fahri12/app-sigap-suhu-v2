@@ -83,6 +83,16 @@
             <p class="text-muted">Tahun Pelajaran 2025/2026</p>
         </div>
 
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
         <ul class="nav nav-pills justify-content-center mb-4" id="ppdbTab" role="tablist">
             <li class="nav-item">
                 <button class="nav-link active" id="tab1-btn" data-bs-toggle="pill" data-bs-target="#tab1">1.
@@ -199,16 +209,6 @@
             nextTab('tab5');
         }
 
-        // 4. Handle Final Submit
-        document.getElementById('ppdbForm').addEventListener('submit', function(e) {
-            const btn = document.getElementById('finalSubmit');
-
-            // Tambahkan animasi loading pada tombol
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Mengirim Data...';
-            btn.classList.add('disabled');
-
-            // Form akan terkirim secara otomatis ke Laravel Controller
-        });
 
         const apiWilayah = 'https://www.emsifa.com/api-wilayah-indonesia/api';
 

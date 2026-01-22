@@ -26,7 +26,6 @@ class AuthController extends Controller
         'kode_pendaftaran' => 'required|string',
     ]);
 
-    // Credential: email/username adalah kode_pendaftaran, password juga kode_pendaftaran
     $credentials = [
         'password'         => $request->kode_pendaftaran, 
         'role'             => 'pendaftar',

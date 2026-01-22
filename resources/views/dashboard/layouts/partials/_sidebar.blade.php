@@ -77,16 +77,16 @@
 
             <div class="nav-header">Rombel & Kelas</div>
 
-            <a href="#" class="nav-link">
-                <i class="fas fa-school"></i> Data Kelas
+            <a href="{{ route('adminsekolah.kelola-kelas.index')  }}" class="nav-link {{ request()->routeIs('adminsekolah.kelola-kelas.index') ? 'active' : ''}}">
+                <i class="fas fa-school"></i> Kelola Kelas
             </a>
 
-            <a href="{{ route('adminsekolah.kelola-rombel.index') }}" class="nav-link">
-                <i class="fas fa-door-open"></i> Data Rombel
+            <a href="{{ route('adminsekolah.kelola-rombel.index') }}" class="nav-link {{ request()->routeIs('adminsekolah.kelola-rombel.index') ? 'active' : ''}}">
+                <i class="fas fa-door-open"></i> Kelola Rombel
             </a>
 
-            <a href="#" class="nav-link">
-                <i class="fas fa-user-tag"></i> Tentukan Rombel
+            <a href="{{ route('adminsekolah.penempatan-rombel.index') }}" class="nav-link {{ request()->routeIs('adminsekolah.penempatan-rombel.index') ? 'active' : ''}}">
+                <i class="fas fa-user-tag"></i> Penempatan Rombel
             </a>
 
             <div class="nav-header">Laporan</div>
@@ -106,6 +106,57 @@
                 <i class="fas fa-th-large"></i> Upload Berkas
             </a>
         @endif
+
+
+
+
+        @if (auth()->user()->role == 'admin-pondok')
+    <a href="{{ route('adminpondok.dashboard') }}"
+        class="nav-link {{ request()->routeIs('adminpondok.dashboard') ? 'active' : '' }}">
+        <i class="fas fa-th-large"></i> Dashboard
+    </a>
+
+    <div class="nav-header">Manajemen Asrama</div>
+    
+    <a href="{{ route('adminpondok.asrama.index') }}" class="nav-link {{ request()->routeIs('adminpondok.asrama.index') ? 'active' : '' }}">
+        <i class="fas fa-building"></i> Data Asrama
+    </a>
+
+    <a href="{{ route('adminpondok.plotting-kamar.index') }}" class="nav-link {{ request()->routeIs('adminpondok.plotting-kamar.index') ? 'active' : '' }}">
+        <i class="fas fa-users-cog"></i> Plotting Kamar
+    </a>
+
+    <div class="nav-header">Kesiswaan (Santri)</div>
+
+    <a href="{{ route('adminpondok.aktifasi-santri.index') }}" class="nav-link {{ request()->routeIs('adminpondok.aktifasi-santri.index') ? 'active' : '' }}">
+        <i class="fas fa-user-check"></i> Aktivasi Santri
+        <span class="badge bg-danger ms-auto">New</span>
+    </a>
+
+    <a href="{{ route('adminpondok.daftar-santri.index') }}" class="nav-link {{ request()->routeIs('adminpondok.daftar-santri.index') ? 'active' : '' }}">
+        <i class="fas fa-user-graduate"></i> Daftar Santri
+    </a>
+
+    <a href="#" class="nav-link">
+        <i class="fas fa-door-open"></i> Perizinan (Pesiar)
+    </a>
+
+    <div class="nav-header">Kedisiplinan & Tahfidz</div>
+
+    <a href="#" class="nav-link">
+        <i class="fas fa-gavel"></i> Pelanggaran/Poin
+    </a>
+
+    <a href="#" class="nav-link">
+        <i class="fas fa-book-reader"></i> Setoran Hafalan
+    </a>
+
+    <div class="nav-header">Laporan</div>
+    
+    <a href="#" class="nav-link">
+        <i class="fas fa-file-invoice"></i> Laporan Bulanan
+    </a>
+@endif
 
     @endauth
 

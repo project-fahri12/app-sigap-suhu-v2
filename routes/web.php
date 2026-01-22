@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\AdminPondok\DashboardAdminPondokController;
-use App\Http\Controllers\Dashboard\AdminSekolah\DashboardAdminSekolahController;
+use App\Http\Controllers\Dashboard\AdminPondok\AsramaController;
+use App\Http\Controllers\Dashboard\AdminPondok\DaftarSantriController;
+use App\Http\Controllers\Dashboard\AdminPondok\AktivasiSantri;
+use App\Http\Controllers\Dashboard\AdminPondok\PlottingKamar;
 use App\Http\Controllers\Dashboard\AdminSekolah\DataSiswaController;
 use App\Http\Controllers\Dashboard\AdminSekolah\GelombangPpdbController;
 use App\Http\Controllers\Dashboard\AdminSekolah\KelasController;
 use App\Http\Controllers\Dashboard\AdminSekolah\RombelController;
+use App\Http\Controllers\Dashboard\AdminSekolah\PenempatanRombelController;
 use App\Http\Controllers\Dashboard\AdminSekolah\VerifikasiBerkasController;
 use App\Http\Controllers\Dashboard\PanitiaPpdb\DashboardPanitiaPpdbController;
 use App\Http\Controllers\Dashboard\Pendaftar\PanduanController;
@@ -59,12 +63,17 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::resource('data-siswa', DataSiswaController::class);
         Route::resource('kelola-rombel', RombelController::class);
         Route::resource('kelola-kelas', KelasController::class);
+        Route::resource('penempatan-rombel', PenempatanRombelController::class);
 
     });
 
     // Admin Pondok (Hanya bisa diakses role 'admin_pondok')
     Route::middleware(['role:admin-pondok'])->prefix('pondok')->name('adminpondok.')->group(function () {
         Route::get('/dashboard', [DashboardAdminPondokController::class, 'index'])->name('dashboard');
+        Route::resource('asrama', AsramaController::class);
+        Route::resource('daftar-santri', DaftarSantriController::class);
+        Route::resource('aktifasi-santri', AktivasiSantri::class);
+        Route::resource('plotting-kamar', PlottingKamar::class);
     });
 
 });

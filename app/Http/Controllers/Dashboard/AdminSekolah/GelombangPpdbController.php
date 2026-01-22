@@ -16,7 +16,7 @@ class GelombangPpdbController extends Controller
         $user = Auth::user();
 
         $gelombangs = GelombangPPDB::with('tahunAjaran')
-            ->withCount('pendaftar') // Ini akan menciptakan variabel pendaftars_count
+            ->withCount('pendaftar') 
             ->where('sekolah_id', $user->sekolah_id)
             ->orderBy('created_at', 'desc')
             ->get();

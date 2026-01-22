@@ -11,7 +11,8 @@ class Rombel extends Model
         'kelas_id', 
         'nama_rombel', 
         'kapasitas', 
-        'staus_rombel'
+        'status_rombel',
+        'jenis_kelas'
     ];
 
     public function kelas()
