@@ -29,7 +29,7 @@
                     <div>
                         {{-- Menampilkan Nama Sekolah/Lembaga dari Database --}}
                         <h6 class="mb-0 fw-bold text-dark" style="font-size: 14px; text-transform: uppercase;">
-                            {{ auth()->user()->sekolah->nama_sekolah ?? 'SISTEM PUSAT' }}
+                            {{ auth()->user()->sekolah->nama_sekolah ?? 'PENDAFTAR' }}
                         </h6>
 
                         {{-- Menampilkan Role dan Tahun Ajaran Aktif --}}

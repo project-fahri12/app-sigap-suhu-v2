@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -20,26 +21,33 @@ class AuthController extends Controller
         return view('auth.login-pendaftar');
     }
 
-    public function storePendaftar(Request $request)
+   public function storePendaftar(Request $request)
 {
     $request->validate([
         'kode_pendaftaran' => 'required|string',
     ]);
 
-    $credentials = [
-        'password'         => $request->kode_pendaftaran, 
-        'role'             => 'pendaftar',
-    ];
+    $user = User::where('pendaftar_id', function ($q) use ($request) {
+            $q->select('id')
+              ->from('pendaftars')
+              ->where('kode_pendaftaran', $request->kode_pendaftaran);
+        })
+        ->where('role', 'pendaftar')
+        ->first();
 
-    if (Auth::attempt($credentials, $request->has('remember'))) {
-        $request->session()->regenerate();
-        return redirect()->route('pendaftar.panduan.index');
+    if (!$user) {
+        return back()->withErrors([
+            'kode_pendaftaran' => 'Kode pendaftaran tidak ditemukan',
+        ]);
     }
 
-    return back()->withErrors([
-        'kode_pendaftaran' => 'ID Pendaftaran tidak ditemukan atau tidak sesuai.',
-    ])->withInput();
+    Auth::login($user);
+    $user->update(['is_aktif' => 'aktif']); // ⭐ PENTING
+    $request->session()->regenerate();
+
+    return redirect()->route('pendaftar.panduan.index');
 }
+
 
     // Login Admin / Staff
     public function authadmin()
@@ -97,27 +105,24 @@ class AuthController extends Controller
     }
 
     
-    public function logout(Request $request)
-    {
-        Auth::logout();
+   public function logout(Request $request)
+{
+    $role = Auth::user()?->role; 
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    Auth::logout();
 
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    if ($role === 'pendaftar') {
         return redirect()
-            ->route('auth.admin')
+            ->route('auth.pendaftar')
             ->with('success', 'Berhasil keluar dari sistem.');
     }
 
-    public function logoutPendaftar(Request $request)
-    {
-        Auth::logout();
+    return redirect()
+        ->route('auth.admin')
+        ->with('success', 'Berhasil keluar dari sistem.');
+}
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect()
-            ->route('pendaftar.logout')
-            ->with('success', 'Berhasil keluar dari sistem.');
-    }
 }

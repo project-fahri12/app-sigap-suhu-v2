@@ -1,28 +1,30 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Dashboard\AdminPondok\DashboardAdminPondokController;
-use App\Http\Controllers\Dashboard\AdminPondok\AsramaController;
-use App\Http\Controllers\Dashboard\AdminPondok\DaftarSantriController;
-use App\Http\Controllers\Dashboard\AdminPondok\AktivasiSantri;
+use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Dashboard\AdminPondok\PlottingKamar;
-use App\Http\Controllers\Dashboard\AdminSekolah\DataSiswaController;
-use App\Http\Controllers\Dashboard\AdminSekolah\GelombangPpdbController;
-use App\Http\Controllers\Dashboard\AdminSekolah\KelasController;
-use App\Http\Controllers\Dashboard\AdminSekolah\RombelController;
-use App\Http\Controllers\Dashboard\AdminSekolah\PenempatanRombelController;
-use App\Http\Controllers\Dashboard\AdminSekolah\VerifikasiBerkasController;
-use App\Http\Controllers\Dashboard\PanitiaPpdb\DashboardPanitiaPpdbController;
+use App\Http\Controllers\Dashboard\AdminPondok\AktivasiSantri;
 use App\Http\Controllers\Dashboard\Pendaftar\PanduanController;
+use App\Http\Controllers\Dashboard\SuperAdmin\PondokController;
+use App\Http\Controllers\Dashboard\AdminPondok\AsramaController;
+use App\Http\Controllers\Dashboard\AdminSekolah\KelasController;
+use App\Http\Controllers\Dashboard\SuperAdmin\SekolahController;
+use App\Http\Controllers\Dashboard\AdminSekolah\RombelController;
+use App\Http\Controllers\Dashboard\AdminSekolah\DataSiswaController;
 use App\Http\Controllers\Dashboard\Pendaftar\UploadBerkasController;
 use App\Http\Controllers\Dashboard\SuperAdmin\DaftarUlangController;
-use App\Http\Controllers\Dashboard\SuperAdmin\DashboardSuperAdminController;
-use App\Http\Controllers\Dashboard\SuperAdmin\PondokController;
-use App\Http\Controllers\Dashboard\SuperAdmin\SekolahController;
 use App\Http\Controllers\Dashboard\SuperAdmin\TahunAjaranController;
+use App\Http\Controllers\Dashboard\AdminPondok\DaftarSantriController;
 use App\Http\Controllers\Dashboard\SuperAdmin\UserManajemenController;
-use App\Http\Controllers\Home\HomeController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Dashboard\AdminSekolah\GelombangPpdbController;
+use App\Http\Controllers\Dashboard\AdminSekolah\PenempatanRombelController;
+use App\Http\Controllers\Dashboard\AdminSekolah\VerifikasiBerkasController;
+use App\Http\Controllers\Dashboard\SuperAdmin\DashboardSuperAdminController;
+use App\Http\Controllers\Dashboard\AdminPondok\DashboardAdminPondokController;
+use App\Http\Controllers\Dashboard\AdminPondok\RomkamController;
+use App\Http\Controllers\Dashboard\PanitiaPpdb\DashboardPanitiaPpdbController;
+use App\Http\Controllers\Dashboard\AdminSekolah\DashboardAdminSekolahController;
 
 // Route Public
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -74,6 +76,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::resource('daftar-santri', DaftarSantriController::class);
         Route::resource('aktifasi-santri', AktivasiSantri::class);
         Route::resource('plotting-kamar', PlottingKamar::class);
+        Route::resource('romkam', RomkamController::class);
     });
 
 });
@@ -81,8 +84,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 // route Dashboad untuk pendaftar
 
 Route::middleware(['role:pendaftar', 'auth'])->prefix('pendaftar')->name('pendaftar.')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logoutPendaftar'])->name('logout');
-
     Route::resource('/panduan', PanduanController::class);
     Route::resource('/upload-berkas', UploadBerkasController::class);
 });

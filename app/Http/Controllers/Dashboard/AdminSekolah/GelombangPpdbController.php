@@ -12,7 +12,6 @@ class GelombangPpdbController extends Controller
 {
     public function index()
     {
-        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $gelombangs = GelombangPPDB::with('tahunAjaran')
@@ -35,6 +34,7 @@ class GelombangPpdbController extends Controller
             'tanggal_tutup' => 'required|date|after_or_equal:tanggal_buka',
             'kuota' => 'required|integer|min:1',
         ]);
+
 
         // Jika is_aktif dicentang, nonaktifkan gelombang lain di sekolah yang sama
         if ($request->is_aktif) {

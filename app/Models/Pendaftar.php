@@ -50,8 +50,13 @@ class Pendaftar extends Model
         return $this->hasMany(DaftarUlang::class, 'pendaftar_id');
     }
 
-    public function siswa() 
+    public function siswa()
     {
-        return $this->belongsTo(Siswa::class,'pendaftar_id');
+        return $this->belongsTo(Siswa::class, 'pendaftar_id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
     }
 }

@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('sekolah_id')->constrained('sekolahs')->onDelete('cascade');
             $table->foreignId('kelas_id')->constrained('kelas')->onDelete('cascade');
             $table->string('nama_rombel');
+            $table->string('jenis_kelas');
             $table->integer('kapasitas');
-            $table->string('status_rombel'); // untuk menentukan akitf.renov,non akif
+            $table->string('status_rombel'); 
             $table->timestamps();
         });
     }

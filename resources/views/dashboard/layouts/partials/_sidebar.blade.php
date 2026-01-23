@@ -122,6 +122,10 @@
         <i class="fas fa-building"></i> Data Asrama
     </a>
 
+    <a href="{{ route('adminpondok.romkam.index') }}" class="nav-link {{ request()->routeIs('adminpondok.romkam.index') ? 'active' : '' }}">
+        <i class="fas fa-users-cog"></i>  Kamar
+    </a>
+
     <a href="{{ route('adminpondok.plotting-kamar.index') }}" class="nav-link {{ request()->routeIs('adminpondok.plotting-kamar.index') ? 'active' : '' }}">
         <i class="fas fa-users-cog"></i> Plotting Kamar
     </a>
