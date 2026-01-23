@@ -15,11 +15,13 @@ class Santri extends Model
         'status_santri',
     ];
 
-    public function romkam() {
-        return $this->belongsTo(Romkam::class, 'romka_id');
-    }
+    public function pendaftar()
+{
+    return $this->belongsTo(Pendaftar::class, 'pendaftar_id');
+}
 
-    public function pendaftar() {
-        return $this->hasMany(pendaftar::class);
-    }
+public function romkam()
+{
+    return $this->belongsTo(Romkam::class, 'romkam_id');
+}
 }

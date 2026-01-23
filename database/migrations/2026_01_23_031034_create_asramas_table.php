@@ -9,8 +9,6 @@ return new class extends Migration {
         Schema::create('asramas', function (Blueprint $table) {
             $table->id(); 
             $table->string('nama_asrama');
-            $table->integer('total_lemari');
-            $table->integer('jumlah_kamar');
             $table->string('status_asrama')->nullable();
             $table->timestamps();
         });
