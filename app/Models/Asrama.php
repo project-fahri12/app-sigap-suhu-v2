@@ -11,6 +11,7 @@ class Asrama extends Model
         'total_lemari',
         'jumlah_kamar',
         'status_asrama',
+        'jk',
     ];
 
     public function romkas() {

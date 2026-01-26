@@ -7,161 +7,176 @@
         <div class="row mb-4 align-items-center">
             <div class="col-md-6">
                 <h4 class="fw-bold text-dark mb-1">Plotting Kamar Santri</h4>
-                <p class="text-muted small mb-0">Kelola penempatan santri ke dalam kamar (Romkam).</p>
+                <p class="text-muted small mb-0">Kelola penempatan santri baru atau pindah kamar santri lama secara massal.</p>
             </div>
-            <div class="col-md-6 text-md-end">
-                <button class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold" data-bs-toggle="modal" data-bs-target="#modalPlotting">
-                    <i class="fas fa-user-plus me-2"></i>Plotting Baru
-                </button>
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <div class="d-inline-flex bg-white p-2 rounded-pill shadow-sm border">
+                    <input type="text" id="globalSearch" class="form-control form-control-sm border-0 bg-transparent px-3" placeholder="Cari Nama Santri..." style="width: 250px;">
+                    <span class="btn btn-success btn-sm rounded-pill px-3"><i class="fas fa-search"></i></span>
+                </div>
             </div>
         </div>
 
-        @if(session('success'))
-        <div class="alert alert-primary border-0 rounded-4 shadow-sm mb-4">
-            <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
-        </div>
+        @if (session('success'))
+            <div class="alert alert-primary border-0 rounded-4 shadow-sm mb-4">
+                <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+            </div>
         @endif
 
-        <div class="card border-0 shadow-sm rounded-4">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light">
-                            <tr>
-                                <th class="ps-4 py-3 text-muted small fw-bold">NAMA SANTRI</th>
-                                <th class="py-3 text-muted small fw-bold">KAMAR (ROMKAM)</th>
-                                <th class="py-3 text-muted small fw-bold">GEDUNG</th>
-                                <th class="py-3 text-muted small fw-bold text-center">STATUS</th>
-                                <th class="py-3 text-muted small fw-bold text-end pe-4">AKSI</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($plottings as $s)
-                            <tr>
-                                <td class="ps-4">
-                                    <div class="fw-bold text-dark">{{ $s->nama }}</div>
-                                    <small class="text-muted">NIS: {{ $s->nis ?? '-' }}</small>
-                                </td>
-                                <td><div class="fw-bold text-primary">{{ $s->romkam->nama_romkam }}</div></td>
-                                <td>
-                                    <span class="text-muted small">
-                                        <i class="fas fa-building me-1"></i> {{ $s->romkam->asrama->nama_asrama ?? '-' }}
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
-                                        {{ $s->status_santri ?? 'Mukim' }}
-                                    </span>
-                                </td>
-                                <td class="text-end pe-4">
-                                    <div class="btn-group border rounded-pill overflow-hidden bg-white shadow-sm">
-                                        <button class="btn btn-white btn-sm border-0 py-2 px-3" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $s->id }}">
-                                            <i class="fas fa-exchange-alt text-warning"></i>
-                                        </button>
-                                        <form action="{{ route('adminpondok.plotting-kamar.destroy', $s->id) }}" method="POST" class="d-inline">
-                                            @csrf @method('DELETE')
-                                            <button type="submit" class="btn btn-white btn-sm border-0 py-2 px-3" onclick="return confirm('Keluarkan santri dari kamar ini?')">
-                                                <i class="fas fa-sign-out-alt text-danger"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
+        <ul class="nav nav-pills mb-4 bg-white p-2 rounded-pill shadow-sm d-inline-flex border" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active rounded-pill px-4 fw-bold" id="tab-laki-tab" data-bs-toggle="pill" data-bs-target="#tab-laki" type="button" role="tab">
+                    <i class="fas fa-mars me-2"></i>Antrian Laki-laki
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link rounded-pill px-4 fw-bold" id="tab-perempuan-tab" data-bs-toggle="pill" data-bs-target="#tab-perempuan" type="button" role="tab">
+                    <i class="fas fa-venus me-2"></i>Antrian Perempuan
+                </button>
+            </li>
+        </ul>
 
-                            <div class="modal fade" id="modalEdit{{ $s->id }}" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content border-0 rounded-4">
-                                        <form action="{{ route('adminpondok.plotting-kamar.update', $s->id) }}" method="POST">
-                                            @csrf @method('PUT')
-                                            <div class="modal-header border-0 pt-4 px-4">
-                                                <h5 class="fw-bold mb-0">Pindah Kamar</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                            </div>
-                                            <div class="modal-body p-4">
-                                                <div class="p-3 bg-light rounded-3 mb-4 text-center">
-                                                    <small class="text-muted d-block">Nama Santri:</small>
-                                                    <span class="fw-bold">{{ $s->nama }}</span>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label class="form-label small fw-bold text-muted">PILIH KAMAR BARU</label>
-                                                    <select name="romkam_id" class="form-select rounded-3 border-0 bg-light py-2">
-                                                        @foreach($romkams as $rk)
-                                                            <option value="{{ $rk->id }}" {{ $s->romkam_id == $rk->id ? 'selected' : '' }}>
-                                                                {{ $rk->nama_romkam }} ({{ $rk->asrama->nama_asrama }})
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm">Simpan Perpindahan</button>
-                                            </div>
-                                        </form>
-                                    </div>
+        <form action="{{ route('adminpondok.plotting-kamar.store') }}" method="POST" id="formPlotting">
+            @csrf
+            <div class="row g-4">
+                <div class="col-xl-8">
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="tab-laki" role="tabpanel">
+                            @include('dashboard.admin-pondok.plotting-kamar.partials.table-santri', [
+                                'gender' => 'L', 
+                                'data' => $santriBelumPlot->where('pendaftar.jenis_kelamin', 'L')
+                            ])
+                        </div>
+
+                        <div class="tab-pane fade" id="tab-perempuan" role="tabpanel">
+                            @include('dashboard.admin-pondok.plotting-kamar.partials.table-santri', [
+                                'gender' => 'P', 
+                                'data' => $santriBelumPlot->where('pendaftar.jenis_kelamin', 'P')
+                            ])
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4">
+                    <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 100px;">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <div class="bg-success-subtle text-success p-3 rounded-circle d-inline-block mb-3">
+                                    <i class="fas fa-door-open fa-2x"></i>
                                 </div>
+                                <h6 class="fw-bold">Tujuan Penempatan</h6>
                             </div>
-                            @empty
-                            <tr>
-                                <td colspan="5" class="text-center py-5 text-muted small">Belum ada santri yang diplot ke kamar.</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card-footer bg-white border-0 py-3">
-                {{ $plottings->links() }}
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade" id="modalPlotting" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 rounded-4 shadow-lg">
-            <form action="{{ route('adminpondok.plotting-kamar.store') }}" method="POST">
-                @csrf
-                <div class="modal-header border-0 pt-4 px-4">
-                    <h5 class="fw-bold mb-0">Plotting Santri</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4 pt-2">
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">CARI SANTRI</label>
-                        <select name="santri_id" class="form-select rounded-3 bg-light border-0 py-2" required>
-                            <option value="" selected disabled>Pilih Santri...</option>
-                            @foreach($santriBelumPlot as $sbp)
-                                <option value="{{ $sbp->id }}">{{ $sbp->pendaftar->nama_lengkap }} (NIS: {{ $sbp->nis ?? 'N/A' }})</option>
-                            @endforeach
-                        </select>
-                        <small style="font-size: 10px;" class="text-muted mt-1">*Hanya menampilkan santri yang belum punya kamar.</small>
+                            <div class="mb-3">
+                                <label class="small fw-bold text-muted mb-2">PILIH KAMAR TUJUAN</label>
+                                <select name="romkam_id" id="selectKamar" class="form-select rounded-3 border-0 bg-light py-2" required>
+                                    <option value="" selected disabled>-- Pilih Kamar --</option>
+                                    @foreach($romkams as $rk)
+                                        <option value="{{ $rk->id }}" data-gender="{{ $rk->jk }}" class="kamar-option">
+                                            [{{ $rk->jk }}] {{ $rk->asrama->nama_asrama }} - {{ $rk->nama_romkam }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <small id="genderAlert" class="text-danger d-none mt-1" style="font-size: 11px;">
+                                    <i class="fas fa-exclamation-triangle"></i> Kamar tidak sesuai gender!
+                                </small>
+                            </div>
+
+                            <div class="p-3 rounded-3 mb-4 bg-light border border-dashed text-center">
+                                <div class="small text-muted mb-1">Santri terpilih:</div>
+                                <div class="h3 fw-bold text-success mb-0" id="countSelected">0</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 rounded-pill fw-bold py-3 shadow-sm btn-proses" disabled>
+                                PROSES PLOTTING <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label class="form-label small fw-bold text-muted">PILIH KAMAR (ROMKAM)</label>
-                        <select name="romkam_id" class="form-select rounded-3 bg-light border-0 py-2" required>
-                            <option value="" selected disabled>Pilih Kamar...</option>
-                            @foreach($romkams as $rk)
-                                <option value="{{ $rk->id }}">{{ $rk->nama_romkam }} - {{ $rk->asrama->nama_asrama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm">Simpan Penempatan</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 
 <style>
+    .nav-pills .nav-link { color: #6c757d; border: 1px solid transparent; }
+    .nav-pills .nav-link.active { background-color: #198754 !important; color: white !important; box-shadow: 0 4px 10px rgba(25, 135, 84, 0.2); }
     .bg-success-subtle { background-color: #eaf6ed !important; }
     .text-success { color: #198754 !important; }
     .rounded-4 { border-radius: 1rem !important; }
-    .btn-white { background: #fff; border: 1px solid #eee; }
-    .table thead th { 
-        background-color: #f8f9fa !important; 
-        border: none; 
-        font-size: 11px; 
-        text-transform: uppercase; 
-        letter-spacing: 0.5px; 
-    }
-    .form-select:focus { box-shadow: none; border: 1px solid #0d6efd; }
+    .border-dashed { border-style: dashed !important; }
+    .table thead th { background-color: #f1f7f5 !important; border: none; font-size: 11px; letter-spacing: 0.5px; }
+    .santri-row:hover { background-color: #f8faf9; }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectKamar = document.getElementById('selectKamar');
+    const btnProses = document.querySelector('.btn-proses');
+    const countSpan = document.getElementById('countSelected');
+    const kamarOptions = document.querySelectorAll('.kamar-option');
+    const globalSearch = document.getElementById('globalSearch');
+
+    // 1. Fungsi Filter Kamar berdasarkan Gender Tab
+    function filterKamarByGender() {
+        const activeTab = document.querySelector('.tab-pane.active');
+        const activeTabGender = activeTab.id === 'tab-laki' ? 'L' : 'P';
+        
+        selectKamar.value = ""; // Reset pilihan dropdown
+
+        kamarOptions.forEach(option => {
+            const kamarGender = option.getAttribute('data-gender');
+            option.style.display = (kamarGender === activeTabGender) ? 'block' : 'none';
+        });
+    }
+
+    // 2. Fungsi Hitung dan Validasi
+    function validateAndCount() {
+        const activeTab = document.querySelector('.tab-pane.active');
+        const checkedCount = activeTab.querySelectorAll('.check-item:checked').length;
+        
+        countSpan.innerText = checkedCount;
+        btnProses.disabled = (checkedCount === 0 || !selectKamar.value);
+    }
+
+    // 3. Search Real-time
+    globalSearch.addEventListener('input', function() {
+        const val = this.value.toLowerCase();
+        document.querySelectorAll('.santri-row').forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(val) ? '' : 'none';
+        });
+    });
+
+    // 4. Event Listeners
+    filterKamarByGender(); // Run on load
+
+    document.querySelectorAll('button[data-bs-toggle="pill"]').forEach(tab => {
+        tab.addEventListener('shown.bs.tab', function () {
+            document.querySelectorAll('.check-item, .check-all').forEach(i => i.checked = false);
+            filterKamarByGender();
+            validateAndCount();
+        });
+    });
+
+    document.querySelectorAll('.check-item, .check-all, #selectKamar').forEach(el => {
+        el.addEventListener('change', validateAndCount);
+    });
+
+    // Check All Per Tab Logic
+    ['L', 'P'].forEach(g => {
+        const ca = document.getElementById('checkAll' + g);
+        if(ca) {
+            ca.addEventListener('change', function() {
+                const tab = document.getElementById(g === 'L' ? 'tab-laki' : 'tab-perempuan');
+                tab.querySelectorAll('.check-item').forEach(item => {
+                    if (item.closest('tr').style.display !== 'none') {
+                        item.checked = this.checked;
+                    }
+                });
+                validateAndCount();
+            });
+        }
+    });
+});
+</script>
 @endsection

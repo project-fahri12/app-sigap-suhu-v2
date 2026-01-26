@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
@@ -37,16 +37,16 @@ class User extends Authenticatable
         return $this->belongsTo(Sekolah::class, 'sekolah_id');
     }
 
-    public function pondok() 
+    public function pondok()
     {
-        return $this->belongsTo(Pondok::class,'pondok_id');
+        return $this->belongsTo(Pondok::class, 'pondok_id');
     }
 
     public function pendaftar()
-{
-    // Jika di tabel pendaftars kolomnya adalah user_id
-    return $this->hasOne(Pendaftar::class, 'pendaftar_id', 'id');
-}
+    {
+        // Jika di tabel pendaftars kolomnya adalah user_id
+        return $this->hasOne(Pendaftar::class, 'pendaftar_id', 'id');
+    }
 
     // ================= HELPER ROLE =================
 
@@ -54,4 +54,22 @@ class User extends Authenticatable
     {
         return $this->role === $role;
     }
+
+    public function getLabelAttribute()
+    {
+        if ($this->sekolah) {
+            return $this->sekolah->nama_sekolah;
+        }
+
+        if ($this->role === 'super-admin') {
+            return 'Super Admin';
+        }
+
+        if ($this->pondok) {
+            return $this->pondok->nama_pondok;
+        }
+
+        return 'PENDAFTAR';
+    }
+
 }

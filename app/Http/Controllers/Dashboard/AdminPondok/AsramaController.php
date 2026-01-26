@@ -8,9 +8,22 @@ use Illuminate\Http\Request;
 
 class AsramaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $asramas = Asrama::latest()->paginate(10);
+        $query = Asrama::query();
+
+        // Fitur Search
+        if ($request->has('search')) {
+            $query->where('nama_asrama', 'like', '%' . $request->search . '%');
+        }
+
+        // Fitur Filter JK
+        if ($request->filled('jk')) {
+            $query->where('jk', $request->jk);
+        }
+
+        $asramas = $query->latest()->paginate(10);
+        
         return view('dashboard.admin-pondok.asrama.index', compact('asramas'));
     }
 
@@ -18,13 +31,11 @@ class AsramaController extends Controller
     {
         $request->validate([
             'nama_asrama'   => 'required|string|max:255',
-            'status_asrama' => 'nullable|string|max:255',
+            'jk'            => 'required|in:L,P',
+            'status_asrama' => 'required|string',
         ]);
 
-        Asrama::create([
-            'nama_asrama'   => $request->nama_asrama,
-            'status_asrama' => $request->status_asrama ?? 'Aktif',
-        ]);
+        Asrama::create($request->all());
 
         return redirect()->back()->with('success', 'Asrama baru berhasil disimpan!');
     }
@@ -33,7 +44,8 @@ class AsramaController extends Controller
     {
         $request->validate([
             'nama_asrama'   => 'required|string|max:255',
-            'status_asrama' => 'nullable|string|max:255',
+            'jk'            => 'required|in:L,P',
+            'status_asrama' => 'required|string',
         ]);
 
         $asrama = Asrama::findOrFail($id);
@@ -44,7 +56,9 @@ class AsramaController extends Controller
 
     public function destroy($id)
     {
-        Asrama::findOrFail($id)->delete();
+        $asrama = Asrama::findOrFail($id);
+        $asrama->delete();
+        
         return redirect()->back()->with('success', 'Asrama berhasil dihapus!');
     }
 }

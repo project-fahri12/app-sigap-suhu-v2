@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\DaftarUlang;
 use App\Models\Pendaftar;
+use App\Models\Santri;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,32 +15,63 @@ class DaftarUlangController extends Controller
     public function index(Request $request)
     {
         $totalTagihanPerSiswa = 5000000;
+        $statusTab = $request->get('tab', 'semua');
 
-        $query = Pendaftar::with(['informasiKontak'])
+        $query = Pendaftar::with(['informasiKontak', 'daftarUlang'])
             ->withSum('daftarUlang as total_dibayar', 'dibayar');
 
-        if ($request->has('search')) {
-            $query->where('nama_lengkap', 'like', "%{$request->search}%")
-                ->orWhere('kode_pendaftaran', 'like', "%{$request->search}%");
+        // Filter Berdasarkan Tab
+        if ($statusTab === 'belum_input') {
+            $query->doesntHave('daftarUlang');
+        } elseif ($statusTab === 'cicilan') {
+            $query->whereHas('daftarUlang')
+                  ->having('total_dibayar', '>', 0)
+                  ->having('total_dibayar', '<', $totalTagihanPerSiswa);
+        } elseif ($statusTab === 'lunas') {
+            $query->having('total_dibayar', '>=', $totalTagihanPerSiswa);
         }
 
-        $pendaftars = $query->latest()->get();
+        // Filter Search
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nama_lengkap', 'like', "%{$request->search}%")
+                  ->orWhere('kode_pendaftaran', 'like', "%{$request->search}%");
+            });
+        }
 
+        // Urutan: Belum bayar (0) paling atas, lalu urutkan yang terbaru
+        $pendaftars = $query->orderBy(DB::raw('COALESCE(total_dibayar, 0)'), 'asc')
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        // Data Statistik & Counter Tab
         $totalMasuk = DaftarUlang::sum('dibayar');
+        
+        // Counter dinamis untuk badge di tab
+        $counts = [
+            'semua'       => Pendaftar::count(),
+            'belum_input' => Pendaftar::doesntHave('daftarUlang')->count(),
+            'cicilan'     => Pendaftar::whereHas('daftarUlang')
+                                ->withSum('daftarUlang as total', 'dibayar')
+                                ->get()->filter(fn($p) => $p->total > 0 && $p->total < $totalTagihanPerSiswa)->count(),
+            'lunas'       => Pendaftar::withSum('daftarUlang as total', 'dibayar')
+                                ->get()->filter(fn($p) => $p->total >= $totalTagihanPerSiswa)->count(),
+        ];
 
-        $lunasCount = $pendaftars->filter(function ($p) use ($totalTagihanPerSiswa) {
-            return ($p->total_dibayar ?? 0) >= $totalTagihanPerSiswa;
-        })->count();
+        if ($request->ajax()) {
+            return view('dashboard.superadmin.daftar-ulang._table', compact('pendaftars', 'totalTagihanPerSiswa'))->render();
+        }
 
-        return view('dashboard.superadmin.daftar-ulang.index', compact(
-            'pendaftars',
-            'totalMasuk',
-            'lunasCount',
-            'totalTagihanPerSiswa'
-        ));
+        return view('dashboard.superadmin.daftar-ulang.index', [
+            'pendaftars' => $pendaftars,
+            'totalMasuk' => $totalMasuk,
+            'lunasCount' => $counts['lunas'],
+            'counts' => $counts,
+            'totalTagihanPerSiswa' => $totalTagihanPerSiswa,
+            'statusTab' => $statusTab
+        ]);
     }
-
-    // ... bagian atas controller tetap sama
 
     public function store(Request $request)
     {
@@ -53,11 +85,8 @@ class DaftarUlangController extends Controller
         DB::transaction(function () use ($request) {
             $sudahDibayar = DaftarUlang::where('pendaftar_id', $request->pendaftar_id)->sum('dibayar');
             $totalSetelahBayarBaru = $sudahDibayar + $request->dibayar;
-
-            // Tentukan status berdasarkan nominal tagihan
             $status = ($totalSetelahBayarBaru >= $request->tagihan) ? 'lunas' : 'cicilan';
 
-            // 1. Simpan Transaksi Pembayaran
             DaftarUlang::create([
                 'pendaftar_id' => $request->pendaftar_id,
                 'tagihan' => $request->tagihan,
@@ -69,20 +98,23 @@ class DaftarUlangController extends Controller
             $pendaftar = Pendaftar::lockForUpdate()->findOrFail($request->pendaftar_id);
 
             if ($status === 'lunas') {
-                // 2a. Update status jadi Diterima
                 $pendaftar->update(['status_pendaftaran' => 'diterima']);
+                $nis = $this->generateNis($pendaftar);
 
-                // 3. Buat Data Siswa
-                Siswa::firstOrCreate(
-                    ['pendaftar_id' => $pendaftar->id],
-                    [
-                        'nis' => $this->generateNis($pendaftar),
-                        'pondok_id' => $pendaftar->pondok_id,
-                        'status_santri' => 'Aktif',
-                    ]
-                );
+                Siswa::firstOrCreate(['pendaftar_id' => $pendaftar->id], [
+                    'nis' => $nis,
+                    'sekolah_id' => $pendaftar->sekolah_id,
+                    'pondok_id' => $pendaftar->pondok_id,
+                    'status_siswa' => 'Aktif',
+                ]);
+
+                Santri::firstOrCreate(['pendaftar_id' => $pendaftar->id], [
+                    'pondok_id' => $pendaftar->pondok_id,
+                    'sekolah_id' => $pendaftar->sekolah_id,
+                    'nis' => $nis,
+                    'status_santri' => 'Aktif',
+                ]);
             } else {
-                // 2b. Jika masih cicilan, update status jadi Dispensasi Pembayaran
                 $pendaftar->update(['status_pendaftaran' => 'dispensasi pembayaran']);
             }
         });
@@ -93,19 +125,10 @@ class DaftarUlangController extends Controller
     private function generateNis(Pendaftar $pendaftar)
     {
         $tahun = date('Y');
-
-        // Ambil ID sekolah, misal ID 1 jadi 001
         $sekolah = str_pad($pendaftar->sekolah_id, 3, '0', STR_PAD_LEFT);
+        $urut = Siswa::whereHas('pendaftar', fn($q) => $q->where('sekolah_id', $pendaftar->sekolah_id))
+            ->whereYear('created_at', $tahun)->count() + 1;
 
-        // PERBAIKAN: Hitung urutan dari tabel SISWAS, bukan PENDAFTARS
-        $urut = Siswa::whereHas('pendaftar', function ($q) use ($pendaftar) {
-            $q->where('sekolah_id', $pendaftar->sekolah_id);
-        })
-            ->whereYear('created_at', $tahun)
-            ->count() + 1;
-
-        $noUrut = str_pad($urut, 4, '0', STR_PAD_LEFT);
-
-        return "{$tahun}{$sekolah}{$noUrut}";
+        return "{$tahun}{$sekolah}" . str_pad($urut, 4, '0', STR_PAD_LEFT);
     }
 }

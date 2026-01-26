@@ -15,11 +15,17 @@ class Romkam extends Model
         'nama_romkam',
         'kapasitas',
         'status_romkam',
-        'asrama_id'
+        'asrama_id',
+        'jk',
     ];
 
     public function asrama()
     {
         return $this->belongsTo(Asrama::class, 'asrama_id');
+    }
+
+    public function santri()
+    {
+        return $this->hasMany(Santri::class, 'romkam_id');
     }
 }

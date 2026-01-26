@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Dashboard\AdminPondok;
 
 use App\Http\Controllers\Controller;
-use App\Models\Romkam;
 use App\Models\Asrama;
+use App\Models\Romkam;
 use Illuminate\Http\Request;
 
 class RomkamController extends Controller
 {
     public function index()
     {
-        // Mengambil data romkam beserta relasi asramanya
-        $romkams = Romkam::with('asrama')->latest()->paginate(10);
-        $asramas = Asrama::all(); // Untuk dropdown di modal
+        // Ambil romkam, relasi asrama, dan hitung jumlah santri yang terdaftar di tiap kamar
+        $romkams = Romkam::with('asrama')
+            ->withCount('santri')
+            ->latest()
+            ->paginate(10);
+
+
+        $asramas = Asrama::all();
 
         return view('dashboard.admin-pondok.romkam.index', compact('romkams', 'asramas'));
     }
@@ -21,19 +26,19 @@ class RomkamController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_romkam'   => 'required|string|max:255',
-            'asrama_id'     => 'required|exists:asramas,id',
-            'kapasitas'     => 'required|integer',
+            'nama_romkam' => 'required|string|max:255',
+            'asrama_id' => 'required|exists:asramas,id',
+            'kapasitas' => 'required|integer',
             'status_romkam' => 'required',
         ]);
 
         Romkam::create([
-            'pondok_id'     => 1, // Sesuaikan dengan session pondok
-            'nis'           => $request->nis ?? '0',
-            'nama_romkam'   => $request->nama_romkam,
-            'kapasitas'     => $request->kapasitas,
+            'pondok_id' => 1, // Sesuaikan dengan session pondok
+            'nis' => $request->nis ?? '0',
+            'nama_romkam' => $request->nama_romkam,
+            'kapasitas' => $request->kapasitas,
             'status_romkam' => $request->status_romkam,
-            'asrama_id'     => $request->asrama_id,
+            'asrama_id' => $request->asrama_id,
         ]);
 
         return redirect()->back()->with('success', 'Kamar (Romkam) berhasil ditambahkan.');
@@ -42,9 +47,9 @@ class RomkamController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama_romkam'   => 'required|string|max:255',
-            'asrama_id'     => 'required|exists:asramas,id',
-            'kapasitas'     => 'required|integer',
+            'nama_romkam' => 'required|string|max:255',
+            'asrama_id' => 'required|exists:asramas,id',
+            'kapasitas' => 'required|integer',
             'status_romkam' => 'required',
         ]);
 
@@ -57,6 +62,7 @@ class RomkamController extends Controller
     public function destroy($id)
     {
         Romkam::findOrFail($id)->delete();
+
         return redirect()->back()->with('success', 'Kamar berhasil dihapus.');
     }
 }

@@ -1,172 +1,195 @@
 @extends('dashboard.layouts.app')
 
 @section('content')
-<div class="content-body" style="background-color: #f1f7f5;">
+<div class="content-body" style="background-color: #f4f7f6;">
     <div class="container-fluid">
         
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card border-0 shadow-sm rounded-4" style="background: linear-gradient(45deg, #198754, #20c997); color: white;">
-                    <div class="card-body p-4 d-flex align-items-center justify-content-between">
-                        <div>
-                            <h3 class="fw-bold mb-1"><i class="fas fa-boxes me-2"></i>Manajemen Loker & Hunian</h3>
-                            <p class="mb-0 opacity-75">Manajemen plotting santri berdasarkan ketersediaan unit lemari di asrama.</p>
+                <div class="card border-0 shadow-sm rounded-4" style="background: linear-gradient(135deg, #136a42, #198754); color: white;">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-7">
+                                <h3 class="fw-bold mb-1"><i class="fas fa-house-user me-2"></i>Dashboard Hunian & Loker</h3>
+                                <p class="mb-0 opacity-75">Sistem monitoring ketersediaan fasilitas asrama santri.</p>
+                            </div>
+                            <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                                <div class="d-inline-block text-center bg-white bg-opacity-10 p-2 px-4 rounded-4 border border-white border-opacity-25">
+                                    <h4 class="mb-0 fw-bold" id="live-clock">00:00:00</h4>
+                                    <small class="text-uppercase ls-1" id="live-date">Memuat Tanggal...</small>
+                                </div>
+                            </div>
                         </div>
-                        <i class="fas fa-mosque fa-4x opacity-25 d-none d-md-block"></i>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="row g-3 mb-4">
+            @php
+                $stats = [
+                    ['title' => 'Gedung', 'value' => '4', 'unit' => 'Blok', 'icon' => 'fa-building', 'color' => 'success'],
+                    ['title' => 'Kamar', 'value' => '48', 'unit' => 'Unit', 'icon' => 'fa-door-open', 'color' => 'primary'],
+                    ['title' => 'Total Loker', 'value' => '480', 'unit' => 'Slot', 'icon' => 'fa-box', 'color' => 'info'],
+                    ['title' => 'Tersedia', 'value' => '15', 'unit' => 'Slot', 'icon' => 'fa-check-circle', 'color' => 'warning']
+                ];
+            @endphp
+            @foreach($stats as $stat)
             <div class="col-6 col-lg-3">
-                <div class="card border-0 shadow-sm rounded-4 border-bottom border-4 border-success h-100">
-                    <div class="card-body p-3 p-lg-4 text-center">
-                        <div class="bg-success-subtle text-success p-3 rounded-circle d-inline-block mb-3">
-                            <i class="fas fa-building fa-2x"></i>
+                <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden position-relative">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="bg-{{ $stat['color'] }}-subtle text-{{ $stat['color'] }} p-3 rounded-4">
+                                <i class="fas {{ $stat['icon'] }} fa-xl"></i>
+                            </div>
                         </div>
-                        <h6 class="text-muted small fw-bold text-uppercase">Blok Asrama</h6>
-                        <h3 class="fw-bold text-success mb-0">4 <small class="fs-6 text-muted fw-normal">Gedung</small></h3>
+                        <h6 class="text-muted small fw-bold text-uppercase mb-1">{{ $stat['title'] }}</h6>
+                        <h3 class="fw-bold mb-0">{{ $stat['value'] }} <small class="fs-6 text-muted fw-normal">{{ $stat['unit'] }}</small></h3>
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-lg-3">
-                <div class="card border-0 shadow-sm rounded-4 border-bottom border-4 border-primary h-100">
-                    <div class="card-body p-3 p-lg-4 text-center">
-                        <div class="bg-primary-subtle text-primary p-3 rounded-circle d-inline-block mb-3">
-                            <i class="fas fa-door-closed fa-2x"></i>
-                        </div>
-                        <h6 class="text-muted small fw-bold text-uppercase">Total Kamar</h6>
-                        <h3 class="fw-bold text-primary mb-0">48 <small class="fs-6 text-muted fw-normal">Unit</small></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="card border-0 shadow-sm rounded-4 border-bottom border-4 border-info h-100">
-                    <div class="card-body p-3 p-lg-4 text-center">
-                        <div class="bg-info-subtle text-info p-3 rounded-circle d-inline-block mb-3">
-                            <i class="fas fa-archive fa-2x"></i>
-                        </div>
-                        <h6 class="text-muted small fw-bold text-uppercase">Total Lemari</h6>
-                        <h3 class="fw-bold text-info mb-0">480 <small class="fs-6 text-muted fw-normal">Slot</small></h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 col-lg-3">
-                <div class="card border-0 shadow-sm rounded-4 border-bottom border-4 border-warning h-100">
-                    <div class="card-body p-3 p-lg-4 text-center">
-                        <div class="bg-warning-subtle text-warning p-3 rounded-circle d-inline-block mb-3">
-                            <i class="fas fa-user-tag fa-2x"></i>
-                        </div>
-                        <h6 class="text-muted small fw-bold text-uppercase">Lemari Kosong</h6>
-                        <h3 class="fw-bold text-warning mb-0">15 <small class="fs-6 text-muted fw-normal">Tersedia</small></h3>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
 
         <div class="row g-4">
-            <div class="col-lg-8">
+            <div class="col-xl-8">
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
                     <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="fw-bold text-dark mb-0"><i class="fas fa-border-all me-2 text-success"></i>Kapasitas Lemari: Gedung A</h5>
-                            <small class="text-muted">Menampilkan sebaran unit lemari di setiap kamar</small>
-                        </div>
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-success dropdown-toggle rounded-pill px-3" data-bs-toggle="dropdown">
-                                <i class="fas fa-filter me-1"></i> Filter Gedung
-                            </button>
-                            <ul class="dropdown-menu border-0 shadow">
-                                <li><a class="dropdown-item" href="#">Gedung A (Putra)</a></li>
-                                <li><a class="dropdown-item" href="#">Gedung B (Putri)</a></li>
-                            </ul>
-                        </div>
+                        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-th-large me-2 text-success"></i>Kapasitas Per Kamar</h5>
+                        <button class="btn btn-sm btn-light rounded-pill px-3">Lihat Semua</button>
                     </div>
                     <div class="card-body p-4">
                         <div class="row g-3">
-                            @for ($i = 1; $i <= 12; $i++)
-                            <div class="col-md-4 col-6">
-                                <div class="p-3 border rounded-4 position-relative transition-hover bg-white border-success-subtle">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <span class="badge bg-success shadow-sm">Kamar {{ $i }}</span>
-                                        <i class="fas fa-archive text-success opacity-50"></i>
+                            @for ($i = 1; $i <= 6; $i++)
+                            <div class="col-md-4">
+                                <div class="p-3 border rounded-4 transition-hover bg-white border-light shadow-sm">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle">Kamar 0{{ $i }}</span>
+                                        <small class="text-muted"><i class="fas fa-users me-1"></i> {{ 10 - $i }}/10</small>
                                     </div>
-                                    <div class="d-flex align-items-end mb-1">
-                                        <h4 class="fw-bold mb-0 me-2">{{ $i == 3 ? '10' : '8' }}</h4>
-                                        <small class="text-muted pb-1">/ 10 Lemari</small>
+                                    <div class="progress mb-2" style="height: 6px;">
+                                        <div class="progress-bar bg-success" style="width: {{ (10-$i)*10 }}%"></div>
                                     </div>
-                                    <div class="progress mb-2" style="height: 6px; border-radius: 10px;">
-                                        <div class="progress-bar bg-success rounded-pill" style="width: {{ $i == 3 ? '100%' : '80%' }}"></div>
-                                    </div>
-                                    <div class="d-flex justify-content-between" style="font-size: 11px;">
-                                        <span class="text-muted">Terisi: <b>{{ $i == 3 ? '10' : '8' }}</b></span>
-                                        <span class="{{ $i == 3 ? 'text-danger' : 'text-success' }} fw-bold">{{ $i == 3 ? 'Penuh' : 'Sisa 2' }}</span>
-                                    </div>
+                                    <small class="text-muted d-block text-end" style="font-size: 10px;">{{ $i }} Slot Tersisa</small>
                                 </div>
                             </div>
                             @endfor
                         </div>
-                        <div class="mt-4 p-3 bg-light rounded-4 border-start border-4 border-success">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-info-circle me-3 text-success fa-lg"></i>
-                                <small class="text-muted">Data di atas merepresentasikan jumlah <b>unit lemari aktif</b>. Setiap lemari hanya diperuntukkan bagi 1 santri mukim.</small>
-                            </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-header bg-white border-0 pt-4 px-4">
+                        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-history me-2 text-success"></i>Plotting Terbaru</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr class="text-muted small">
+                                        <th class="ps-4">SANTRI</th>
+                                        <th>GEDUNG/KAMAR</th>
+                                        <th>NOMOR LOKER</th>
+                                        <th class="text-end pe-4">STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $activities = [
+                                            ['name' => 'Ahmad Fauzi', 'room' => 'Gedung A / K01', 'loker' => 'L-001', 'status' => 'Aktif'],
+                                            ['name' => 'M. Ridwan', 'room' => 'Gedung A / K03', 'loker' => 'L-045', 'status' => 'Aktif'],
+                                            ['name' => 'Zaini Abid', 'room' => 'Gedung B / K02', 'loker' => 'L-102', 'status' => 'Pindah'],
+                                        ];
+                                    @endphp
+                                    @foreach($activities as $act)
+                                    <tr class="small">
+                                        <td class="ps-4 fw-bold text-dark">{{ $act['name'] }}</td>
+                                        <td>{{ $act['room'] }}</td>
+                                        <td><span class="badge bg-light text-dark border">{{ $act['loker'] }}</span></td>
+                                        <td class="text-end pe-4">
+                                            <span class="badge {{ $act['status'] == 'Aktif' ? 'bg-success' : 'bg-warning' }} rounded-pill">
+                                                {{ $act['status'] }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
-                    <div class="card-header bg-white py-3 px-4 border-0">
-                        <h6 class="fw-bold mb-0 text-muted"><i class="fas fa-layer-group me-2 text-success"></i>Manajemen Lanjutan</h6>
+            <div class="col-xl-4">
+                <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+                    <div class="card-body p-0">
+                        <div class="bg-success p-3 text-white text-center">
+                            <h6 class="mb-0 fw-bold" id="cal-month-year">Januari 2026</h6>
+                        </div>
+                        <div class="p-3">
+                            <table class="table table-sm table-borderless text-center mb-0" id="calendar-table">
+                                <thead>
+                                    <tr class="text-muted small">
+                                        <th>S</th> <th>S</th> <th>R</th> <th>K</th> <th>J</th> <th>S</th> <th>M</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="small">
+                                    <tr>
+                                        <td class="text-muted opacity-25">29</td><td class="text-muted opacity-25">30</td><td class="text-muted opacity-25">31</td><td>1</td><td>2</td><td>3</td><td>4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td>
+                                    </tr>
+                                    <tr>
+                                        <td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td class="bg-success text-white rounded-circle">25</td>
+                                    </tr>
+                                    <tr>
+                                        <td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td class="text-muted opacity-25">1</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="card-body p-4 pt-0">
-                        
-                        <div class="d-flex align-items-start p-3 mb-3 bg-light rounded-4 opacity-75 grayscale-filter border border-dashed">
-                            <div class="bg-white p-2 rounded shadow-sm me-3 text-secondary"><i class="fas fa-clipboard-check"></i></div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-1 small fw-bold text-dark">Kedisiplinan & Absensi</h6>
-                                <ul class="list-unstyled mb-2" style="font-size: 10px; line-height: 1.6;">
-                                    <li><i class="fas fa-circle-notch me-1 text-success"></i> Absensi Malam (Ba'da Isya)</li>
-                                    <li><i class="fas fa-circle-notch me-1 text-success"></i> Absensi Shalat Berjamaah</li>
-                                    <li><i class="fas fa-circle-notch me-1 text-success"></i> Kontrol Kebersihan Kamar</li>
-                                </ul>
-                                <span class="badge bg-secondary-subtle text-secondary py-1" style="font-size: 8px;">COMING SOON</span>
-                            </div>
-                        </div>
+                </div>
 
-                        <div class="d-flex align-items-start p-3 mb-3 bg-light rounded-4 opacity-75 grayscale-filter border border-dashed">
-                            <div class="bg-white p-2 rounded shadow-sm me-3 text-secondary"><i class="fas fa-shuttle-van"></i></div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-1 small fw-bold text-dark">Perizinan / Pesiar</h6>
-                                <ul class="list-unstyled mb-2" style="font-size: 10px; line-height: 1.6;">
-                                    <li><i class="fas fa-circle-notch me-1 text-success"></i> Pengajuan Izin Keluar</li>
-                                    <li><i class="fas fa-circle-notch me-1 text-success"></i> Log Riwayat Kepulangan</li>
-                                </ul>
-                                <span class="badge bg-secondary-subtle text-secondary py-1" style="font-size: 8px;">COMING SOON</span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-items-start p-3 bg-light rounded-4 opacity-75 grayscale-filter border border-dashed">
-                            <div class="bg-white p-2 rounded shadow-sm me-3 text-secondary"><i class="fas fa-tools"></i></div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-1 small fw-bold text-dark">Fasilitas & Inventaris</h6>
-                                <ul class="list-unstyled mb-2" style="font-size: 10px; line-height: 1.6;">
-                                    <li><i class="fas fa-circle-notch me-1 text-success"></i> Cek Kerusakan Lemari</li>
-                                    <li><i class="fas fa-circle-notch me-1 text-success"></i> Inventaris Kunci Kamar</li>
-                                </ul>
-                                <span class="badge bg-secondary-subtle text-secondary py-1" style="font-size: 8px;">COMING SOON</span>
-                            </div>
-                        </div>
-
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-header bg-white border-0 pt-4 px-4">
+                        <h6 class="fw-bold mb-0 text-muted"><i class="fas fa-rocket me-2 text-success"></i>Fitur Pengembangan</h6>
                     </div>
-                    <div class="bg-light p-3 border-top">
-                         <div class="d-flex align-items-center justify-content-center text-success">
-                            <div class="spinner-grow spinner-grow-sm me-2" role="status"></div>
-                            <small class="fw-bold">Menunggu Sinkronisasi Data...</small>
-                         </div>
+                    <div class="card-body p-4 pt-2">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small class="fw-bold">E-Absensi Hunian</small>
+                                <small class="text-success">85%</small>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-success" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small class="fw-bold">Manajemen Inventaris</small>
+                                <small class="text-info">40%</small>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-info" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-0">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small class="fw-bold">Integrasi Perizinan</small>
+                                <small class="text-warning">15%</small>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-warning" style="width: 15%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-light p-3 border-top text-center rounded-bottom-4">
+                        <small class="text-muted"><i class="fas fa-sync fa-spin me-2"></i>Sinkronisasi Otomatis Aktif</small>
                     </div>
                 </div>
             </div>
@@ -175,34 +198,51 @@
 </div>
 
 <style>
-    /* Theme Colors & Mixins */
+    .ls-1 { letter-spacing: 1px; }
     .bg-success-subtle { background-color: #e8f5e9 !important; }
     .bg-primary-subtle { background-color: #e3f2fd !important; }
     .bg-info-subtle { background-color: #e0f7fa !important; }
     .bg-warning-subtle { background-color: #fff3cd !important; }
     .text-success { color: #198754 !important; }
-    .rounded-4 { border-radius: 1.25rem !important; }
+    .rounded-4 { border-radius: 1rem !important; }
     
-    /* Hover Effects */
     .transition-hover {
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        background-color: #ffffff;
+        transition: all 0.3s ease;
     }
     .transition-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
         border-color: #198754 !important;
-        z-index: 10;
     }
 
-    /* Grayscale for Coming Soon */
-    .grayscale-filter {
-        filter: grayscale(1);
-        border: 1px dashed #ced4da !important;
+    #calendar-table th, #calendar-table td {
+        padding: 10px 5px;
+        width: 14.28%;
     }
-    
-    .list-unstyled li {
-        margin-bottom: 3px;
+
+    .progress {
+        background-color: #edf2f7;
+        border-radius: 10px;
+        overflow: hidden;
     }
 </style>
+
+<script>
+    function updateClock() {
+        const now = new Date();
+        
+        // Jam
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('live-clock').textContent = `${hours}:${minutes}:${seconds}`;
+        
+        // Tanggal
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('live-date').textContent = now.toLocaleDateString('id-ID', options);
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock(); // Jalankan langsung
+</script>
 @endsection

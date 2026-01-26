@@ -10,39 +10,39 @@ use App\Http\Controllers\Controller;
 class PlottingKamar extends Controller
 {
     public function index()
-    {
-        // 1. Santri yang SUDAH memiliki kamar (romkam_id tidak NULL)
-        $plottings = Santri::with(['romkam.asrama'])
-            ->whereNotNull('romkam_id')
-            ->latest()
-            ->paginate(10);
+{
+    // Tambahkan pendaftar ke dalam eager loading
+    $plottings = Santri::with(['romkam.asrama', 'pendaftar'])
+        ->whereNotNull('romkam_id')
+        ->latest()
+        ->paginate(10);
 
-        // 2. Daftar Kamar yang tersedia untuk pilihan dropdown
-        $romkams = Romkam::with('asrama')->where('status_romkam', 'Tersedia')->get();
+    // Ambil romkam yang statusnya tersedia
+    $romkams = Romkam::with('asrama')->where('status_romkam', 'Tersedia')->get();
 
-        // 3. Santri yang BELUM memiliki kamar (untuk modal plotting baru)
-        $santriBelumPlot = Santri::whereNull('romkam_id')->get();
+    // Pastikan pendaftar juga di-load di sini
+    $santriBelumPlot = Santri::with('pendaftar')->whereNull('romkam_id')->get();
 
-        return view('dashboard.admin-pondok.plotting-kamar.index', compact('plottings', 'romkams', 'santriBelumPlot'));
-    }
+    return view('dashboard.admin-pondok.plotting-kamar.index', compact('plottings', 'romkams', 'santriBelumPlot'));
+}
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'santri_id' => 'required|exists:santris,id',
-            'romkam_id' => 'required|exists:romkams,id',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'santri_ids' => 'required|array',
+        'santri_ids.*' => 'exists:santris,id',
+        'romkam_id' => 'required|exists:romkams,id',
+    ]);
 
-        // Update data santri: masukkan romkam_id dan ubah status_santri
-        $santri = Santri::findOrFail($request->santri_id);
-        $santri->update([
-            'romkam_id'     => $request->romkam_id,
-            'status_santri' => 'Mukim',
-            'updated_at'    => now()
-        ]);
+    // Update masal
+    Santri::whereIn('id', $request->santri_ids)->update([
+        'romkam_id'     => $request->romkam_id,
+        'status_santri' => 'Mukim',
+        'updated_at'    => now()
+    ]);
 
-        return redirect()->back()->with('success', 'Santri berhasil ditempatkan ke kamar.');
-    }
+    return redirect()->back()->with('success', count($request->santri_ids) . ' Santri berhasil ditempatkan ke kamar.');
+}
 
     public function update(Request $request, $id)
     {
