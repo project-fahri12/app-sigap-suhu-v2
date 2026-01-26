@@ -15,32 +15,27 @@ class Santri extends Model
         'status_santri',
     ];
 
-<<<<<<< HEAD
+    // =====================
+    // RELATIONS
+    // =====================
+
+    public function pendaftar()
+    {
+        return $this->belongsTo(Pendaftar::class);
+    }
+
     public function romkam()
     {
-        return $this->belongsTo(Romkam::class, 'romkam_id');
+        return $this->belongsTo(Romkam::class);
     }
 
-    public function pendaftar()
+    public function sekolah()
     {
-        return $this->belongsTo(Pendaftar::class, 'pendaftar_id');
+        return $this->belongsTo(Sekolah::class);
     }
 
-    public function sekolah() 
+    public function pondok()
     {
-        return $this->belongsTo(Sekolah::class,'sekolah_id');
+        return $this->belongsTo(Pondok::class);
     }
-
-    
-=======
-    public function pendaftar()
-{
-    return $this->belongsTo(Pendaftar::class, 'pendaftar_id');
-}
-
-public function romkam()
-{
-    return $this->belongsTo(Romkam::class, 'romkam_id');
-}
->>>>>>> 2b7298b4caabe6b918d24deb5a98e188364485b5
 }

@@ -15,7 +15,7 @@ class PlottingKamar extends Controller
     $plottings = Santri::with(['romkam.asrama', 'pendaftar'])
         ->whereNotNull('romkam_id')
         ->latest()
-        ->paginate(10);
+        ->paginate(10)->WithQueryString();
 
     // Ambil romkam yang statusnya tersedia
     $romkams = Romkam::with('asrama')->where('status_romkam', 'Tersedia')->get();
