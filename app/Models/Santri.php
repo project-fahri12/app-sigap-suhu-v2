@@ -15,6 +15,7 @@ class Santri extends Model
         'status_santri',
     ];
 
+<<<<<<< HEAD
     public function romkam()
     {
         return $this->belongsTo(Romkam::class, 'romkam_id');
@@ -31,4 +32,15 @@ class Santri extends Model
     }
 
     
+=======
+    public function pendaftar()
+{
+    return $this->belongsTo(Pendaftar::class, 'pendaftar_id');
+}
+
+public function romkam()
+{
+    return $this->belongsTo(Romkam::class, 'romkam_id');
+}
+>>>>>>> 2b7298b4caabe6b918d24deb5a98e188364485b5
 }
