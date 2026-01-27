@@ -1,12 +1,12 @@
 @extends('dashboard.layouts.app')
 
-@section('content')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@section('title', 'Penempatan Rombel | SIGAP')
 
+@section('content')
 <div class="content-body" style="background-color: #f4f7f6;">
     <div class="container-fluid">
         
+        {{-- Breadcrumb --}}
         <nav aria-label="breadcrumb" class="mb-3">
             <ol class="breadcrumb bg-transparent p-0 small">
                 <li class="breadcrumb-item text-muted">Akademik</li>
@@ -14,10 +14,11 @@
             </ol>
         </nav>
 
+        {{-- Header Section --}}
         <div class="row mb-4 align-items-center">
             <div class="col-md-6">
                 <h4 class="fw-bold text-dark mb-1">Penempatan Rombel</h4>
-                <p class="text-muted small mb-0">Kelola distribusi siswa ke dalam kelas/rombongan belajar.</p>
+                <p class="text-muted small mb-0">Kelola distribusi siswa ke dalam kelas atau rombongan belajar.</p>
             </div>
             <div class="col-md-6 text-md-end mt-3 mt-md-0">
                 <div class="d-inline-flex align-items-center bg-white border px-3 py-2 rounded-4 shadow-sm">
@@ -28,14 +29,16 @@
         </div>
 
         <div class="row g-4">
+            {{-- KOLOM KIRI: DAFTAR TUNGGU --}}
             <div class="col-xl-5">
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                     <div class="card-header bg-white border-0 pt-4 px-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="fw-bold mb-0 text-dark"><i class="fas fa-list-ul me-2 text-success"></i>Daftar Tunggu</h6>
+                            <h6 class="fw-bold mb-0 text-dark">
+                                <i class="fas fa-list-ul me-2 text-success"></i>Daftar Tunggu
+                            </h6>
                             <div id="search-loader" class="spinner-border spinner-border-sm text-success d-none"></div>
                         </div>
-                        
                         <div class="row g-2">
                             <div class="col-8">
                                 <div class="input-group bg-light rounded-pill border-0 px-3 shadow-sm">
@@ -52,15 +55,13 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <div class="card-body p-0">
-                        <div class="table-responsive" style="max-height: 450px; min-height: 300px;">
+                        <div class="table-responsive" style="max-height: 450px; min-height: 350px;">
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="bg-light sticky-top">
                                     <tr class="small text-muted fw-bold">
-                                        <th class="ps-4" width="40">
-                                            <input type="checkbox" id="selectAll" class="form-check-input">
-                                        </th>
+                                        <th class="ps-4" width="40"><input type="checkbox" id="selectAll" class="form-check-input"></th>
                                         <th>NAMA SISWA</th>
                                         <th class="text-center">JK</th>
                                     </tr>
@@ -74,11 +75,13 @@
 
                     <div class="card-footer bg-white border-top p-4">
                         <div class="p-3 bg-light rounded-4 border" style="border-style: dashed !important;">
-                            <label class="small fw-bold text-muted mb-2 d-block">PROSES PLOTTING CEPAT:</label>
+                            <label class="small fw-bold text-muted mb-2 d-block text-uppercase">Proses Plotting Cepat:</label>
                             <select id="quickRombelSelect" class="form-select border-0 shadow-sm rounded-pill fw-bold text-success">
                                 <option value="">-- Pilih Rombel Tujuan --</option>
                                 @foreach($listRombel as $rombel)
-                                    <option value="{{ $rombel->id }}">{{ $rombel->nama_rombel }} ({{ $rombel->kelas->nama_kelas }})</option>
+                                    <option value="{{ $rombel->id }}">
+                                        {{ $rombel->nama_rombel }} ({{ $rombel->kelas->nama_kelas ?? '-' }}) - [{{ $rombel->jenis_kelas }}]
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -86,6 +89,7 @@
                 </div>
             </div>
 
+            {{-- KOLOM KANAN: ANGGOTA ROMBEL --}}
             <div class="col-xl-7">
                 <div class="card border-0 shadow-sm rounded-4 h-100">
                     <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
@@ -106,7 +110,7 @@
                         @if($rombelTerpilih)
                             <div class="px-4 py-3 bg-success text-white mx-4 rounded-4 mb-4 mt-2 d-flex justify-content-between align-items-center shadow-sm">
                                 <div>
-                                    <small class="opacity-75 d-block small">Rombel Aktif:</small>
+                                    <small class="opacity-75 d-block small">Rombel Aktif (Tipe: {{ $rombelTerpilih->jenis_kelas }}):</small>
                                     <h5 class="fw-bold mb-0">{{ $rombelTerpilih->nama_rombel }}</h5>
                                 </div>
                                 <div class="text-end">
@@ -133,7 +137,14 @@
                                             </td>
                                             <td class="text-center small">{{ $anggota->pendaftar->nisn ?? '-' }}</td>
                                             <td class="text-end pe-4">
-                                                <button onclick="confirmDelete('{{ $anggota->id }}')" class="btn btn-sm btn-light text-danger rounded-circle p-2 border-0 shadow-sm">
+                                                {{-- FORM UNIK UNTUK TIAP BARIS --}}
+                                                <form id="form-delete-{{ $anggota->id }}" action="{{ route('adminsekolah.penempatan-rombel.destroy', $anggota->id) }}" method="POST" style="display:none;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+
+                                                {{-- MEMANGGIL FUNGSI GLOBAL confirmDelete --}}
+                                                <button type="button" onclick="confirmDelete('form-delete-{{ $anggota->id }}')" class="btn btn-sm btn-light text-danger rounded-circle p-2 border-0 shadow-sm">
                                                     <i class="fas fa-user-minus"></i>
                                                 </button>
                                             </td>
@@ -149,7 +160,7 @@
                         @else
                             <div class="text-center py-5 mt-5">
                                 <i class="fas fa-users-viewfinder fa-4x text-muted opacity-25 mb-3"></i>
-                                <p class="text-muted fw-bold">Pilih Rombel untuk melihat data</p>
+                                <p class="text-muted fw-bold">Pilih Rombel untuk melihat data anggota</p>
                             </div>
                         @endif
                     </div>
@@ -159,116 +170,95 @@
     </div>
 </div>
 
-<form id="form-delete" action="" method="POST" style="display:none;">
-    @csrf
-    @method('DELETE')
-</form>
-
 <style>
     .rounded-4 { border-radius: 1rem !important; }
-    .bg-success-subtle { background-color: #eaf6ed !important; }
     .sticky-top { top: 0; z-index: 10; }
     .form-check-input:checked { background-color: #198754; border-color: #198754; }
-    #live-search:focus { box-shadow: none; }
+    #live-search:focus { box-shadow: none; outline: none; border-color: transparent; }
 </style>
 
+@endsection
+
+@push('js')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Membungkus kode dalam fungsi pengecekan jQuery
-    window.onload = function() {
-        if (window.jQuery) {
-            $(document).ready(function() {
-                
-                // 1. Live Search & Filter
-                function performSearch() {
-                    let search = $('#live-search').val();
-                    let gender = $('#filter-gender').val();
-                    $('#search-loader').removeClass('d-none');
+    $(document).ready(function() {
+        // 1. Live Search & Filter
+        function performSearch() {
+            let search = $('#live-search').val();
+            let gender = $('#filter-gender').val();
+            $('#search-loader').removeClass('d-none');
 
-                    $.ajax({
-                        url: "{{ route('adminsekolah.penempatan-rombel.index') }}",
-                        type: 'GET',
-                        data: { search: search, gender: gender, ajax: 1 },
-                        success: function(res) {
-                            $('#waiting-list-body').html(res.html);
-                            $('#count-header').text(res.count);
-                            $('#search-loader').addClass('d-none');
-                        }
-                    });
+            $.ajax({
+                url: "{{ route('adminsekolah.penempatan-rombel.index') }}",
+                type: 'GET',
+                data: { search: search, gender: gender, ajax: 1 },
+                success: function(res) {
+                    $('#waiting-list-body').html(res.html);
+                    $('#count-header').text(res.count);
+                    $('#search-loader').addClass('d-none');
                 }
-
-                $('#live-search').on('keyup', function() { performSearch(); });
-                $('#filter-gender').on('change', function() { performSearch(); });
-
-                // 2. Check All (Gunakan delegasi karena data dinamis)
-                $(document).on('change', '#selectAll', function() {
-                    $('.siswa-checkbox').prop('checked', this.checked);
-                });
-
-                // 3. Quick Plot (Auto Save)
-                $('#quickRombelSelect').on('change', function() {
-                    let rombelId = $(this).val();
-                    let rombelName = $(this).find('option:selected').text();
-                    let selectedSiswa = $('.siswa-checkbox:checked').map(function() { return $(this).val(); }).get();
-
-                    if (selectedSiswa.length === 0) {
-                        Swal.fire('Info', 'Pilih/Centang siswa terlebih dahulu!', 'info');
-                        $(this).val('');
-                        return;
-                    }
-
-                    if (!rombelId) return;
-
-                    Swal.fire({
-                        title: 'Proses Plotting',
-                        text: `Pindahkan ${selectedSiswa.length} siswa ke ${rombelName}?`,
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#198754',
-                        confirmButtonText: 'Ya, Proses!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url: "{{ route('adminsekolah.penempatan-rombel.store') }}",
-                                type: 'POST',
-                                data: {
-                                    _token: "{{ csrf_token() }}",
-                                    siswa_ids: selectedSiswa,
-                                    rombel_id: rombelId
-                                },
-                                success: function(response) {
-                                    Swal.fire('Berhasil!', response.message, 'success')
-                                    .then(() => location.reload());
-                                },
-                                error: function(err) {
-                                    Swal.fire('Gagal', 'Terjadi kesalahan sistem.', 'error');
-                                }
-                            });
-                        } else {
-                            $(this).val('');
-                        }
-                    });
-                });
             });
         }
-    };
 
-    function confirmDelete(id) {
-        Swal.fire({
-            title: 'Keluarkan Siswa?',
-            text: "Siswa akan kembali ke daftar tunggu plotting.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'Ya, Keluarkan!',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                let form = $('#form-delete');
-                form.attr('action', "{{ url('adminsekolah/penempatan-rombel') }}/" + id);
-                form.submit();
-            }
+        $('#live-search').on('keyup', performSearch);
+        $('#filter-gender').on('change', performSearch);
+
+        // 2. Select All Checkbox
+        $(document).on('change', '#selectAll', function() {
+            $('.siswa-checkbox').prop('checked', this.checked);
         });
-    }
-</script>
 
-@endsection
+        // 3. Quick Plotting via AJAX
+        $('#quickRombelSelect').on('change', function() {
+            let rombelId = $(this).val();
+            let rombelName = $(this).find('option:selected').text();
+            let selectedSiswa = $('.siswa-checkbox:checked').map(function() { return $(this).val(); }).get();
+
+            if (!rombelId) return;
+            if (selectedSiswa.length === 0) {
+                Swal.fire('Info', 'Pilih siswa terlebih dahulu!', 'info');
+                $(this).val('');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Konfirmasi Plotting',
+                text: `Pindahkan ${selectedSiswa.length} siswa ke ${rombelName}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                confirmButtonText: 'Ya, Proses!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('adminsekolah.penempatan-rombel.store') }}",
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            siswa_ids: selectedSiswa,
+                            rombel_id: rombelId
+                        },
+                        success: function(response) {
+                            Swal.fire({ 
+                                icon: 'success', 
+                                title: 'Berhasil!', 
+                                text: response.message, 
+                                timer: 1500, 
+                                showConfirmButton: false 
+                            }).then(() => location.reload());
+                        },
+                        error: function(xhr) {
+                            $('#quickRombelSelect').val('');
+                            let msg = (xhr.status === 422) ? xhr.responseJSON.message : "Terjadi kesalahan sistem.";
+                            Swal.fire({ icon: 'error', title: 'Gagal', html: msg });
+                        }
+                    });
+                } else {
+                    $(this).val('');
+                }
+            });
+        });
+    });
+</script>
+@endpush

@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="content-body">
+    {{-- Header Halaman --}}
     <div class="row align-items-center mb-4">
         <div class="col-md-7">
             <h4 class="fw-800 text-dark mb-1">Manajemen Rombongan Belajar (Rombel)</h4>
@@ -14,6 +15,7 @@
         </div>
     </div>
 
+    {{-- Widget Statistik --}}
     <div class="row g-3 mb-4">
         <div class="col-md-6 col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 p-3 bg-white border-start border-primary border-4">
@@ -43,6 +45,7 @@
         </div>
     </div>
 
+    {{-- Tabel Utama --}}
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
@@ -61,13 +64,13 @@
                     <tr>
                         <td class="ps-4">
                             <div class="d-flex align-items-center">
-                                <div class="bg-dark text-white rounded-3 p-2 me-3 fw-bold shadow-sm text-center" style="width: 45px;">
-                                    {{ substr($rombel->nama_rombel, 0, 2) }}
+                                <div class="bg-dark text-white rounded-3 p-2 me-3 fw-bold shadow-sm text-center" style="width: 45px; font-size: 14px;">
+                                    {{ strtoupper(substr($rombel->nama_rombel, 0, 2)) }}
                                 </div>
                                 <div>
                                     <div class="fw-bold text-dark text-uppercase">{{ $rombel->nama_rombel }}</div>
-                                    <small class="text-muted text-uppercase">
-                                        {{ Auth::user()->sekolah->nama_sekolah }} 
+                                    <small class="text-muted text-uppercase" style="font-size: 10px;">
+                                        {{ auth()->user()->sekolah->nama_sekolah }} 
                                     </small>
                                 </div>
                             </div>
@@ -81,23 +84,28 @@
                             @endif
                         </td>
                         <td>
-                            <span class="badge {{ $rombel->status_rombel == 'BUKA' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }} border px-3">
+                            <span class="badge {{ $rombel->status_rombel == 'BUKA' ? 'bg-success-subtle text-success border-success' : 'bg-danger-subtle text-danger border-danger' }} border px-3">
                                 {{ $rombel->status_rombel }}
                             </span>
                         </td>
                         <td class="text-center pe-4">
-                            <div class="btn-group">
-                                <button class="btn btn-light btn-sm rounded-circle border me-1" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $rombel->id }}">
+                            <div class="d-flex justify-content-center">
+                                {{-- Tombol Edit --}}
+                                <button class="btn btn-light btn-sm rounded-circle border me-2" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $rombel->id }}">
                                     <i class="fas fa-edit text-primary"></i>
                                 </button>
-                                <form action="{{ route('adminsekolah.kelola-rombel.destroy', $rombel->id) }}" method="POST" onsubmit="return confirm('Hapus rombel ini?')">
+                                {{-- Form Hapus --}}
+                                <form id="delete-form-{{ $rombel->id }}" action="{{ route('adminsekolah.kelola-rombel.destroy', $rombel->id) }}" method="POST">
                                     @csrf @method('DELETE')
-                                    <button class="btn btn-light btn-sm rounded-circle border"><i class="fas fa-trash text-danger"></i></button>
+                                    <button type="button" class="btn btn-light btn-sm rounded-circle border" onclick="confirmDelete('delete-form-{{ $rombel->id }}')">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </button>
                                 </form>
                             </div>
                         </td>
                     </tr>
 
+                    {{-- MODAL EDIT --}}
                     <div class="modal fade" id="modalEdit{{ $rombel->id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content border-0 shadow-lg rounded-4">
@@ -111,7 +119,7 @@
                                         <div class="row g-3 mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label small fw-bold">Tingkat Kelas</label>
-                                                <select name="kelas_id" class="form-select border-2 bg-light">
+                                                <select name="kelas_id" class="form-select border-2 bg-light shadow-none">
                                                     @foreach($list_kelas as $k)
                                                         <option value="{{ $k->id }}" {{ $rombel->kelas_id == $k->id ? 'selected' : '' }}>{{ $k->nama_kelas }}</option>
                                                     @endforeach
@@ -119,17 +127,17 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label small fw-bold">Kapasitas</label>
-                                                <input type="number" name="kapasitas" class="form-control border-2 bg-light" value="{{ $rombel->kapasitas }}">
+                                                <input type="number" name="kapasitas" class="form-control border-2 bg-light shadow-none" value="{{ $rombel->kapasitas }}">
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label small fw-bold">Nama Rombel</label>
-                                            <input type="text" name="nama_rombel" class="form-control border-2 bg-light" value="{{ $rombel->nama_rombel }}">
+                                            <input type="text" name="nama_rombel" class="form-control border-2 bg-light shadow-none" value="{{ $rombel->nama_rombel }}">
                                         </div>
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <label class="form-label small fw-bold">Jenis Kelas</label>
-                                                <select name="jenis_kelas" class="form-select border-2 bg-light">
+                                                <select name="jenis_kelas" class="form-select border-2 bg-light shadow-none">
                                                     <option value="L" {{ $rombel->jenis_kelas == 'L' ? 'selected' : '' }}>Laki-laki (L)</option>
                                                     <option value="P" {{ $rombel->jenis_kelas == 'P' ? 'selected' : '' }}>Perempuan (P)</option>
                                                     <option value="LP" {{ $rombel->jenis_kelas == 'LP' ? 'selected' : '' }}>Campuran (LP)</option>
@@ -137,7 +145,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label small fw-bold">Status</label>
-                                                <select name="status_rombel" class="form-select border-2 bg-light">
+                                                <select name="status_rombel" class="form-select border-2 bg-light shadow-none">
                                                     <option value="BUKA" {{ $rombel->status_rombel == 'BUKA' ? 'selected' : '' }}>BUKA</option>
                                                     <option value="TUTUP" {{ $rombel->status_rombel == 'TUTUP' ? 'selected' : '' }}>TUTUP</option>
                                                 </select>
@@ -145,6 +153,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer border-0 p-4 pt-0">
+                                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
                                         <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Update Data</button>
                                     </div>
                                 </form>
@@ -153,7 +162,11 @@
                     </div>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">Belum ada data rombel.</td>
+                        <td colspan="6" class="text-center py-5">
+                            <i class="fas fa-users-slash fa-3x text-light mb-3"></i>
+                            <h6 class="fw-bold text-muted">Belum Ada Data Rombel</h6>
+                            <p class="small text-muted mb-0">Silakan tambahkan rombel untuk mulai mendistribusikan santri.</p>
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -162,6 +175,7 @@
     </div>
 </div>
 
+{{-- MODAL TAMBAH --}}
 <div class="modal fade" id="modalTambahRombel" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4">
@@ -174,8 +188,8 @@
                 <div class="modal-body p-4">
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Pilih Tingkatan</label>
-                            <select name="kelas_id" class="form-select border-2 bg-light" required>
+                            <label class="form-label small fw-bold text-muted">TINGKATAN</label>
+                            <select name="kelas_id" class="form-select border-2 bg-light shadow-none" required>
                                 <option value="" selected disabled>Pilih Kelas</option>
                                 @foreach($list_kelas as $k)
                                     <option value="{{ $k->id }}">{{ $k->nama_kelas }}</option>
@@ -183,26 +197,26 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Kapasitas Maksimal</label>
-                            <input type="number" name="kapasitas" class="form-control border-2 bg-light" placeholder="32" required>
+                            <label class="form-label small fw-bold text-muted">KAPASITAS</label>
+                            <input type="number" name="kapasitas" class="form-control border-2 bg-light shadow-none" placeholder="32" required>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Nama Rombel / Grup</label>
-                        <input type="text" name="nama_rombel" class="form-control border-2 bg-light" placeholder="Contoh: Abu Bakar Ash-Shiddiq" required>
+                        <label class="form-label small fw-bold text-muted">NAMA ROMBEL / GRUP</label>
+                        <input type="text" name="nama_rombel" class="form-control border-2 bg-light shadow-none" placeholder="Contoh: Abu Bakar Ash-Shiddiq" required>
                     </div>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Jenis Kelas</label>
-                            <select name="jenis_kelas" class="form-select border-2 bg-light">
+                            <label class="form-label small fw-bold text-muted">JENIS KELAS</label>
+                            <select name="jenis_kelas" class="form-select border-2 bg-light shadow-none">
                                 <option value="L">Laki-laki (L)</option>
                                 <option value="P">Perempuan (P)</option>
                                 <option value="LP">Campuran (LP)</option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Status Rombel</label>
-                            <select name="status_rombel" class="form-select border-2 bg-light">
+                            <label class="form-label small fw-bold text-muted">STATUS</label>
+                            <select name="status_rombel" class="form-select border-2 bg-light shadow-none">
                                 <option value="BUKA">BUKA</option>
                                 <option value="TUTUP">TUTUP</option>
                             </select>
@@ -211,7 +225,7 @@
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0">
                     <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Simpan Rombel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan Rombel</button>
                 </div>
             </form>
         </div>
@@ -220,8 +234,9 @@
 
 <style>
     .fw-800 { font-weight: 800; }
-    .icon-shape { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; }
-    .table thead th { border: none; padding: 15px; font-size: 11px; letter-spacing: 0.05rem; }
-    .table tbody td { padding: 18px 15px; border-color: #f1f5f9; }
+    .icon-shape { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; }
+    .table thead th { border: none; padding: 15px; font-size: 11px; letter-spacing: 0.05rem; background-color: #f8fafc; }
+    .table tbody td { padding: 16px 15px; border-color: #f1f5f9; }
+    .form-select, .form-control { border-radius: 10px; padding: 10px 15px; }
 </style>
 @endsection

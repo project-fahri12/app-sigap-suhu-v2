@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Santri extends Model
 {
+    // Mengatur kolom yang boleh diisi secara massal
     protected $fillable = [
         'pondok_id',
         'pendaftar_id',
@@ -15,32 +17,35 @@ class Santri extends Model
         'status_santri',
     ];
 
-<<<<<<< HEAD
-    public function romkam()
+    /**
+     * Relasi ke model Romkam (Rombongan Kamar)
+     */
+    public function romkam(): BelongsTo
     {
         return $this->belongsTo(Romkam::class, 'romkam_id');
     }
 
-    public function pendaftar()
+    /**
+     * Relasi ke model Pendaftar
+     */
+    public function pendaftar(): BelongsTo
     {
         return $this->belongsTo(Pendaftar::class, 'pendaftar_id');
     }
 
-    public function sekolah() 
+    /**
+     * Relasi ke model Sekolah
+     */
+    public function sekolah(): BelongsTo
     {
-        return $this->belongsTo(Sekolah::class,'sekolah_id');
+        return $this->belongsTo(Sekolah::class, 'sekolah_id');
     }
 
-    
-=======
-    public function pendaftar()
-{
-    return $this->belongsTo(Pendaftar::class, 'pendaftar_id');
-}
-
-public function romkam()
-{
-    return $this->belongsTo(Romkam::class, 'romkam_id');
-}
->>>>>>> 2b7298b4caabe6b918d24deb5a98e188364485b5
+    /**
+     * Relasi ke model Pondok (Tambahan jika diperlukan)
+     */
+    public function pondok(): BelongsTo
+    {
+        return $this->belongsTo(Pondok::class, 'pondok_id');
+    }
 }

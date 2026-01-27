@@ -4,12 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard | SIGAP')</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
-        rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/css/admin/master.css', 'resources/js/app.js'])
+    
+    <style>
+        /* Memastikan progress bar SweetAlert sesuai tema */
+        .swal2-html-container { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+    </style>
     @stack('css')
 </head>
 
@@ -20,19 +27,14 @@
         <aside class="sidebar shadow-sm" id="mainSidebar">
             <div class="sidebar-header">
                 <div class="d-flex align-items-center">
-                    {{-- Icon berubah warna berdasarkan role --}}
-                    <div
-                        class="{{ auth()->user()->role == 'superadmin' ? 'bg-primary' : 'bg-success' }} text-white px-3 py-1 rounded-3 me-2">
-                        <i
-                            class="fas {{ auth()->user()->role == 'superadmin' ? 'fa-shield-alt' : 'fa-university' }}"></i>
+                    {{-- Icon dinamis berdasarkan role --}}
+                    <div class="flex-shrink-0 {{ auth()->user()->role == 'superadmin' ? 'bg-primary' : 'bg-success' }} text-white px-3 py-1 rounded-3 me-2">
+                        <i class="fas {{ auth()->user()->role == 'superadmin' ? 'fa-shield-alt' : 'fa-university' }}"></i>
                     </div>
-                    <div>
-                        {{-- Menampilkan Nama Sekolah/Lembaga dari Database --}}
-                        <h6 class="mb-0 fw-bold text-dark" style="font-size: 14px; text-transform: uppercase;">
+                    <div class="overflow-hidden">
+                        <h6 class="mb-0 fw-bold text-dark text-truncate" style="font-size: 14px; text-transform: uppercase;">
                             {{ auth()->user()->label }}
                         </h6>
-
-                        {{-- Menampilkan Role dan Tahun Ajaran Aktif --}}
                         <small class="text-muted fw-bold d-block" style="font-size: 9px; text-transform: uppercase;">
                             {{ auth()->user()->role }}
                             @php
@@ -52,21 +54,89 @@
         </aside>
 
         <main class="main-content">
-
             @include('dashboard.layouts.partials._navbar')
-
-            @yield('content')
+            
+            <div class="p-4">
+                @yield('content')
+            </div>
         </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
+        // Toggle Sidebar
         function toggleSidebar() {
             document.getElementById('mainSidebar').classList.toggle('is-active');
             document.getElementById('sidebarOverlay').classList.toggle('is-active');
         }
+
+        // Global SweetAlert2 Handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            // Alert Sukses
+            @if(session('success'))
+                Toast.fire({
+                    icon: 'success',
+                    title: "{{ session('success') }}"
+                });
+            @endif
+
+            // Alert Error / Gagal
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kesalahan',
+                    text: "{{ session('error') }}",
+                    confirmButtonColor: '#3085d6',
+                });
+            @endif
+
+            // Alert Validasi (Error dari $request->validate)
+            @if($errors->any())
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Periksa Inputan Anda',
+                    html: `<ul style="text-align:left;">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                          </ul>`,
+                    confirmButtonColor: '#f8bb86',
+                });
+            @endif
+        });
+
+        // Fungsi Global untuk Konfirmasi Hapus
+        function confirmDelete(formId) {
+            Swal.fire({
+                title: 'Hapus Data?',
+                text: "Data ini akan dihapus secara permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            });
+        }
     </script>
     @stack('js')
 </body>
-
 </html>
