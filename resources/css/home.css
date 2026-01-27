@@ -1,0 +1,251 @@
+ :root {
+                    --primary-green: #198754;
+                    --light-green: #2ecc71;
+                    --dark-green: #0d5233;
+                    --soft-bg: #f8faf9;
+                    --gradient-main: linear-gradient(135deg, #0d5233 0%, #198754 100%);
+                    --glass-white: rgba(255, 255, 255, 0.9);
+                }
+
+
+                body {
+                    font-family:
+                        'Plus Jakarta Sans', sans-serif;
+
+                    background-color: var(--soft-bg);
+
+                    color: #2c3e50;
+                    overflow-x: hidden;
+
+
+                }
+
+                /* --- NAVIGATION --- */
+                .navbar {
+                    transition: all 0.4s ease;
+                    padding: 15px 0;
+                    /* Perbaikan: 'var' bukan 'va', pastikan variabel --glass-white sudah didefinisikan */
+                    background: var(--glass-white, rgba(255, 255, 255, 0.8)) !important;
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
+                    /* Dukungan Safari */
+                }
+
+                .navbar.scrolled {
+                    padding: 10px 0;
+                    /* Perbaikan: '2px solid' bukan '2x olid' */
+                    border-bottom: 2px solid var(--primary-green);
+                    background: white !important;
+                    /* Warna putih solid saat di-scroll */
+                }
+
+                .nav-link {
+                    font-weight: 600;
+                    color: #333 !important;
+                    /* Perbaikan: 'margin' bukan 'marin' */
+                    margin: 0 10px;
+                    font-size: 0.95rem;
+                }
+
+                .nav-link:hover {
+                    color: var(--primary-green) !important;
+                }
+
+                /* Button PPDB */
+                .btn-ppdb {
+                    /* Perbaikan: 'background' bukan 'b ackground' */
+                    background: var(--gradient-main, linear-gradient(135deg, #198754, #20c997));
+                    color: white !important;
+                    border-radius: 50px;
+                    padding: 8px 25px;
+                    font-weight: 700;
+                    border: none;
+                    transition: all 0.3s;
+                }
+
+                .btn-ppdb:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.4);
+                    filter: brightness(1.1);
+                }
+
+                /* --- HERO SECTION --- */
+                .hero-section {
+                    /* Padding responsif: Atas lebih besar untuk menghindari tumpukan dengan navbar */
+                    padding: 180px 0 120px;
+                    background: var(--gradient-main), url('https://www.transparenttextures.com/patterns/cubes.png');
+                    color: white;
+                    position: relative;
+                    /* Membuat bentuk lengkung di bawah */
+                    clip-path: ellipse(150% 100% at 50% 0%);
+                    overflow: hidden;
+                }
+
+                .hero-title {
+                    font-weight: 800;
+                    font-size: 3.5rem;
+                    line-height: 1.2;
+                    margin-bottom: 20px;
+                }
+
+                /* --- RESPONSIVE ADJUSTMENTS --- */
+                @media (max-width: 992px) {
+                    .navbar {
+                        background: white !important;
+                        /* Mobile menu biasanya lebih baik solid white */
+                    }
+
+                    .nav-link {
+                        margin: 5px 0;
+                        padding: 10px;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .hero-section {
+                        padding: 140px 0 80px;
+                        clip-path: none;
+                        /* Menghilangkan clip-path di mobile agar konten tidak terpotong */
+                        text-align: center;
+                    }
+
+                    .hero-title {
+                        font-size: 2.2rem;
+                    }
+
+                    .btn-ppdb {
+                        width: 100%;
+                        /* Tombol full width di mobile jika diperlukan */
+                        max-width: 300px;
+                    }
+                }
+
+                /* --- CARD INSTITUTION --- */
+                .card-lembaga {
+                    border: none;
+                    border-radius: 20px;
+                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    background: white;
+                    height: 100%;
+                    overflow: hidden;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                }
+
+                .card-lembaga:hover {
+                    transform: translateY(-12px);
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+                }
+
+                .status-badge {
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                    padding: 5px 15px;
+                    border-radius: 50px;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                }
+
+                /* --- STEPS PPDB --- */
+                .step-item {
+                    position: relative;
+                    text-align: center;
+                }
+
+                .step-number {
+                    width: 60px;
+                    height: 60px;
+                    background: white;
+                    color: var(--primary-green);
+                    border: 3px solid var(--primary-green);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    margin: 0 auto 20px;
+                    z-index: 2;
+                    position: relative;
+                }
+
+                .step-item::after {
+                    content: '';
+                    position: absolute;
+                    top: 30px;
+                    left: 50%;
+                    width: 100%;
+                    height: 2px;
+                    background: #dee2e6;
+                    z-index: 1;
+                }
+
+                .step-item:last-child::after {
+                    display: none;
+                }
+
+                @media (max-width: 768px) {
+                    .step-item::after {
+                        display: none;
+                    }
+                }
+
+                /* --- PARALLAX CTA --- */
+                .parallax-cta {
+                    background-image: linear-gradient(rgba(13, 82, 51, 0.85), rgba(13, 82, 51, 0.85)),
+                        url('https://images.unsplash.com/photo-1541339907198-e08756ebafe3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+                    background-attachment: fixed;
+                    background-position: center;
+                    background-size: cover;
+                    padding: 120px 0;
+                    color: white;
+                }
+
+                /* --- STATS CARD --- */
+                .stat-box {
+                    background: white;
+                    border-bottom: 5px solid var(--primary-green);
+                    padding: 30px;
+                    border-radius: 15px;
+                    text-align: center;
+                }
+
+                .stat-number {
+                    font-size: 2.5rem;
+                    font-weight: 800;
+                    color: var(--primary-green);
+                }
+
+                /* --- FAQ --- */
+                .accordion-button:not(.collapsed) {
+                    background-color: var(--soft-bg);
+                    color: var(--primary-green);
+                    font-weight: 700;
+                }
+
+                /* --- FOOTER --- */
+                .footer {
+                    background: #0a2b1c;
+                    color: #ecf0f1;
+                    padding: 80px 0 30px;
+                }
+
+                .footer h5 {
+                    color: white;
+                    margin-bottom: 25px;
+                    font-weight: 700;
+                }
+
+                .footer-link {
+                    color: #bdc3c7;
+                    text-decoration: none;
+                    transition: 0.3s;
+                    display: block;
+                    margin-bottom: 12px;
+                }
+
+                .footer-link:hover {
+                    color: var(--light-green);
+                    transform: translateX(5px);
+                }

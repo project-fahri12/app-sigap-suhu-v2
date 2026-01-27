@@ -11,6 +11,7 @@ use App\Http\Controllers\Dashboard\AdminSekolah\DashboardAdminSekolahController;
 use App\Http\Controllers\Dashboard\AdminSekolah\DataSiswaController;
 use App\Http\Controllers\Dashboard\AdminSekolah\GelombangPpdbController;
 use App\Http\Controllers\Dashboard\AdminSekolah\KelasController;
+use App\Http\Controllers\Dashboard\AdminSekolah\LaporanSekolahController;
 use App\Http\Controllers\Dashboard\AdminSekolah\PenempatanRombelController;
 use App\Http\Controllers\Dashboard\AdminSekolah\RombelController;
 use App\Http\Controllers\Dashboard\AdminSekolah\VerifikasiBerkasController;
@@ -106,6 +107,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::resource('kelola-rombel', RombelController::class);
         Route::resource('kelola-kelas', KelasController::class);
         Route::resource('penempatan-rombel', PenempatanRombelController::class);
+        Route::get('laporan-sekolah', [LaporanSekolahController::class, 'index'])->name('laporan-sekolah');
 
     });
 
