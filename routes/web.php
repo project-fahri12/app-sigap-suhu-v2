@@ -16,9 +16,11 @@ use App\Http\Controllers\Dashboard\AdminSekolah\RombelController;
 use App\Http\Controllers\Dashboard\AdminSekolah\VerifikasiBerkasController;
 use App\Http\Controllers\Dashboard\Pendaftar\PanduanController;
 use App\Http\Controllers\Dashboard\Pendaftar\UploadBerkasController;
+use App\Http\Controllers\Dashboard\SuperAdmin\AuditLogController;
 use App\Http\Controllers\Dashboard\SuperAdmin\DaftarUlangController;
 use App\Http\Controllers\Dashboard\SuperAdmin\DashboardSuperAdminController;
 use App\Http\Controllers\Dashboard\SuperAdmin\PondokController;
+use App\Http\Controllers\Dashboard\SuperAdmin\RekapPendaftaranController;
 use App\Http\Controllers\Dashboard\SuperAdmin\SekolahController;
 use App\Http\Controllers\Dashboard\SuperAdmin\TahunAjaranController;
 use App\Http\Controllers\Dashboard\SuperAdmin\UserManajemenController;
@@ -43,15 +45,54 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     // Super Admin (Hanya bisa diakses role 'superadmin')
+    // Super Admin (Hanya bisa diakses role 'superadmin')
     Route::middleware(['role:super-admin'])->prefix('super')->name('superadmin.')->group(function () {
+
         Route::get('/dashboard', [DashboardSuperAdminController::class, 'index'])->name('dashboard');
-        Route::resource('/tahun-ajaran', TahunAjaranController::class)->only(['index', 'store', 'destroy', 'update']);
-        Route::resource('/sekolah', SekolahController::class)->only(['index', 'update', 'destroy', 'store']);
-        Route::resource('/pondok', PondokController::class)->only(['index', 'destroy', 'update', 'store']);
-        Route::patch('pondok/{id}/toggle', [PondokController::class, 'toggleStatus'])->name('pondok.toggle');
-        Route::resource('/manajemen-user', UserManajemenController::class);
+
+        // --- Tahun Ajaran ---
+        Route::get('/tahun-ajaran', [TahunAjaranController::class, 'index'])->name('tahun-ajaran.index');
+        Route::post('/tahun-ajaran', [TahunAjaranController::class, 'store'])->name('tahun-ajaran.store');
+        Route::put('/tahun-ajaran/{id}', [TahunAjaranController::class, 'update'])->name('tahun-ajaran.update');
+        Route::delete('/tahun-ajaran/{id}', [TahunAjaranController::class, 'destroy'])->name('tahun-ajaran.destroy');
+
+        // --- Sekolah ---
+        Route::get('/sekolah', [SekolahController::class, 'index'])->name('sekolah.index');
+        Route::post('/sekolah', [SekolahController::class, 'store'])->name('sekolah.store');
+        Route::put('/sekolah/{id}', [SekolahController::class, 'update'])->name('sekolah.update');
+        Route::delete('/sekolah/{id}', [SekolahController::class, 'destroy'])->name('sekolah.destroy');
+
+        // --- Pondok ---
+        Route::get('/pondok', [PondokController::class, 'index'])->name('pondok.index');
+        Route::post('/pondok', [PondokController::class, 'store'])->name('pondok.store');
+        Route::put('/pondok/{id}', [PondokController::class, 'update'])->name('pondok.update');
+        Route::delete('/pondok/{id}', [PondokController::class, 'destroy'])->name('pondok.destroy');
+        Route::patch('/pondok/{id}/toggle', [PondokController::class, 'toggleStatus'])->name('pondok.toggle');
+
+        // --- Manajemen User ---
+        Route::get('/manajemen-user', [UserManajemenController::class, 'index'])->name('manajemen-user.index');
+        Route::get('/manajemen-user/create', [UserManajemenController::class, 'create'])->name('manajemen-user.create');
+        Route::post('/manajemen-user', [UserManajemenController::class, 'store'])->name('manajemen-user.store');
+        Route::get('/manajemen-user/{id}', [UserManajemenController::class, 'show'])->name('manajemen-user.show');
+        Route::get('/manajemen-user/{id}/edit', [UserManajemenController::class, 'edit'])->name('manajemen-user.edit');
+        Route::put('/manajemen-user/{id}', [UserManajemenController::class, 'update'])->name('manajemen-user.update');
+        Route::delete('/manajemen-user/{id}', [UserManajemenController::class, 'destroy'])->name('manajemen-user.destroy');
         Route::patch('/manajemen-user/{id}/toggle', [UserManajemenController::class, 'toggle'])->name('manajemen-user.toggle');
-        Route::resource('daftar-ulang', DaftarUlangController::class);
+
+        // --- Daftar Ulang ---
+        Route::get('/daftar-ulang', [DaftarUlangController::class, 'index'])->name('daftar-ulang.index');
+        Route::get('/daftar-ulang/create', [DaftarUlangController::class, 'create'])->name('daftar-ulang.create');
+        Route::post('/daftar-ulang', [DaftarUlangController::class, 'store'])->name('daftar-ulang.store');
+        Route::get('/daftar-ulang/{id}', [DaftarUlangController::class, 'show'])->name('daftar-ulang.show');
+        Route::get('/daftar-ulang/{id}/edit', [DaftarUlangController::class, 'edit'])->name('daftar-ulang.edit');
+        Route::put('/daftar-ulang/{id}', [DaftarUlangController::class, 'update'])->name('daftar-ulang.update');
+        Route::delete('/daftar-ulang/{id}', [DaftarUlangController::class, 'destroy'])->name('daftar-ulang.destroy');
+
+        // --- Audit & Rekap ---
+        Route::get('/audit-log', [AuditLogController::class, 'index'])->name('audit.index');
+        Route::get('/audit-log/latest', [AuditLogController::class, 'getLatest'])->name('audit.getLatest');
+        Route::get('/rekap-pendaftaran', [RekapPendaftaranController::class, 'index'])->name('rekap.index');
+        Route::get('/laporan-global', [RekapPendaftaranController::class, 'rekapGlobal'])->name('rekap-global.index');
     });
 
     // Admin Sekolah (Hanya bisa diakses role 'admin_sekolah')

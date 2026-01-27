@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class GelombangPPDB extends Model
 {
+    use LogsActivity;
     protected $table = 'gelombang_ppdbs';
 
     protected $fillable = [

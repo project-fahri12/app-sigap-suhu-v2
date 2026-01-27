@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pendaftar extends Model
 {
+    use LogsActivity;
     // app/Models/Pendaftar.php
     protected $fillable = [
         'kode_pendaftaran', 'tahun_ajaran_id', 'sekolah_id', 'pondok_id',

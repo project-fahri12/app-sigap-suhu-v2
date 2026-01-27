@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DaftarUlang extends Model
 {
     use HasFactory;
+    use LogsActivity;
 
     protected $fillable = [
         'pendaftar_id',
@@ -19,7 +21,7 @@ class DaftarUlang extends Model
 
     public function pendaftaran()
     {
-        return $this->belongsTo(Pendaftaran::class, 'pendaftar_id');
+        return $this->belongsTo(Pendaftar::class, 'pendaftar_id');
     }
 
     public function isLunas(): bool

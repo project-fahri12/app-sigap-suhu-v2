@@ -12,54 +12,60 @@ class SekolahController extends Controller
     public function index()
     {
         return view('dashboard.superadmin.sekolah.index', [
-            'sekolahs'      => Sekolah::latest()->get(),
-            'total_sekolah' => Sekolah::count(),
-            'tidak_wajib'   => Sekolah::where('keterangan', 'tidak_wajib')->count(),
-            'wajib'         => Sekolah::where('keterangan', 'wajib')->count(),
+            'sekolahs' => Sekolah::latest()->get(),
         ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama_sekolah' => 'required|string|max:255',
             'jenjang'      => 'required|string|max:20',
             'keterangan'   => 'required|in:wajib,tidak_wajib',
+            'kode_sekolah' => 'nullable|unique:sekolahs,kode_sekolah',
         ]);
 
         Sekolah::create([
-            'kode_sekolah' => 'unit-' . Str::upper(Str::random(5)),
-            'nama_sekolah' => $request->nama_sekolah,
-            'jenjang'      => $request->jenjang,
-            'keterangan'   => $request->keterangan,
+            // Jika kode_sekolah kosong di input, generate otomatis
+            'kode_sekolah' => $request->kode_sekolah ?? 'UNIT-' . Str::upper(Str::random(5)),
+            'nama_sekolah' => $validated['nama_sekolah'],
+            'jenjang'      => $validated['jenjang'],
+            'keterangan'   => $validated['keterangan'],
             'is_aktif'     => 1,
         ]);
 
         return back()->with('success', 'Unit sekolah berhasil ditambahkan');
     }
 
-    public function update(Request $request, Sekolah $sekolah)
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        $sekolah = Sekolah::findOrFail($id);
+
+        $validated = $request->validate([
             'nama_sekolah' => 'required|string|max:255',
             'jenjang'      => 'required|string|max:20',
             'keterangan'   => 'required|in:wajib,tidak_wajib',
-            'is_aktif'     => 'required|boolean',
+            'kode_sekolah' => "required|unique:sekolahs,kode_sekolah,$id",
         ]);
 
-        $sekolah->update($request->only([
-            'nama_sekolah',
-            'jenjang',
-            'keterangan',
-            'is_aktif'
-        ]));
+        $sekolah->update($validated);
 
         return back()->with('success', 'Unit sekolah berhasil diperbarui');
     }
 
-    public function destroy(Sekolah $sekolah)
+    public function toggleStatus($id)
     {
-        $sekolah->delete();
+        $sekolah = Sekolah::findOrFail($id);
+        $sekolah->update([
+            'is_aktif' => !$sekolah->is_aktif
+        ]);
+
+        return back()->with('success', 'Status sekolah berhasil diubah');
+    }
+
+    public function destroy($id)
+    {
+        Sekolah::findOrFail($id)->delete();
         return back()->with('success', 'Unit sekolah berhasil dihapus');
     }
 }

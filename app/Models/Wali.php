@@ -2,17 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Wali extends Model
 {
-    // Primary key ID biasa (Auto-increment)
-    protected $primaryKey = 'id';
+    use LogsActivity;
 
-    /**
-     * Kolom yang dapat diisi secara massal.
-     */
     protected $fillable = [
         'pendaftar_id',
         'nama_wali',

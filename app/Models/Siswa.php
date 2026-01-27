@@ -1,10 +1,12 @@
 <?php
 namespace App\Models;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Siswa extends Model
 {
+    use LogsActivity;
     protected $fillable = [
         'pendaftar_id', 
         'nis', 
@@ -33,4 +35,7 @@ class Siswa extends Model
     {
         return $this->belongsTo(Pondok::class);
     }
+    public function siswa() {
+    return $this->hasMany(Siswa::class, 'sekolah_id');
+}
 }

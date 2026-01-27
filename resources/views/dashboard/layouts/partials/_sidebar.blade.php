@@ -3,45 +3,69 @@
     @auth
         {{-- SUPER ADMIN --}}
         @if (auth()->user()->role === 'super-admin')
+            {{-- DASHBOARD --}}
             <a href="{{ route('superadmin.dashboard') }}"
                 class="nav-link {{ request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
                 <i class="fas fa-th-large"></i> Dashboard
             </a>
 
+            {{-- KONFIGURASI YAYASAN --}}
             <div class="nav-header">Konfigurasi Yayasan</div>
+
             <a href="{{ route('superadmin.tahun-ajaran.index') }}"
                 class="nav-link {{ request()->routeIs('superadmin.tahun-ajaran.index') ? 'active' : '' }}">
                 <i class="fas fa-calendar-alt"></i> Tahun Ajaran
             </a>
+
             <a href="{{ route('superadmin.sekolah.index') }}"
                 class="nav-link {{ request()->routeIs('superadmin.sekolah.index') ? 'active' : '' }}">
                 <i class="fas fa-school"></i> Unit Sekolah
             </a>
+
             <a href="{{ route('superadmin.pondok.index') }}"
                 class="nav-link {{ request()->routeIs('superadmin.pondok.index') ? 'active' : '' }}">
                 <i class="fas fa-mosque"></i> Pondok Pesantren
             </a>
 
-            <div class="nav-header">Data Master</div>
-            <a href="{{ route('superadmin.manajemen-user.index') }}"
-                class="nav-link {{ request()->routeIs('superadmin.manajemen-user.index') ? 'active' : '' }}">
-                <i class="fas fa-users-cog"></i> User Manajemen
-            </a>
+            {{-- PPDB YAYASAN --}}
+            <div class="nav-header">PPDB Yayasan</div>
 
-            <div class="nav-header">Monitoring & Laporan</div>
-            {{-- MENU BARU: DAFTAR ULANG --}}
+        
+
+            {{-- MENU EXISTING --}}
             <a href="{{ route('superadmin.daftar-ulang.index') }}"
                 class="nav-link {{ request()->routeIs('superadmin.daftar-ulang.*') ? 'active' : '' }}">
                 <i class="fas fa-user-check"></i> Daftar Ulang
             </a>
 
-            <a href="#" class="nav-link">
+            {{-- DATA MASTER --}}
+            <div class="nav-header">Data Master</div>
+
+            <a href="{{ route('superadmin.manajemen-user.index') }}"
+                class="nav-link {{ request()->routeIs('superadmin.manajemen-user.index') ? 'active' : '' }}">
+                <i class="fas fa-users-cog"></i> User & Role
+            </a>
+
+            {{-- MONITORING --}}
+            <div class="nav-header">Monitoring & Laporan</div>
+
+            <a href="{{ route('superadmin.rekap.index') }}" class="nav-link {{ request()->routeIs('superadmin.rekap.index') ? 'active' : '' }} ">
                 <i class="fas fa-file-signature"></i> Rekap Pendaftaran
             </a>
-            <a href="#" class="nav-link">
+
+            <a href="{{ route('superadmin.rekap-global.index') }}" class="nav-link {{ request()->routeIs('superadmin.rekap-global.index') ? 'active' : '' }}">
                 <i class="fas fa-chart-line"></i> Laporan Global
             </a>
+
+            {{-- SISTEM --}}
+            <div class="nav-header">Sistem</div>
+
+            {{-- MENU BARU: Audit Log (href sementara) --}}
+            <a href="{{ route('superadmin.audit.index') }}" class="nav-link {{ request()->routeIs('superadmin.audit.index') ? 'active' : '' }}">
+                <i class="fas fa-shield-alt"></i> Audit Log
+            </a>
         @endif
+
 
         {{-- ADMIN SEKOLAH --}}
         @if (auth()->user()->role === 'admin-sekolah')
@@ -116,7 +140,6 @@
 
         @if (auth()->user()->role == 'admin-pondok')
             @php
-                // Mengambil jumlah santri yang kolom romkam_id nya masih kosong (null)
                 $jumlahBelumPlot = \App\Models\Santri::whereNull('romkam_id')->count();
             @endphp
 
@@ -150,19 +173,90 @@
                 @endif
             </a>
 
-            <div class="nav-header">Data Santri</div>
+            <div class="nav-header">Akademik Pesantren (Madin)</div>
+
+            <a href="javascript:void(0)" class="nav-link nav-disabled" title="Dalam Tahap Pengembangan">
+                <i class="fas fa-calendar-alt text-muted"></i> Jadwal Mengaji
+            </a>
+            <a href="javascript:void(0)" class="nav-link nav-disabled" title="Dalam Tahap Pengembangan">
+                <i class="fas fa-book-open text-muted"></i> Kurikulum & Kitab
+            </a>
+            <a href="javascript:void(0)" class="nav-link nav-disabled" title="Dalam Tahap Pengembangan">
+                <i class="fas fa-user-edit text-muted"></i> Absensi Santri
+            </a>
+
+            <div class="nav-header">Ketertiban & Keamanan</div>
+
+            <a href="javascript:void(0)" class="nav-link nav-disabled" title="Dalam Tahap Pengembangan">
+                <i class="fas fa-user-shield text-muted"></i> Poin Pelanggaran
+            </a>
+            <a href="javascript:void(0)" class="nav-link nav-disabled" title="Dalam Tahap Pengembangan">
+                <i class="fas fa-exchange-alt text-muted"></i> Mutasi Kamar
+            </a>
+            <a href="javascript:void(0)" class="nav-link nav-disabled" title="Dalam Tahap Pengembangan">
+                <i class="fas fa-key text-muted"></i> Perizinan Keluar
+            </a>
+
+            <div class="nav-header">Data & Pengaturan</div>
 
             <a href="{{ route('adminpondok.daftar-santri.index') }}"
                 class="nav-link {{ request()->routeIs('adminpondok.daftar-santri.index') ? 'active' : '' }}">
                 <i class="fas fa-user-graduate"></i> Database Santri
             </a>
 
-            <div class="nav-header">Laporan</div>
-
-            <a href="#" class="nav-link">
-                <i class="fas fa-file-signature"></i> Laporan Hunian
+            <a href="javascript:void(0)" class="nav-link nav-disabled" title="Dalam Tahap Pengembangan">
+                <i class="fas fa-sliders-h text-muted"></i> Pengaturan Situs
             </a>
         @endif
+
+        <style>
+            /* Style untuk menu yang sedang dikembangkan */
+            .nav-disabled {
+                opacity: 0.6;
+                cursor: not-allowed !important;
+                background-color: rgba(0, 0, 0, 0.02);
+                position: relative;
+            }
+
+            .nav-disabled:hover {
+                background-color: rgba(0, 0, 0, 0.02) !important;
+                color: inherit !important;
+            }
+
+            .nav-disabled::after {
+                content: 'Dev';
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 9px;
+                background: #eee;
+                padding: 1px 6px;
+                border-radius: 10px;
+                color: #888;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('click', function(e) {
+                const disabledLink = e.target.closest('.nav-disabled');
+                if (disabledLink) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Fitur Belum Tersedia',
+                        text: 'Tersedia untuk V2.',
+                        icon: 'info',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                }
+            });
+        </script>
 
     @endauth
 
