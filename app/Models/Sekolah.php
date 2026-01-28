@@ -38,4 +38,9 @@ class Sekolah extends Model
         return $this->hasMany(Siswa::class, 'sekolah_id', 'id');
     }
 
+     public function santri()
+    {
+        return $this->hasMany(Santri::class, 'pondok_id', 'id');
+    }
+
 }

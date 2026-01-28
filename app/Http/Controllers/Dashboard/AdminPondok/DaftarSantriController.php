@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Santri;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class DaftarSantriController extends Controller
+class   DaftarSantriController extends Controller
 {
     public function index(Request $request)
     {
@@ -36,29 +37,44 @@ class DaftarSantriController extends Controller
         return view('dashboard.admin-pondok.daftar-santri.index', compact('santris'));
     }
 
-    // export pfd
+             // export pfd
     public function exportPdf(Request $request)
-    {
-        $query = Santri::with(['pendaftar', 'sekolah', 'romkam.asrama']);
+{
+    $user = Auth::user();
+    $namaInstansi = "YAYASAN PONDOK PESANTREN";
+    $instansi = null;
 
-        // Gunakan filter yang sama dengan fungsi index
-        if ($request->filled('search')) {
-            $query->whereHas('pendaftar', function ($q) use ($request) {
-                $q->where('nama_lengkap', 'like', '%'.$request->search.'%');
-            })->orWhere('nis', 'like', '%'.$request->search.'%');
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status_santri', $request->status);
-        }
-        // Contoh urutan berdasarkan nama pendaftar (A-Z)
-        $santris = $query->join('pendaftars', 'santris.pendaftar_id', '=', 'pendaftars.id')
-            ->orderBy('pendaftars.nama_lengkap', 'asc')
-            ->get();
-
-        $pdf = Pdf::loadView('dashboard.admin-pondok.daftar-santri.export.pdf', compact('santris'))
-            ->setPaper('a4', 'portrait');
-
-        return $pdf->stream('Data-Santri-'.now()->format('Y-m-d').'.pdf');
+    if ($user->sekolah_id) {
+        $instansi = \App\Models\Sekolah::find($user->sekolah_id);
+        $namaInstansi = $instansi->nama_sekolah;
+    } elseif ($user->pondok_id) {
+        $instansi = \App\Models\Pondok::find($user->pondok_id);
+        $namaInstansi = $instansi->nama_pondok;
     }
+
+    $query = Santri::with(['pendaftar', 'sekolah', 'romkam.asrama']);
+
+    // Filter Pencarian
+    if ($request->filled('search')) {
+        $query->whereHas('pendaftar', function ($q) use ($request) {
+            $q->where('nama_lengkap', 'like', '%'.$request->search.'%');
+        })->orWhere('nis', 'like', '%'.$request->search.'%');
+    }
+
+    // URUTKAN BERDASARKAN WAKTU MASUK (Awal ke Akhir)
+    $santris = $query->orderBy('created_at', 'asc')->get();
+
+    // Grouping per Asrama tetap dipertahankan
+    $santriPerAsrama = $santris->groupBy(function($item) {
+        return $item->romkam->asrama->nama_asrama ?? 'BELUM ADA ASRAMA';
+    });
+
+    $pdf = Pdf::loadView('dashboard.admin-pondok.daftar-santri.export.pdf', [
+        'santriPerAsrama' => $santriPerAsrama,
+        'namaInstansi' => $namaInstansi,
+        'instansi' => $instansi
+    ])->setPaper('a4', 'portrait');
+
+    return $pdf->stream('Laporan-Santri-'.now()->format('Y-m-d').'.pdf');
+}
 }

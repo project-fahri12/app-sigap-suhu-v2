@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
-            font-size: 9pt; /* Diperkecil dari 11pt */
+            font-size: 9pt;
             margin: 0.5cm;
         }
 
@@ -14,7 +14,7 @@
             text-align: center;
             position: relative;
             padding-bottom: 5px;
-            border-bottom: 2px solid #000; /* Garis lebih tipis */
+            border-bottom: 2px solid #000;
             margin-bottom: 10px;
         }
 
@@ -29,12 +29,12 @@
             position: absolute;
             left: 0;
             top: 0;
-            width: 60px; /* Diperkecil dari 80px */
+            width: 60px;
             height: auto;
         }
 
         .instansi-name {
-            font-size: 13pt; /* Diperkecil dari 16pt */
+            font-size: 13pt;
             font-weight: bold;
             margin: 0;
             text-transform: uppercase;
@@ -42,7 +42,7 @@
         }
 
         .instansi-sub {
-            font-size: 11pt; /* Diperkecil dari 14pt */
+            font-size: 11pt;
             font-weight: bold;
             margin: 0;
             text-transform: uppercase;
@@ -50,7 +50,7 @@
         }
 
         .alamat {
-            font-size: 8pt; /* Diperkecil agar muat 1 baris */
+            font-size: 8pt;
             margin: 2px 0 0 0;
         }
 
@@ -76,21 +76,20 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 9pt; /* Memastikan isi tabel kecil */
+            font-size: 9pt;
+            margin-bottom: 20px;
         }
 
         th {
             background-color: #E2EFDA;
             border: 1px solid #000;
-            padding: 3px; /* Padding diperkecil */
-            font-size: 9pt;
+            padding: 5px;
             text-transform: uppercase;
         }
 
         td {
             border: 1px solid #000;
-            padding: 2px 4px; /* Padding baris diperkecil agar hemat tempat */
-            font-size: 9pt;
+            padding: 4px;
             vertical-align: middle;
         }
 
@@ -102,69 +101,88 @@
             text-transform: capitalize;
         }
 
-        .gender-header {
-            background-color: #f2f2f2;
-            font-weight: bold;
-            text-align: center;
-            font-size: 9pt;
-            padding: 4px;
+        .asrama-banner {
+            margin-top: 15px;
+            margin-bottom: 8px;
+            background-color: #f0f0f0;
+            padding: 6px;
+            border: 1px solid #000;
+            border-left: 5px solid #000;
         }
     </style>
 </head>
 
 <body>
+    {{-- Kop Surat Dinamis Berdasarkan Auth User (Sekolah/Pondok) --}}
     <div class="kop-container">
         <img src="{{ public_path('assets/kop/logo-kop-pondok.png') }}" class="logo">
-        
+
         <div class="instansi-name">YAYASAN PONDOK PESANTREN</div>
-        <div class="instansi-sub">SUBULUL HUDA KEMBANGSAWIT</div>
-        
+
+        <div class="instansi-sub">
+            {{ strtoupper($namaInstansi) }} SUBULUL HUDA
+        </div>
+
         <div class="alamat">
-            Dsn. Kembangsawit, Ds. Rejosari, Kec. Kebonsari, Kab. Madiun, Jawa Timur 63173
+            {{ $instansi->alamat ?? 'Dsn. Kembangsawit, Ds. Rejosari, Kec. Kebonsari, Kab. Madiun, Jawa Timur 63173' }}
         </div>
     </div>
 
     <div class="title-doc">
-        <h4>DATA SANTRI/WATI</h4>
-        <p>TAHUN AJARAN {{ date('Y') }}/{{ date('Y') + 1 }}</p>
+        <h4>LAPORAN PENEMPATAN SANTRI/WATI BARU</h4>
+        <p>UNIT: {{ strtoupper($namaInstansi) }} - TA {{ date('Y') }}/{{ date('Y') + 1 }}</p>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th width="4%">No.</th> <th width="12%">NIS</th>
-                <th width="30%">Nama Santri/wati</th>
-                <th width="15%">Asrama</th>
-                <th width="19%">Kamar / No</th>
-                <th width="20%">Sekolah</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td colspan="6" class="gender-header">LAKI-LAKI</td>
-            </tr>
-            @foreach ($santris as $s)
+    @foreach ($santriPerAsrama as $namaAsrama => $daftarSantri)
+        <div class="asrama-banner">
+            <strong style="font-size: 10pt;">GEDUNG ASRAMA: {{ strtoupper($namaAsrama) }}</strong>
+        </div>
+
+        <table>
+            <thead>
                 <tr>
-                    <td class="text-center">{{ $loop->iteration }}.</td>
-                    <td class="text-center">{{ $s->nis ?? '-' }}</td>
-                    <td class="text-capitalize">{{ strtolower($s->pendaftar->nama_lengkap ?? '-') }}</td>
-                    <td class="text-center text-capitalize">
-                        {{ $s->romkam && $s->romkam->asrama ? strtolower($s->romkam->asrama->nama_asrama) : '-' }}
-                    </td>
-                    <td class="text-center text-capitalize">
-                        @if ($s->romkam)
-                            {{ strtolower($s->romkam->nama_romkam) }} / no.
-                            {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
-                        @else
-                            -
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        {{ $s->sekolah->nama_sekolah ?? '-' }}
-                    </td>
+                    <th width="5%">NO.</th>
+                    <th width="15%">NIS</th>
+                    <th width="35%">NAMA SANTRI</th>
+                    <th width="25%">KAMAR / NO. LEMARI</th>
+                    <th width="20%">UNIT SEKOLAH</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table> 
+            </thead>
+            <tbody>
+                @foreach ($daftarSantri as $s)
+                    <tr>
+                        <td class="text-center">{{ $loop->iteration }}.</td>
+                        <td class="text-center">{{ $s->nis ?? '-' }}</td>
+                        <td class="text-capitalize">{{ strtolower($s->pendaftar->nama_lengkap ?? '-') }}</td>
+                        <td class="text-center">
+                            @if ($s->romkam)
+                                {{ strtoupper($s->romkam->nama_romkam) }} / NO. {{ $loop->iteration }}
+                            @else
+                                <span style="color: red;">Belum Diatur</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            {{ $s->sekolah->nama_sekolah ?? '-' }}
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endforeach
+
+    <div style="margin-top: 30px; float: right; width: 250px; text-align: center; font-size: 9pt;">
+        Madiun, {{ now()->translatedFormat('d F Y') }} <br>
+        Mengetahui, <br>
+        Admin {{ $namaInstansi }} <br><br><br><br><br>
+        <strong>( ____________________ )</strong>
+    </div>
+
+    <div style="clear: both;"></div>
+
+    <div style="margin-top: 20px; font-size: 8pt; color: #666; font-style: italic;">
+        * Laporan ini dicetak secara otomatis melalui Sistem Informasi Pondok.<br>
+        * Dicetak pada {{ date('d-m-Y H:i') }} WIB.
+    </div>
 </body>
+
 </html>

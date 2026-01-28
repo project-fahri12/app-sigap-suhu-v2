@@ -5,6 +5,8 @@ use App\Http\Controllers\Dashboard\AdminPondok\AktivasiSantri;
 use App\Http\Controllers\Dashboard\AdminPondok\AsramaController;
 use App\Http\Controllers\Dashboard\AdminPondok\DaftarSantriController;
 use App\Http\Controllers\Dashboard\AdminPondok\DashboardAdminPondokController;
+use App\Http\Controllers\Dashboard\AdminPondok\LaporanPondokController;
+use App\Http\Controllers\Dashboard\AdminPondok\LogPindahKamarController;
 use App\Http\Controllers\Dashboard\AdminPondok\PlottingKamar;
 use App\Http\Controllers\Dashboard\AdminPondok\RomkamController;
 use App\Http\Controllers\Dashboard\AdminSekolah\DashboardAdminSekolahController;
@@ -119,8 +121,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::resource('aktifasi-santri', AktivasiSantri::class);
         Route::resource('plotting-kamar', PlottingKamar::class);
         Route::resource('romkam', RomkamController::class);
-        Route::get('admin-pondok/daftar-santri/export-pdf', [DaftarSantriController::class, 'exportPdf'])
-            ->name('daftar-santri.export-pdf');
+        Route::get('admin-pondok/daftar-santri/export-pdf', [DaftarSantriController::class, 'exportPdf'])->name('daftar-santri.export-pdf');
+        Route::get('laporan-pondok', [LaporanPondokController::class, 'index'])->name('laporan-pondok.index');
+
     });
 
 });

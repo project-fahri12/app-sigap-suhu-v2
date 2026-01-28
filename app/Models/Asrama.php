@@ -18,7 +18,7 @@ use LogsActivity;
         'jk',
     ];
 
-    public function romkas() {
+    public function romkams() {
         return $this->hasMany(Romkam::class, 'asrama_id');
     }
 }
