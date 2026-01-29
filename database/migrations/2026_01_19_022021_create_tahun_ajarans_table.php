@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('tahun_ajarans', function (Blueprint $table) {
             // Menggunakan UUID sebagai Primary Key sesuai gambar
-            $table->id(); 
+            $table->id();
             $table->string('nama');
             $table->year('tahun_mulai');
             $table->year('tahun_selesai');
-            $table->boolean('is_aktif')->default(false); 
+            $table->boolean('is_aktif')->default(false);
             $table->timestamps();
         });
     }
@@ -27,6 +27,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('tahun_ajarans');
+        Schema::enableForeignKeyConstraints();
     }
 };

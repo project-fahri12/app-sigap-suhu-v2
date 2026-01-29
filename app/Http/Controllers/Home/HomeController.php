@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers\Home;
 
-use App\Models\User;
-use App\Models\Wali;
-use App\Models\Pondok;
-use App\Models\Sekolah;
-use App\Models\OrangTua;
-use App\Models\Pendaftar;
-use App\Models\TahunAjaran;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\GelombangPpdb;
 use App\Models\InformasiKontak;
+use App\Models\OrangTua;
+use App\Models\Pendaftar;
+use App\Models\Pondok;
+use App\Models\Sekolah;
+use App\Models\TahunAjaran;
+use App\Models\User;
+use App\Models\Wali;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -30,13 +30,24 @@ class HomeController extends Controller
             },
         ])->get();
 
-        return view('home', compact('lembagas'));
+        $tahunAjaranId = TahunAjaran::where('is_aktif', 1)->value('id');
+
+        $stastistik = [
+            'total_pendaftar' => $tahunAjaranId
+                ? Pendaftar::where('tahun_ajaran_id', $tahunAjaranId)->count()
+                : 0,
+
+            'total_pendidikan_formal' => Sekolah::where('is_aktif', 1)->count(),
+            'total_unit_ponpes' => Pondok::where('is_aktif', 1)->count(),
+        ];
+
+        return view('home', compact('lembagas', 'stastistik', 'tahunAjaranId'));
     }
 
     public function regist(Request $request)
     {
         $sekolahId = $request->query('sekolah');
-        if (!$sekolahId) {
+        if (! $sekolahId) {
             abort(404);
         }
 
@@ -61,7 +72,7 @@ class HomeController extends Controller
 
             $tahunAjaran = TahunAjaran::where('is_aktif', 1)->first();
 
-            $kodePendaftaran = 'YYPPSH-' . date('Y') . strtoupper(Str::random(5));
+            $kodePendaftaran = 'YYPPSH-'.date('Y').strtoupper(Str::random(5));
 
             // 1. Simpan Pendaftar
             $pendaftar = Pendaftar::create([
@@ -91,7 +102,7 @@ class HomeController extends Controller
                 'desa' => $request->desa,
                 'kode_pos' => $request->kode_pos,
                 'sekolah_asal' => $request->sekolah_asal,
-                'npsn_sekolah' => $request->npsn_sekolah ?? '-', 
+                'npsn_sekolah' => $request->npsn_sekolah ?? '-',
                 'status_sekolah' => $request->status_sekolah,
             ]);
 
@@ -137,22 +148,23 @@ class HomeController extends Controller
             ]);
 
             User::create([
-                'pendaftar_id'  => $pendaftar->id,
-                'name'  => $request->nama_lengkap,
+                'pendaftar_id' => $pendaftar->id,
+                'name' => $request->nama_lengkap,
                 'email' => $request->email,
-                'password'  => Hash::make($kodePendaftaran),
+                'password' => Hash::make($kodePendaftaran),
             ]);
 
             DB::commit();
 
             return redirect()->route('pendaftaran.success', ['kode' => $pendaftar->kode_pendaftaran])
                 ->with('success', 'Pendaftaran Berhasil!');
-            } catch (\Exception $e) {
-                dd($e);
-                DB::rollBack();
+        } catch (\Exception $e) {
+            dd($e);
+            DB::rollBack();
             // Log error untuk debug
-            Log::error('Gagal Simpan Pendaftaran: ' . $e->getMessage());
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+            Log::error('Gagal Simpan Pendaftaran: '.$e->getMessage());
+
+            return back()->with('error', 'Terjadi kesalahan: '.$e->getMessage())->withInput();
         }
     }
 

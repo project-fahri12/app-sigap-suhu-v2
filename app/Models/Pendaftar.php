@@ -17,7 +17,7 @@ class Pendaftar extends Model
         'jumlah_saudara', 'berkebutuhan_khusus', 'domisili_santri',
         'alamat_lengkap', 'rt', 'rw', 'provinsi', 'kabupaten',
         'kecamatan', 'desa', 'kode_pos', 'sekolah_asal',
-        'npsn_sekolah', 'status_sekolah', 'status_pendaftaran',
+        'npsn_sekolah', 'status_sekolah', 'status_pendaftaran', 'status_berkas'
     ];
 
     // Relasi ke Tahun Ajaran

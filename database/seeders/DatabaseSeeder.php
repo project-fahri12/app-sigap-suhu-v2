@@ -140,10 +140,11 @@ class DatabaseSeeder extends Seeder
                 'kecamatan' => 'Kec. '.$faker->citySuffix,
                 'desa' => 'Ds. '.$faker->streetName,
                 'kode_pos' => $faker->postcode,
-                'sekolah_asal' => ($isSMP ? 'SD ' : 'SMP ').$faker->company, // Sekolah asal random
+                'sekolah_asal' => ($isSMP ? 'SD ' : 'SMP ').$faker->company, 
                 'npsn_sekolah' => $faker->numerify('20######'),
                 'status_sekolah' => $faker->randomElement(['Negeri', 'Swasta']),
-                'status_pendaftaran' => 'terverifikasi',
+                'status_pendaftaran' => 'pndaftar',
+                'status_berkas'     => 'belum'
             ]);
 
             // B. Create Orang Tua (Lengkap)

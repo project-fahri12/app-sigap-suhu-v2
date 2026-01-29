@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('kode_sekolah');
             $table->string('nama_sekolah');
             $table->string('jenjang', '20');
-            $table->enum('keterangan', ['tidak_wajib','wajib'])->default('wajib');
+            $table->enum('keterangan', ['tidak_wajib', 'wajib'])->default('wajib');
             $table->boolean('is_aktif')->default(true);
             $table->timestamps();
         });
@@ -27,6 +27,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('sekolahs');
+        Schema::enableForeignKeyConstraints();
+
     }
 };

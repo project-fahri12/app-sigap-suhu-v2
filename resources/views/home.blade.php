@@ -52,8 +52,8 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-7 animate__animated animate__fadeInLeft">
-                    <span class="badge bg-light text-success fw-bold px-3 py-2 mb-3">PENDAFTARAN T.A 2026/2027
-                        DIBUKA</span>
+                    <span class="badge bg-light text-success fw-bold px-3 py-2 mb-3">PENDAFTARAN {{ $tahunAjaranId->nama ?? ''}}
+                        {{ $tahunAjaranId == true ? 'DIBUKA' : 'TUTUP ' }}</span>
                     <h1 class="hero-title mb-4">Wujudkan Generasi <br><span class="text-warning">Cerdas &
                             Berakhlak</span></h1>
                     <p class="lead mb-5 opacity-90">Satu sistem terpadu untuk pendaftaran seluruh lembaga pendidikan di
@@ -75,26 +75,29 @@
         <div class="row g-4 text-center">
             <div class="col-6 col-md-3">
                 <div class="stat-box shadow">
-                    <div class="stat-number">5</div>
-                    <div class="small fw-bold text-muted uppercase">Lembaga</div>
+                    <div class="stat-number">{{ $stastistik['total_pendidikan_formal'] }}</div>
+                    <div class="small fw-bold text-muted uppercase">Lembaga Pendidikan Formal</div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="stat-box shadow">
-                    <div class="stat-number">1.2k</div>
+                    <div class="stat-number">{{ $stastistik['total_pendaftar'] }}</div>
                     <div class="small fw-bold text-muted">Pendaftar</div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="stat-box shadow">
-                    <div class="stat-number">350</div>
-                    <div class="small fw-bold text-muted">Santri Baru</div>
+                    <div class="stat-number">{{ $stastistik['total_unit_ponpes'] }}</div>
+                    <div class="small fw-bold text-muted">Unit Pondok Pesantren</div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="stat-box shadow">
-                    <div class="stat-number">24/7</div>
-                    <div class="small fw-bold text-muted">Support</div>
+                    <div class="stat-number">0</div>
+                    <div class="small fw-bold text-muted">Pendidik & ustadz</div>
+                    <small style="color: #6c757d; font-style: italic;">
+                        *fitur dalam pengembangan
+                    </small>
                 </div>
             </div>
         </div>
@@ -143,7 +146,7 @@
                                 {{ $lembaga->deskripsi ?? 'Pendidikan berkualitas berbasis nilai Islami.' }}</p>
                             <hr>
 
-                            <<div class="d-flex justify-content-between mb-3">
+                            <div class="d-flex justify-content-between mb-3">
                                 <span class="small text-muted">
                                     Kuota:
                                     <strong>{{ $gelombang->kuota ?? '-' }}</strong>
@@ -165,7 +168,6 @@
                                 <button class="btn btn-secondary fw-bold" disabled>Belum Tersedia</button>
                             @endif
 
-                            <a href="#" class="btn btn-outline-secondary btn-sm">Brosur & Biaya</a>
                         </div>
                     </div>
             </div>

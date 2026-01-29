@@ -9,3 +9,15 @@ $table->enum('status_pendaftaran', [
     'dibatalkan',
     '', 
 ])->default('pendaftar');
+
+
+
+$table->enum('status_berkas', [
+    'belum',                // belum isi berkas
+    'pending',              // sudah isi / mengunggu verifikasi admin
+    'lulus_verifikasi',     // sudah diverifikasi admin
+    'batal',                // dibatalkan
+
+])->default('belum');
+
+

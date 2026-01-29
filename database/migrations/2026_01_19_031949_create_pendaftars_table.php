@@ -48,6 +48,7 @@ return new class extends Migration
             $table->string('status_sekolah');
 
             $table->string('status_pendaftaran')->default('pending');
+            $table->string('status_berkas')->default('belum');
             $table->timestamps();
         });
     }

@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('pondoks', function (Blueprint $table) {
+        Schema::create('pondoks', function (Blueprint $table) {
             $table->id();
             $table->string('kode_pondok');
             $table->string('nama_pondok');
             $table->string('yayasan_mitra')->nullable();
-            $table->string('jenis'); 
+            $table->string('jenis');
             $table->string('pengasuh')->nullable();
             $table->boolean('is_aktif')->default(true);
             $table->timestamps();
@@ -28,6 +28,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('pondoks');
+        Schema::enableForeignKeyConstraints();
+
     }
 };
