@@ -19,7 +19,7 @@ class DaftarUlang extends Model
         'keterangan'
     ];
 
-    public function pendaftaran()
+    public function pendaftar()
     {
         return $this->belongsTo(Pendaftar::class, 'pendaftar_id');
     }

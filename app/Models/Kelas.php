@@ -14,4 +14,9 @@ class Kelas extends Model
     {
         return $this->hasMany(Rombel::class);
     }
+
+    public function siswa() 
+    {
+        return $this->hasMany(Siswa::class);
+    }
 }

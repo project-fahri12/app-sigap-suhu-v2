@@ -60,9 +60,9 @@
                 class="nav-link {{ request()->routeIs('adminsekolah.verifikasi-berkas.index') ? 'active' : '' }}">
                 <i class="fas fa-check-double"></i> Verifikasi Berkas
             </a>
-            <a href="#" class="nav-link">
+            {{-- <a href="#" class="nav-link">
                 <i class="fas fa-desktop"></i> Monitoring Pendaftar
-            </a>
+            </a> --}}
             <a href="{{ route('adminsekolah.gelombang-ppdb.index') }}"
                 class="nav-link {{ request()->routeIs('adminsekolah.gelombang-ppdb.index') ? 'active' : '' }}">
                 <i class="fas fa-calendar-alt"></i> Informasi Gelombang
@@ -89,7 +89,7 @@
             </a>
 
             <div class="nav-header">Laporan</div>
-            <a href="#" class="nav-link">
+            <a href="{{ route('adminsekolah.laporan-sekolah') }}" class="nav-link {{ request()->routeIs('adminsekolah.laporan-sekolah') ? 'active' : '' }}">
                 <i class="fas fa-print"></i> Laporan PPDB
             </a>
         @endif

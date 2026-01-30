@@ -36,6 +36,11 @@ class Pendaftar extends Model
         return $this->hasOne(InformasiKontak::class);
     }
 
+    public function wali() 
+    {
+        return $this->hasOne(OrangTua::class, 'pendaftaran_id');
+    }
+
     public function berkas()
     {
         return $this->hasMany(BerkasPath::class, 'pendaftar_id', 'id');
@@ -61,4 +66,6 @@ class Pendaftar extends Model
     {
         return $this->hasOne(User::class);
     }
+    
+    
 }

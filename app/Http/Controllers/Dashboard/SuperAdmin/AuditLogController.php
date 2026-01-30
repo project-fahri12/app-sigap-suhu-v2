@@ -2,42 +2,50 @@
 
 namespace App\Http\Controllers\Dashboard\SuperAdmin;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\AuditLog;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AuditLogController extends Controller
 {
-    public function index()
+     public function index(Request $request)
     {
-        // Mengambil 20 log terbaru beserta data user-nya
-        $logs = AuditLog::with('user')->latest()->paginate(20);
-
+        // Ambil 50 data terbaru untuk loading pertama
+        $logs = AuditLog::with('user')->latest()->limit(50)->get();
         return view('dashboard.superadmin.audit-log.index', compact('logs'));
     }
 
     public function getLatest(Request $request)
     {
-        $lastId = $request->get('last_id');
+        $query = AuditLog::with('user')->where('id', '>', $request->last_id);
 
-        // Ambil data yang LEBIH BARU dari ID terakhir di browser user
-        $newLogs = AuditLog::with('user')
-            ->where('id', '>', $lastId)
-            ->orderBy('id', 'asc') // Penting agar ID terbaru ada di urutan terakhir koleksi
-            ->get();
-
-        if ($newLogs->isEmpty()) {
-            return response()->json(['count' => 0]);
+        // Filter pencarian di sisi server untuk data baru
+        if ($request->search) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('description', 'LIKE', "%{$search}%")
+                  ->orWhere('ip_address', 'LIKE', "%{$search}%")
+                  ->orWhereHas('user', function($u) use ($search) {
+                      $u->where('name', 'LIKE', "%{$search}%");
+                  });
+            });
         }
 
-        // Ambil ID terbesar dari data baru yang ditemukan
-        $actualNewLastId = $newLogs->max('id');
+        $logs = $query->latest()->get();
 
         return response()->json([
-            'count' => $newLogs->count(),
-            // Kita reverse saat tampil di view agar yang paling baru di atas
-            'html' => view('dashboard.superadmin.audit-log._list_rows', ['logs' => $newLogs->reverse()])->render(),
-            'new_last_id' => $actualNewLastId,
+            'count' => $logs->count(),
+            'new_last_id' => $logs->first()->id ?? $request->last_id,
+            'html' => view('dashboard.superadmin.audit-log._list_rows', compact('logs'))->render()
         ]);
     }
+
+    public function clear()
+    {
+        AuditLog::truncate();
+        return response()->json(['status' => 'success']);
+    }   
 }

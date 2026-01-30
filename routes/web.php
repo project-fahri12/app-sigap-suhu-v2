@@ -6,7 +6,6 @@ use App\Http\Controllers\Dashboard\AdminPondok\AsramaController;
 use App\Http\Controllers\Dashboard\AdminPondok\DaftarSantriController;
 use App\Http\Controllers\Dashboard\AdminPondok\DashboardAdminPondokController;
 use App\Http\Controllers\Dashboard\AdminPondok\LaporanPondokController;
-use App\Http\Controllers\Dashboard\AdminPondok\LogPindahKamarController;
 use App\Http\Controllers\Dashboard\AdminPondok\PlottingKamar;
 use App\Http\Controllers\Dashboard\AdminPondok\RomkamController;
 use App\Http\Controllers\Dashboard\AdminSekolah\DashboardAdminSekolahController;
@@ -94,6 +93,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         // --- Audit & Rekap ---
         Route::get('/audit-log', [AuditLogController::class, 'index'])->name('audit.index');
         Route::get('/audit-log/latest', [AuditLogController::class, 'getLatest'])->name('audit.getLatest');
+        Route::delete('/audit-log/clear', [AuditLogController::class, 'clear'])->name('audit.clear');
+        Route::get('/audit-log/export/{type}', [AuditLogController::class, 'export'])->name('audit.export');
         Route::get('/rekap-pendaftaran', [RekapPendaftaranController::class, 'index'])->name('rekap.index');
         Route::get('/laporan-global', [RekapPendaftaranController::class, 'rekapGlobal'])->name('rekap-global.index');
     });
@@ -105,11 +106,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::get('verifikasi-berkas', [VerifikasiBerkasController::class, 'index'])->name('verifikasi-berkas.index');
         Route::patch('verifikasi-berkas/update-item/{id}', [VerifikasiBerkasController::class, 'updateItem'])->name('verifikasi-berkas.update-item');
         Route::put('verifikasi-berkas/final/{id}', [VerifikasiBerkasController::class, 'updateFinal'])->name('verifikasi-berkas.final');
-        Route::resource('data-siswa', DataSiswaController::class);
+        Route::get('data-siswa', [DataSiswaController::class, 'index'])->name('data-siswa.index');
         Route::resource('kelola-rombel', RombelController::class);
         Route::resource('kelola-kelas', KelasController::class);
         Route::resource('penempatan-rombel', PenempatanRombelController::class);
         Route::get('laporan-sekolah', [LaporanSekolahController::class, 'index'])->name('laporan-sekolah');
+        Route::get('/data-siswa/export', [DataSiswaController::class, 'export'])
+            ->name('data-siswa.export');
 
     });
 

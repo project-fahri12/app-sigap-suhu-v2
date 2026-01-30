@@ -18,9 +18,15 @@
                             </div>
                         </div>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-outline-success rounded-pill px-4" onclick="exportData('Excel')">
-                                <i class="fas fa-file-excel me-1"></i> Export
-                            </button>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-success rounded-pill px-4 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-file-excel me-1"></i> Export
+                                </button>
+                                <ul class="dropdown-menu border-0 shadow-sm">
+                                    <li><a class="dropdown-item" href="javascript:void(0)" onclick="exportData('full')">Export Semua Siswa</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0)" onclick="exportData('baru')">Export Siswa Baru (Aktif)</a></li>
+                                </ul>
+                            </div>
                             <button class="btn btn-success rounded-pill px-4" onclick="window.print()">
                                 <i class="fas fa-print me-1"></i> Cetak Laporan
                             </button>
@@ -34,16 +40,8 @@
             <div class="col-xl-12">
                 <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden">
                     <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between">
-                        <h6 class="fw-bold mb-0">Tren Pendaftaran vs Daftar Ulang (30 Hari Terakhir)</h6>
-                        <div class="dropdown">
-                            <button class="btn btn-light btn-sm dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown">
-                                Januari 2026
-                            </button>
-                            <ul class="dropdown-menu border-0 shadow-sm">
-                                <li><a class="dropdown-item" href="#">Desember 2025</a></li>
-                                <li><a class="dropdown-item" href="#">Januari 2026</a></li>
-                            </ul>
-                        </div>
+                        <h6 class="fw-bold mb-0">Tren Pendaftaran vs Daftar Ulang Lunas (7 Hari Terakhir)</h6>
+                        <span class="badge bg-primary-subtle text-primary rounded-pill">{{ date('F Y') }}</span>
                     </div>
                     <div class="card-body">
                         <div style="height: 350px;">
@@ -61,7 +59,7 @@
                     <div class="mb-4">
                         <div class="d-flex justify-content-between mb-1">
                             <span class="small text-muted">Total Pendaftar</span>
-                            <span class="fw-bold">452</span>
+                            <span class="fw-bold">{{ $totalPendaftar }}</span>
                         </div>
                         <div class="progress" style="height: 8px;">
                             <div class="progress-bar bg-primary" style="width: 100%"></div>
@@ -70,23 +68,25 @@
                     <div class="mb-4">
                         <div class="d-flex justify-content-between mb-1">
                             <span class="small text-muted">Daftar Ulang (Lunas)</span>
-                            <span class="fw-bold">312</span>
+                            <span class="fw-bold">{{ $lunasDaftarUlang }}</span>
                         </div>
+                        @php $persenLunas = $totalPendaftar > 0 ? ($lunasDaftarUlang / $totalPendaftar) * 100 : 0; @endphp
                         <div class="progress" style="height: 8px;">
-                            <div class="progress-bar bg-success" style="width: 69%"></div>
+                            <div class="progress-bar bg-success" style="width: {{ $persenLunas }}%"></div>
                         </div>
                     </div>
                     <div class="mb-4">
                         <div class="d-flex justify-content-between mb-1">
                             <span class="small text-muted">Belum Verifikasi Berkas</span>
-                            <span class="fw-bold text-danger">45</span>
+                            <span class="fw-bold text-danger">{{ $belumVerifikasi }}</span>
                         </div>
+                        @php $persenBelum = $totalPendaftar > 0 ? ($belumVerifikasi / $totalPendaftar) * 100 : 0; @endphp
                         <div class="progress" style="height: 8px;">
-                            <div class="progress-bar bg-danger" style="width: 10%"></div>
+                            <div class="progress-bar bg-danger" style="width: {{ $persenBelum }}%"></div>
                         </div>
                     </div>
                     <div class="alert alert-info border-0 rounded-4 mt-auto mb-0">
-                        <small><i class="fas fa-info-circle me-1"></i> Data ini hanya mencakup unit <strong>{{ auth()->user()->sekolah->singkatan ?? 'SMA' }}</strong> saja.</small>
+                        <small><i class="fas fa-info-circle me-1"></i> Data mencakup unit <strong>{{ auth()->user()->sekolah->singkatan ?? 'SMA' }}</strong> tahun ajaran aktif.</small>
                     </div>
                 </div>
             </div>
@@ -108,28 +108,29 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse($dataKelas as $kelas)
                                 <tr>
-                                    <td class="fw-bold">Kelas X (Sepuluh)</td>
-                                    <td class="text-center">60</td>
-                                    <td class="text-center">65</td>
-                                    <td class="text-center text-primary fw-bold">125</td>
+                                    <td class="fw-bold">{{ $kelas->nama_kelas }}</td>
+                                    <td class="text-center">{{ $kelas->laki_laki }}</td>
+                                    <td class="text-center">{{ $kelas->perempuan }}</td>
+                                    <td class="text-center text-primary fw-bold">{{ $kelas->laki_laki + $kelas->perempuan }}</td>
                                     <td>
+                                        @php 
+                                            $kapasitas = 40; // Sesuaikan jika ada kolom kapasitas di tabel kelas
+                                            $totalSiswa = $kelas->laki_laki + $kelas->perempuan;
+                                            $persenIsi = ($totalSiswa / $kapasitas) * 100;
+                                        @endphp
                                         <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-success" style="width: 85%"></div>
+                                            <div class="progress-bar {{ $persenIsi > 90 ? 'bg-danger' : ($persenIsi > 70 ? 'bg-warning' : 'bg-success') }}" 
+                                                 style="width: {{ $persenIsi }}%"></div>
                                         </div>
                                     </td>
                                 </tr>
+                                @empty
                                 <tr>
-                                    <td class="fw-bold">Kelas XI (Sebelas)</td>
-                                    <td class="text-center">55</td>
-                                    <td class="text-center">58</td>
-                                    <td class="text-center text-primary fw-bold">113</td>
-                                    <td>
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-warning" style="width: 75%"></div>
-                                        </div>
-                                    </td>
+                                    <td colspan="5" class="text-center text-muted italic">Belum ada data kelas atau siswa.</td>
                                 </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -167,8 +168,9 @@
     .bg-success-subtle { background-color: #eaf6ed !important; }
     .border-dashed { border-style: dashed !important; border-width: 2px !important; }
     @media print {
-        .btn, .sidebar, .dropdown, .roadmap-v2 { display: none !important; }
-        .card { border: 1px solid #ddd !important; shadow: none !important; }
+        .btn, .sidebar, .dropdown, .roadmap-v2, .card-header .dropdown { display: none !important; }
+        .card { border: 1px solid #ddd !important; box-shadow: none !important; }
+        .content-body { padding: 0 !important; background-color: white !important; }
     }
 </style>
 
@@ -176,24 +178,23 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Chart Logic
         const ctx = document.getElementById('chartLaporanFull').getContext('2d');
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['1 Jan', '5 Jan', '10 Jan', '15 Jan', '20 Jan', '25 Jan', '27 Jan'],
+                labels: {!! json_encode($chartLabels) !!},
                 datasets: [
                     {
                         label: 'Pendaftaran Akun',
-                        data: [50, 80, 150, 200, 320, 410, 452],
+                        data: {!! json_encode($chartDaftar) !!},
                         borderColor: '#0d6efd',
                         backgroundColor: 'rgba(13, 110, 253, 0.1)',
                         fill: true,
                         tension: 0.4
                     },
                     {
-                        label: 'Daftar Ulang Selesai',
-                        data: [20, 40, 90, 120, 210, 280, 312],
+                        label: 'Daftar Ulang Lunas',
+                        data: {!! json_encode($chartLunas) !!},
                         borderColor: '#198754',
                         borderDash: [5, 5],
                         fill: false,
@@ -208,22 +209,24 @@
                     legend: { position: 'bottom' }
                 },
                 scales: {
-                    y: { beginAtZero: true, grid: { borderDash: [2, 2] } }
+                    y: { beginAtZero: true, grid: { borderDash: [2, 2] }, ticks: { stepSize: 1 } }
                 }
             }
         });
 
-        // Export Simulation
-        window.exportData = function(type) {
+        window.exportData = function(mode) {
             Swal.fire({
-                title: 'Export Laporan Unit',
-                text: 'Menyiapkan file laporan pendaftaran untuk {{ auth()->user()->sekolah->singkatan ?? "Unit Ini" }}...',
-                icon: 'info',
-                timer: 2000,
-                showConfirmButton: false,
-                didOpen: () => { Swal.showLoading(); }
-            }).then(() => {
-                Swal.fire('Berhasil!', 'File Laporan-Pendaftaran-' + type + '.xlsx telah diunduh.', 'success');
+                title: 'Konfirmasi Export',
+                text: mode === 'baru' ? "Export data siswa baru tahun ajaran aktif?" : "Export seluruh data siswa di unit ini?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                confirmButtonText: 'Ya, Download'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Pastikan route ini sesuai dengan route export Anda
+                    window.location.href = "{{ route('adminsekolah.data-siswa.export') }}?type=" + mode;
+                }
             });
         };
     });

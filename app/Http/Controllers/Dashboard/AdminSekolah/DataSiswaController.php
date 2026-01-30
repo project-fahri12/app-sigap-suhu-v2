@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Dashboard\AdminSekolah;
 
+use App\Exports\SiswaExport;
 use App\Http\Controllers\Controller;
 use App\Models\Kelas;
 use App\Models\Rombel;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DataSiswaController extends Controller
 {
@@ -48,5 +50,16 @@ class DataSiswaController extends Controller
         }
 
         return view('dashboard.admin-sekolah.data-siswa.index', compact('siswas', 'listKelas', 'listRombel'));
+    }
+
+    public function export()
+    {
+        $sekolah_id = Auth::user()->sekolah_id;
+        $tahun = date('Y');
+
+        return Excel::download(
+            new SiswaExport($sekolah_id),
+            "DATA_SISWA_BARU_TA_ $tahun.xlsx"
+        );
     }
 }
