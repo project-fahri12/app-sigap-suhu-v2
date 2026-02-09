@@ -18,28 +18,24 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->reportable(function (Throwable $e) {
+            // Abaikan error validasi dan 404 agar log tidak penuh sampah
             if ($e instanceof \Illuminate\Validation\ValidationException ||
                 $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
                 return;
             }
 
-            // Catat ke Database
             try {
                 \App\Models\AuditLog::create([
-                    'user_id' => Auth::user() ?? null,
+                    'user_id' => Auth::id(), // Gunakan Auth::id() lebih aman
                     'action' => 'ERROR',
-                    'description' => 'System Crash: '.$e->getMessage(),
+                    // Masukkan detail teknis ke dalam description karena kolom payload tidak ada
+                    'description' => 'System Crash: '.$e->getMessage().' | File: '.$e->getFile().' L:'.$e->getLine(),
+                    'model' => 'System',
+                    'model_id' => 0,
                     'ip_address' => request()->ip(),
-                    'payload' => [
-                        'file' => $e->getFile(),
-                        'line' => $e->getLine(),
-                        'url' => request()->fullUrl(),
-                        'method' => request()->method(),
-                        // 'trace' => substr($e->getTraceAsString(), 0, 500) // Opsional
-                    ],
                 ]);
             } catch (\Exception $fallback) {
-                // Jika database juga error, biarkan Laravel mencatat ke file log standar saja
+                // Jika DB down, Laravel log otomatis ke file storage/logs
             }
         });
     })->create();

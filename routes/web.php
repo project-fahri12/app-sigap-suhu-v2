@@ -137,3 +137,4 @@ Route::middleware(['role:pendaftar', 'auth'])->prefix('pendaftar')->name('pendaf
     Route::resource('/panduan', PanduanController::class);
     Route::resource('/upload-berkas', UploadBerkasController::class);
 });
+

@@ -66,6 +66,7 @@ class PenempatanRombelController extends Controller
             'rombel_id' => 'required|exists:rombels,id',
         ]);
 
+        
         try {
             $rombel = Rombel::findOrFail($request->rombel_id);
             $jenisRombel = strtoupper($rombel->jenis_kelas); // L, P, atau LP
@@ -102,7 +103,7 @@ class PenempatanRombelController extends Controller
             // 4. Jika lolos validasi, lakukan update
             Siswa::whereIn('id', $request->siswa_ids)->update([
                 'rombel_id' => $rombel->id,
-                'kelas_id' => $rombel->kelas_id,
+                'kelas_id' => $rombel->kelas_id,    
             ]);
 
             return response()->json([

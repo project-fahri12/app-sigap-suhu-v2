@@ -37,9 +37,9 @@
             <a href="{{ route('superadmin.rekap.index') }}" class="nav-link {{ request()->routeIs('superadmin.rekap.index') ? 'active' : '' }} ">
                 <i class="fas fa-file-signature"></i> Rekap Pendaftaran
             </a>
-            <a href="{{ route('superadmin.rekap-global.index') }}" class="nav-link {{ request()->routeIs('superadmin.rekap-global.index') ? 'active' : '' }}">
+            {{-- <a href="{{ route('superadmin.rekap-global.index') }}" class="nav-link {{ request()->routeIs('superadmin.rekap-global.index') ? 'active' : '' }}">
                 <i class="fas fa-chart-line"></i> Laporan Global
-            </a>
+            </a> --}}
 
             <div class="nav-header">Sistem</div>
             <a href="{{ route('superadmin.audit.index') }}" class="nav-link {{ request()->routeIs('superadmin.audit.index') ? 'active' : '' }}">

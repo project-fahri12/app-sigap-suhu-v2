@@ -19,29 +19,30 @@ class AuditLogController extends Controller
     }
 
     public function getLatest(Request $request)
-    {
-        $query = AuditLog::with('user')->where('id', '>', $request->last_id);
+{
+    // Menggunakan where agar polling hanya mengambil ID yang lebih besar dari yang ada di layar
+    $query = AuditLog::with('user')->where('id', '>', $request->last_id);
 
-        // Filter pencarian di sisi server untuk data baru
-        if ($request->search) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('description', 'LIKE', "%{$search}%")
-                  ->orWhere('ip_address', 'LIKE', "%{$search}%")
-                  ->orWhereHas('user', function($u) use ($search) {
-                      $u->where('name', 'LIKE', "%{$search}%");
-                  });
-            });
-        }
-
-        $logs = $query->latest()->get();
-
-        return response()->json([
-            'count' => $logs->count(),
-            'new_last_id' => $logs->first()->id ?? $request->last_id,
-            'html' => view('dashboard.superadmin.audit-log._list_rows', compact('logs'))->render()
-        ]);
+    if ($request->search) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('description', 'LIKE', "%{$search}%")
+              ->orWhere('action', 'LIKE', "%{$search}%")
+              ->orWhere('ip_address', 'LIKE', "%{$search}%")
+              ->orWhereHas('user', function($u) use ($search) {
+                  $u->where('name', 'LIKE', "%{$search}%");
+              });
+        });
     }
+
+    $logs = $query->orderBy('id', 'desc')->get();
+
+    return response()->json([
+        'count' => $logs->count(),
+        'new_last_id' => $logs->max('id') ?? $request->last_id, // Ambil ID tertinggi
+        'html' => view('dashboard.superadmin.audit-log._list_rows', compact('logs'))->render()
+    ]);
+}
 
     public function clear()
     {

@@ -1,5 +1,30 @@
 @extends('dashboard.layouts.app')
 
+@push('css')
+   <style>
+    .table-danger-custom {
+        background-color: #fff5f5 !important; /* Latar merah sangat muda */
+        border-left: 4px solid #dc3545 !important; /* Garis merah tegas di kiri */
+    }
+    
+    .table-danger-custom:hover {
+        background-color: #ffebeb !important;
+    }
+
+    /* Animasi getar sedikit untuk baris error baru (opsional) */
+    .table-highlight.table-danger-custom {
+        animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(5px); }
+        50% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="content-body">
     {{-- Header & Live Search --}}
