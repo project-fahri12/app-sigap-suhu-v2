@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    
-
     // Login Pendaftar
     public function authpendaftar()
     {
@@ -21,33 +19,38 @@ class AuthController extends Controller
         return view('auth.login-pendaftar');
     }
 
-   public function storePendaftar(Request $request)
-{
-    $request->validate([
-        'kode_pendaftaran' => 'required|string',
-    ]);
-
-    $user = User::where('pendaftar_id', function ($q) use ($request) {
-            $q->select('id')
-              ->from('pendaftars')
-              ->where('kode_pendaftaran', $request->kode_pendaftaran);
-        })
-        ->where('role', 'pendaftar')
-        ->first();
-
-    if (!$user) {
-        return back()->withErrors([
-            'kode_pendaftaran' => 'Kode pendaftaran tidak ditemukan',
+    public function storePendaftar(Request $request)
+    {
+        // Validasi input: harus angka (numeric)
+        $request->validate([
+            'username' => 'required|numeric',
+        ], [
+            'username.required' => 'NISN/Username tidak boleh kosong',
+            'username.numeric' => 'Input harus berupa angka',
         ]);
+
+        // Cari user berdasarkan username dan role pendaftar
+        $user = User::where('name', $request->username)
+            ->where('role', 'pendaftar')
+            ->first();
+
+        // Jika user tidak ditemukan
+        if (! $user) {
+            return back()->withErrors([
+                'username' => 'Username/NISN tidak ditemukan',
+            ])->withInput(); // withInput agar user tidak perlu ketik ulang jika salah
+        }
+
+        // Proses Login
+        Auth::login($user);
+
+        // Update status jika diperlukan
+        $user->update(['is_aktif' => 'aktif']);
+
+        $request->session()->regenerate();
+
+        return redirect()->route('pendaftar.panduan.index');
     }
-
-    Auth::login($user);
-    $user->update(['is_aktif' => 'aktif']); // ⭐ PENTING
-    $request->session()->regenerate();
-
-    return redirect()->route('pendaftar.panduan.index');
-}
-
 
     // Login Admin / Staff
     public function authadmin()
@@ -59,21 +62,20 @@ class AuthController extends Controller
         return view('auth.login-admin');
     }
 
-    
     public function storeAdmin(Request $request)
     {
         // Validasi
         $request->validate([
-            'login'    => 'required|string',
+            'login' => 'required|string',
             'password' => 'required|string',
         ], [
-            'login.required'    => 'Email wajib diisi.',
+            'login.required' => 'Email wajib diisi.',
             'password.required' => 'Password wajib diisi.',
         ]);
 
         // Login hanya pakai EMAIL (karena username tidak ada di DB)
         $credentials = [
-            'email'    => $request->login,
+            'email' => $request->login,
             'password' => $request->password,
             'is_aktif' => 'aktif',
         ];
@@ -89,40 +91,37 @@ class AuthController extends Controller
         ])->withInput($request->only('login'));
     }
 
-    
     protected function redirectUserByRole()
     {
         $user = Auth::user();
 
         return match ($user->role) {
-            'super-admin'   => redirect()->route('superadmin.dashboard'),
+            'super-admin' => redirect()->route('superadmin.dashboard'),
             'admin-sekolah' => redirect()->route('adminsekolah.dashboard'),
-            'admin-pondok'  => redirect()->route('adminpondok.dashboard'),
+            'admin-pondok' => redirect()->route('adminpondok.dashboard'),
             // 'panitia-ppdb'  => redirect()->route('panitia.dashboard'),
-            'pendaftar'     => redirect()->route('pendaftar.panduan.index'),
-            default         => redirect()->route('home'),
+            'pendaftar' => redirect()->route('pendaftar.panduan.index'),
+            default => redirect()->route('home'),
         };
     }
 
-    
-   public function logout(Request $request)
-{
-    $role = Auth::user()?->role; 
+    public function logout(Request $request)
+    {
+        $role = Auth::user()?->role;
 
-    Auth::logout();
+        Auth::logout();
 
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    if ($role === 'pendaftar') {
+        if ($role === 'pendaftar') {
+            return redirect()
+                ->route('home')
+                ->with('success', 'Berhasil keluar dari sistem.');
+        }
+
         return redirect()
-            ->route('auth.pendaftar')
+            ->route('auth.admin')
             ->with('success', 'Berhasil keluar dari sistem.');
     }
-
-    return redirect()
-        ->route('auth.admin')
-        ->with('success', 'Berhasil keluar dari sistem.');
-}
-
 }

@@ -389,3 +389,58 @@
         width: 100%; /* Tombol tumpuk di mobile */
     }
 }
+
+/* --- FOOTER STYLING --- */
+.main-footer {
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+.text-secondary-light {
+    color: #b0b0b0;
+    line-height: 1.6;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links li a {
+    color: #b0b0b0;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.3s;
+}
+
+.footer-links li a:hover {
+    color: #00c853;
+    padding-left: 5px;
+}
+
+/* Social Media Icons */
+.social-links a {
+    width: 35px;
+    height: 35px;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.social-links a:hover {
+    background-color: #00c853;
+    transform: translateY(-3px);
+}
+
+.copyright-bar {
+    background-color: #151515;
+}
+
+.border-secondary {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
