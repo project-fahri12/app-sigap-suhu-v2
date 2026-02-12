@@ -1,0 +1,202 @@
+ /* --- RESET & DASAR --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        header {
+            position: relative;
+            width: 100%;
+        }
+
+        /* --- TOP BAR (HITAM) --- */
+        .top-bar {
+            background-color: #1a1a1a;
+            padding: 20px 0 60px 0; 
+            color: white;
+        }
+
+        .top-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-area img {
+            width: 45px;
+            height: auto;
+        }
+
+        .brand-info .psb-brand {
+            display: block;
+            color: #00c853;
+            font-size: 22px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.1;
+        }
+
+        .brand-info .instansi-brand {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .contact-area {
+            display: flex;
+            gap: 30px;
+        }
+
+        .contact-box {
+            text-align: right;
+        }
+
+        .contact-box p {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 2px;
+        }
+
+        .phone-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .phone-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .icon-circle {
+            width: 32px;
+            height: 32px;
+            background-color: #262626;
+            border: 1px solid #333;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00c853;
+            font-size: 12px;
+        }
+
+        /* --- NAVIGASI (PUTIH MELAYANG) --- */
+        .main-navigation {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -25px;
+            z-index: 100;
+        }
+
+        .nav-card {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Menu Desktop */
+        .nav-list {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-list li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .nav-list li a:hover, .nav-list li a.active {
+            color: #00c853;
+        }
+
+        .login-button {
+            background-color: #00c853;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        /* Mobile Toggle */
+        .mobile-toggle {
+            display: none;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        /* --- RESPONSIVE BREAKPOINTS --- */
+        
+        /* Tablet & HP */
+        @media (max-width: 992px) {
+            .contact-area { display: none; } /* Sembunyikan kontak di layar kecil agar tidak penuh */
+            
+            .nav-list {
+                display: none; /* Sembunyikan menu asli */
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                padding: 20px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                gap: 15px;
+                border-radius: 0 0 4px 4px;
+            }
+
+            .nav-list.active {
+                display: flex; /* Tampil saat toggle diklik */
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .nav-card {
+                padding: 15px 20px;
+            }
+        }
+
+        /* HP Kecil */
+        @media (max-width: 480px) {
+            .brand-info .psb-brand { font-size: 18px; }
+            .brand-info .instansi-brand { font-size: 9px; }
+            .top-bar { padding-bottom: 50px; }
+            .login-button { padding: 8px 15px; font-size: 11px; }
+        }
