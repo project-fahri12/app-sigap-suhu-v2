@@ -1,4 +1,4 @@
- /* --- RESET & DASAR --- */
+/* --- RESET & DASAR --- */
         * {
             margin: 0;
             padding: 0;
@@ -141,17 +141,6 @@
             color: #00c853;
         }
 
-        .login-button {
-            background-color: #00c853;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 12px;
-            text-transform: uppercase;
-        }
-
         /* Mobile Toggle */
         .mobile-toggle {
             display: none;
@@ -200,3 +189,203 @@
             .top-bar { padding-bottom: 50px; }
             .login-button { padding: 8px 15px; font-size: 11px; }
         }
+
+      /* --- STYLING BANNER --- */
+.banner-outline {
+    border: 2px solid #e0e0e0; /* Garis outline luar */
+    padding: 8px;              /* Jarak antara outline dan gambar */
+    background: #ffffff;
+    border-radius: 12px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.banner-img {
+    border-radius: 8px;        /* Membuat sudut gambar sedikit melengkung */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;         /* Menjaga proporsi gambar dalam frame */
+}
+
+/* --- STYLING BUTTONS --- */
+.btn-custom {
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    border: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+/* Tombol Masuk (Biru/Indigo) */
+.btn-login {
+    background-color: #5c6bc0;
+    color: white;
+}
+
+/* Tombol Daftar (Hijau) */
+.btn-register-small {
+    background-color: #66bb6a;
+    color: white !important;
+}
+
+/* Tombol Pilih Cabang (Biru Muda/Cyan) */
+.btn-info-cabang {
+    background-color: #4fc3f7;
+    color: white !important;
+    padding: 15px; /* Lebih tebal karena berdiri sendiri */
+}
+
+.btn-custom:hover {
+    filter: brightness(90%);
+    transform: translateY(-2px);
+}
+
+/* --- CARD LOGIN --- */
+.login-card-mini {
+    padding: 25px;
+    border-radius: 10px;
+}
+
+/* --- INFO LAYANAN STYLING --- */
+.info-card {
+    transition: transform 0.3s ease;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+.info-card:hover {
+    transform: translateY(-10px);
+}
+
+.info-card .card-header {
+    border: none;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+}
+
+.icon-box-small {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Custom list styling */
+.list-unstyled li i {
+    font-size: 18px;
+}
+
+/* Button outline adjustment */
+.btn-outline-success {
+    border-color: #00c853;
+    color: #00c853;
+}
+
+.btn-outline-success:hover {
+    background-color: #00c853;
+    border-color: #00c853;
+}
+
+/* Mobile responsive adjustment */
+@media (max-width: 768px) {
+    .info-card {
+        margin-bottom: 20px;
+    }
+}
+
+/* --- TUTORIAL SECTION --- */
+.video-container {
+    transition: transform 0.3s ease;
+}
+
+.step-num {
+    flex-shrink: 0;
+    width: 35px;
+    height: 35px;
+    background-color: #5c6bc0;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(92, 107, 192, 0.3);
+}
+
+.step-guide p {
+    line-height: 1.5;
+    color: #444;
+}
+
+/* Penyesuaian Mobile */
+@media (max-width: 991.98px) {
+    .tutorial-section {
+        text-align: center;
+    }
+    .step-num {
+        width: 30px;
+        height: 30px;
+    }
+    .ps-lg-4 {
+        margin-top: 30px;
+        text-align: left;
+    }
+}
+
+/* --- PARALLAX JOIN MINIMALIS --- */
+.parallax-join {
+    position: relative;
+    padding: 80px 0; /* Tinggi section lebih proporsional */
+    background-image: url('https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1920&q=80');
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+}
+
+.parallax-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Overlay lebih gelap agar teks tegas */
+}
+
+.tracking-wider {
+    letter-spacing: 2px;
+    font-size: 1.5rem; /* Ukuran teks tidak kebesaran */
+}
+
+.btn-custom-join {
+    font-weight: 700;
+    font-size: 13px;
+    border-radius: 4px;
+    padding: 12px 25px;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.z-index-1 { z-index: 1; }
+
+/* Mobile Mode */
+@media (max-width: 768px) {
+    .parallax-join {
+        background-attachment: scroll;
+        padding: 60px 0;
+    }
+    .tracking-wider {
+        font-size: 1.2rem;
+    }
+    .btn-custom-join {
+        width: 100%; /* Tombol tumpuk di mobile */
+    }
+}
