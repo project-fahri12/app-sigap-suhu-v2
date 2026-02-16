@@ -16,7 +16,8 @@ use App\Http\Controllers\Dashboard\AdminSekolah\LaporanSekolahController;
 use App\Http\Controllers\Dashboard\AdminSekolah\PenempatanRombelController;
 use App\Http\Controllers\Dashboard\AdminSekolah\RombelController;
 use App\Http\Controllers\Dashboard\AdminSekolah\VerifikasiBerkasController;
-use App\Http\Controllers\Dashboard\Pendaftar\PanduanController;
+use App\Http\Controllers\Dashboard\Pendaftar\DashboardPendaftar;
+use App\Http\Controllers\Dashboard\Pendaftar\DataPendaftar;
 use App\Http\Controllers\Dashboard\Pendaftar\UploadBerkasController;
 use App\Http\Controllers\Dashboard\SuperAdmin\AuditLogController;
 use App\Http\Controllers\Dashboard\SuperAdmin\DaftarUlangController;
@@ -26,19 +27,21 @@ use App\Http\Controllers\Dashboard\SuperAdmin\RekapPendaftaranController;
 use App\Http\Controllers\Dashboard\SuperAdmin\SekolahController;
 use App\Http\Controllers\Dashboard\SuperAdmin\TahunAjaranController;
 use App\Http\Controllers\Dashboard\SuperAdmin\UserManajemenController;
+use App\Http\Controllers\Home\DaftarController;
 use App\Http\Controllers\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 
 // Route Public
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/regist', [HomeController::class, 'regist'])->name('regist');
-Route::post('/regist', [HomeController::class, 'registStore'])->name('regist.store');
+Route::get('/daftar', [DaftarController::class, 'index'])->name('daftar');
+Route::post('/daftar', [DaftarController::class, 'store'])->name('daftar.store');
+// Route::get('/regist', [HomeController::class, 'regist'])->name('regist');
+// Route::post('/regist', [HomeController::class, 'registStore'])->name('regist.store');
 // Route untuk menampilkan halaman sukses pendaftaran
-Route::get('/pendaftaran/success/{kode}', [HomeController::class, 'registSuccess'])->name('pendaftaran.success');
+// Route::get('/pendaftaran/success/{kode}', [HomeController::class, 'registSuccess'])->name('pendaftaran.success');
 
 // Auth
-Route::get('auth/pendaftar', [AuthController::class, 'authpendaftar'])->name('auth.pendaftar');
-Route::post('/login-pendaftar', [AuthController::class, 'storePendaftar'])->name('pendaftar.login.submit');
+Route::post('/login', [AuthController::class, 'storePendaftar'])->name('pendaftar.login.submit');
 Route::get('auth/admin', [AuthController::class, 'authadmin'])->name('auth.admin');
 Route::post('auth/admin', [AuthController::class, 'storeAdmin'])->name('auth.admin.store');
 
@@ -134,7 +137,12 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 // route Dashboad untuk pendaftar
 
 Route::middleware(['role:pendaftar', 'auth'])->prefix('pendaftar')->name('pendaftar.')->group(function () {
-    Route::resource('/panduan', PanduanController::class);
+    Route::get('/dashboard', [DashboardPendaftar::class, 'index'])->name('dashboard');
+    Route::get('/data-pendaftar', [DataPendaftar::class, 'index'])->name('data-pendaftar.index');
+
+    // UBAH KE PUT dan TAMBAHKAN {id}
+    Route::put('/data-pendaftar/update/{id}', [DataPendaftar::class, 'update'])->name('data-pendaftar.update');
+
+    Route::post('/data-pendaftar/finalisasi', [DataPendaftar::class, 'finalisasi'])->name('data-pendaftar.finalisasi');
     Route::resource('/upload-berkas', UploadBerkasController::class);
 });
-

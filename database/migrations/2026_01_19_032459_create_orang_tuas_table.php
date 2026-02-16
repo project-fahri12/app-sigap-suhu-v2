@@ -13,23 +13,23 @@ return new class extends Migration
     {
         Schema::create('orang_tuas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pendaftaran_id')->constrained('pendaftars')->onDelete('cascade');
+            $table->foreignId('pendaftar_id')->constrained('pendaftars')->onDelete('cascade');
 
             // Data Ayah
-            $table->string('nama_ayah');
-            $table->string('nik_ayah', 16);
-            $table->string('pendidikan_terakhir_ayah');
-            $table->string('status_ayah');
-            $table->string('pekerjaan_ayah');
-            $table->string('penghasilan_ayah');
+            $table->string('nama_ayah')->nullable();
+            $table->string('nik_ayah', 16)->nullable();
+            $table->string('pendidikan_terakhir_ayah')->nullable();
+            $table->string('status_ayah')->nullable();
+            $table->string('pekerjaan_ayah')->nullable();
+            $table->string('penghasilan_ayah')->nullable();
 
             // Data Ibu
-            $table->string('nama_ibu');
-            $table->string('nik_ibu', 16);
-            $table->string('pendidikan_terakhir_ibu');
-            $table->string('status_ibu');
-            $table->string('pekerjaan_ibu');
-            $table->string('penghasilan_ibu');
+            $table->string('nama_ibu')->nullable();
+            $table->string('nik_ibu', 16)->nullable();
+            $table->string('pendidikan_terakhir_ibu')->nullable();
+            $table->string('status_ibu')->nullable();
+            $table->string('pekerjaan_ibu')->nullable();
+            $table->string('penghasilan_ibu')->nullable();
 
             $table->timestamps();
         });

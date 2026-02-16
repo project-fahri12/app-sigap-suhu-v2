@@ -9,7 +9,7 @@ class OrangTua extends Model
 {
     use LogsActivity;
     protected $fillable = [
-        'pendaftaran_id',
+        'pendaftar_id',
         'nama_ayah', 'nik_ayah', 'pendidikan_terakhir_ayah', 'status_ayah', 'pekerjaan_ayah', 'penghasilan_ayah',
         'nama_ibu', 'nik_ibu', 'pendidikan_terakhir_ibu', 'status_ibu', 'pekerjaan_ibu', 'penghasilan_ibu',
     ];

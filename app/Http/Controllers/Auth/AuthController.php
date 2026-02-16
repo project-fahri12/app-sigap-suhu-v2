@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -19,47 +20,57 @@ class AuthController extends Controller
         return view('auth.login-pendaftar');
     }
 
+    public function authadmin()
+    {
+        return view('auth.login-admin');
+    }
+
     public function storePendaftar(Request $request)
     {
-        // Validasi input: harus angka (numeric)
-        $request->validate([
-            'username' => 'required|numeric',
+        // 1. Validasi
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|numeric|digits:10', // Menambahkan digits:10 agar lebih ketat
         ], [
-            'username.required' => 'NISN/Username tidak boleh kosong',
-            'username.numeric' => 'Input harus berupa angka',
+            'username.required' => 'NISN tidak boleh kosong',
+            'username.numeric' => 'NISN harus berupa angka',
+            'username.digits' => 'NISN harus berjumlah 10 digit',
         ]);
 
-        // Cari user berdasarkan username dan role pendaftar
-        $user = User::where('name', $request->username)
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first('username'),
+            ], 422);
+        }
+
+        // 2. Cari user berdasarkan kolom NISN
+        // Kita gunakan kolom 'nisn' sesuai struktur database yang kamu kirim tadi
+        $user = User::where('nisn', $request->username)
             ->where('role', 'pendaftar')
             ->first();
 
-        // Jika user tidak ditemukan
         if (! $user) {
-            return back()->withErrors([
-                'username' => 'Username/NISN tidak ditemukan',
-            ])->withInput(); // withInput agar user tidak perlu ketik ulang jika salah
+            return response()->json([
+                'success' => false,
+                'message' => 'NISN tidak terdaftar sebagai pendaftar',
+            ], 404);
         }
 
-        // Proses Login
+        // 3. Proses Login
+        // Menggunakan Auth::login agar session terbentuk
         Auth::login($user);
 
-        // Update status jika diperlukan
+        // Update status menjadi aktif jika diperlukan
         $user->update(['is_aktif' => 'aktif']);
 
+        // Proteksi session fixation
         $request->session()->regenerate();
 
-        return redirect()->route('pendaftar.panduan.index');
-    }
-
-    // Login Admin / Staff
-    public function authadmin()
-    {
-        if (Auth::check()) {
-            return $this->redirectUserByRole();
-        }
-
-        return view('auth.login-admin');
+        return response()->json([
+            'success' => true,
+            'message' => 'Login berhasil, selamat datang!',
+            'redirect' => route('pendaftar.dashboard'),
+        ]);
     }
 
     public function storeAdmin(Request $request)

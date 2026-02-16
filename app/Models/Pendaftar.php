@@ -17,7 +17,7 @@ class Pendaftar extends Model
         'jumlah_saudara', 'berkebutuhan_khusus', 'domisili_santri',
         'alamat_lengkap', 'rt', 'rw', 'provinsi', 'kabupaten',
         'kecamatan', 'desa', 'kode_pos', 'sekolah_asal',
-        'npsn_sekolah', 'status_sekolah', 'status_pendaftaran', 'status_berkas'
+        'npsn_sekolah', 'status_sekolah', 'status_pendaftaran', 'status_berkas', 'last_step'
     ];
 
     // Relasi ke Tahun Ajaran
@@ -28,7 +28,7 @@ class Pendaftar extends Model
 
     public function orangTua()
     {
-        return $this->hasOne(OrangTua::class, 'pendaftaran_id');
+        return $this->hasOne(OrangTua::class, 'pendaftar_id');
     }
 
     public function informasiKontak()
@@ -38,7 +38,7 @@ class Pendaftar extends Model
 
     public function wali() 
     {
-        return $this->hasOne(OrangTua::class, 'pendaftaran_id');
+        return $this->hasOne(OrangTua::class, 'pendaftar_id');
     }
 
     public function berkas()

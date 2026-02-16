@@ -97,9 +97,17 @@
 
         {{-- PENDAFTAR --}}
         @if (auth()->user()->role == 'pendaftar')
-            <a href="{{ route('pendaftar.panduan.index') }}"
+            <a href="{{ route('pendaftar.dashboard') }}"
+                class="nav-link {{ request()->routeIs('pendaftar.dashboard') ? 'active' : '' }}">
+                <i class="fas fa-book"></i> Dashboard
+            </a>
+            {{-- <a href="{{ route('pendaftar.panduan.index') }}"
                 class="nav-link {{ request()->routeIs('pendaftar.panduan*') ? 'active' : '' }}">
                 <i class="fas fa-book"></i> Panduan
+            </a> --}}
+            <a href="{{ route('pendaftar.data-pendaftar.index') }}"
+                class="nav-link {{ request()->routeIs('pendaftar.data-pendaftar*') ? 'active' : '' }}">
+                <i class="fas fa-book"></i> Data Pendaftar
             </a>
             <a href="{{ route('pendaftar.upload-berkas.index') }}"
                 class="nav-link {{ request()->routeIs('pendaftar.upload-berkas*') ? 'active' : '' }}">

@@ -168,11 +168,11 @@ class HomeController extends Controller
         }
     }
 
-    public function registSuccess($kode)
-    {
-        // Cari data pendaftaran berdasarkan kode pendaftaran
-        $pendaftaran = Pendaftar::where('kode_pendaftaran', $kode)->firstOrFail();
+    // public function registSuccess($kode)
+    // {
+    //     // Cari data pendaftaran berdasarkan kode pendaftaran
+    //     $pendaftaran = Pendaftar::where('kode_pendaftaran', $kode)->firstOrFail();
 
-        return view('regist.success', compact('pendaftaran'));
-    }
+    //     return view('regist.success', compact('pendaftaran'));
+    // }
 }

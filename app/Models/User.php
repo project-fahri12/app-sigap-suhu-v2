@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Models;
-
 use App\Traits\LogsActivity;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -21,6 +20,7 @@ class User extends Authenticatable
         'pondok_id',
         'pendaftar_id',
         'is_aktif',
+        'nisn',
     ];
 
     protected $hidden = [
@@ -47,7 +47,7 @@ class User extends Authenticatable
     public function pendaftar()
     {
         // Jika di tabel pendaftars kolomnya adalah user_id
-        return $this->hasOne(Pendaftar::class, 'pendaftar_id', 'id');
+        return $this->belongsTo(Pendaftar::class, 'pendaftar_id', 'id');
     }
 
     // ================= HELPER ROLE =================
@@ -73,5 +73,4 @@ class User extends Authenticatable
 
         return 'PENDAFTAR';
     }
-
 }

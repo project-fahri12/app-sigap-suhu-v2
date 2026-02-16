@@ -1,11 +1,13 @@
 <?php
 
 $table->enum('status_pendaftaran', [
-    'pendaftar',              // isi data awal
+    'draft',              //mengisi awal 
+    'pending,',           // sudah finalisasi data
+    'pendaftar',          // isi data awal
     'pending',            // upload berkas
     'lulus_verifikasi',   // admin verifikasi berkas
     'tidak_lulus',        // gagal verifikasi
-    'diterima',            // diterima final
+    'diterima',           // diterima final
     'dibatalkan',
     '', 
 ])->default('pendaftar');
