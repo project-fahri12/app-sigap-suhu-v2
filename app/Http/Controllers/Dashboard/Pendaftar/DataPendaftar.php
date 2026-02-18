@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Pendaftar;
 
 use App\Http\Controllers\Controller;
+use App\Models\BerkasPath;
 use App\Models\Pendaftar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,22 +15,24 @@ class DataPendaftar extends Controller
      * Menampilkan halaman formulir pendaftaran
      */
     public function index()
-    {
-        // Ambil data pendaftar berdasarkan User yang login
-        $user = Auth::user();
-        $pendaftar = Pendaftar::with(['orangTua', 'wali', 'informasiKontak'])->find($user->pendaftar_id);
+{
+    $user = Auth::user();
+    $pendaftar = Pendaftar::with(['orangTua', 'wali', 'informasiKontak', 'berkas', 'sekolah', 'pondok'])->find($user->pendaftar_id);
 
-        if (!$pendaftar) {
-            return redirect()->route('logout')->with('error', 'Data pendaftaran tidak ditemukan.');
-        }
-
-        // Jika status sudah pending/dikunci, user tidak boleh edit lagi (Opsional)
-        // if ($pendaftar->status_pendaftaran !== 'draft') {
-        //     return redirect()->route('pendaftar.dashboard')->with('info', 'Pendaftaran Anda sudah difinalisasi.');
-        // }
-
-        return view('dashboard.pendaftar.data-pendaftar', compact('pendaftar'));
+    if (!$pendaftar) {
+        return redirect()->route('logout')->with('error', 'Data pendaftaran tidak ditemukan.');
     }
+
+    // Ambil object berkas
+    $berkas_foto = BerkasPath::where('pendaftar_id', $user->pendaftar_id)
+                ->where('jenis_berkas', 'foto')
+                ->first();
+
+    // Ambil hanya path_file nya saja jika ada
+    $pas_foto = $berkas_foto ? $berkas_foto->path_file : null;
+
+    return view('dashboard.pendaftar.data-pendaftar', compact('pendaftar', 'pas_foto'));
+}
 
     /**
      * Menyimpan progres setiap tab (via AJAX Next)
@@ -138,4 +141,5 @@ class DataPendaftar extends Controller
             ], 500);
         }
     }
+
 }

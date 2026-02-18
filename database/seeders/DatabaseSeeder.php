@@ -28,9 +28,9 @@ class DatabaseSeeder extends Seeder
         // 1. Data Pondok
         // ------------------------------
         $listPondok = [
-            ['kode' => 'PDK-01', 'nama' => 'Pondok Subulul Huda Induk', 'jenis' => 'Salafiyah', 'pengasuh' => 'KH. Ahmad Dahlan'],
-            ['kode' => 'PDK-02', 'nama' => 'Pondok Al-Aminah', 'jenis' => 'Modern', 'pengasuh' => 'Nyai Hj. Siti Aminah'],
-            ['kode' => 'PDK-03', 'nama' => 'Pondok Al-Mardiyah', 'jenis' => 'Tahfidz', 'pengasuh' => 'Ustadz H. Abdullah'],
+            ['kode' => 'PDK-01', 'nama' => 'Pondok Subulul Huda Induk', 'jenis' => 'L', 'pengasuh' => 'KH. Ahmad Dahlan'],
+            ['kode' => 'PDK-02', 'nama' => 'Pondok Al-Aminah', 'jenis' => 'P', 'pengasuh' => 'Nyai Hj. Siti Aminah'],
+            ['kode' => 'PDK-03', 'nama' => 'Pondok Al-Mardiyah', 'jenis' => 'LP', 'pengasuh' => 'Ustadz H. Abdullah'],
         ];
 
         $pondokIds = [];

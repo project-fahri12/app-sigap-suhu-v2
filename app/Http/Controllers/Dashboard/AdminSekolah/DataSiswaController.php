@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard\AdminSekolah;
 use App\Exports\SiswaExport;
 use App\Http\Controllers\Controller;
 use App\Models\Kelas;
+use App\Models\Pendaftar;
 use App\Models\Rombel;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
@@ -62,4 +63,39 @@ class DataSiswaController extends Controller
             "DATA_SISWA_BARU_TA_ $tahun.xlsx"
         );
     }
+
+    public function calonSiswa(Request $request)
+{
+    $sekolahId = Auth::user()->sekolah_id;
+
+    // Ambil pendaftar berdasarkan sekolah_id dan status belum diterima
+    $query = Pendaftar::where('sekolah_id', $sekolahId)
+        ->where('status_pendaftaran', '!=', 'diterima')
+        ->where(function($q) {
+            // Filter: Tampilkan yang BELUM ADA di tabel daftar_ulangs
+            // ATAU yang SUDAH ADA tapi status_pembayaran-nya BUKAN 'lunas'
+            $q->whereDoesntHave('daftarUlang') 
+              ->orWhereHas('daftarUlang', function($queryDU) {
+                  $queryDU->where('status_pembayaran', '!=', 'lunas');
+              });
+        })
+        ->with(['daftarUlang', 'pondok']); // Eager load relasi
+
+    // Live Search Logic
+    if ($request->search) {
+        $search = $request->search;
+        $query->where(function($q) use ($search) {
+            $q->where('nama_lengkap', 'like', "%$search%")
+              ->orWhere('kode_pendaftaran', 'like', "%$search%");
+        });
+    }
+
+    $pendaftar = $query->latest()->paginate(20);
+
+    if ($request->ajax()) {
+        return view('dashboard.admin-sekolah.calon-siswa._table', compact('pendaftar'))->render();
+    }
+
+    return view('dashboard.admin-sekolah.calon-siswa.index', compact('pendaftar'));
+}
 }

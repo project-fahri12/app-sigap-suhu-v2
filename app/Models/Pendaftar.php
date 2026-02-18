@@ -17,7 +17,7 @@ class Pendaftar extends Model
         'jumlah_saudara', 'berkebutuhan_khusus', 'domisili_santri',
         'alamat_lengkap', 'rt', 'rw', 'provinsi', 'kabupaten',
         'kecamatan', 'desa', 'kode_pos', 'sekolah_asal',
-        'npsn_sekolah', 'status_sekolah', 'status_pendaftaran', 'status_berkas', 'last_step'
+        'npsn_sekolah', 'status_sekolah', 'status_pendaftaran', 'status_berkas', 'last_step', 'pilih_lembaga'
     ];
 
     // Relasi ke Tahun Ajaran
@@ -65,6 +65,16 @@ class Pendaftar extends Model
     public function user()
     {
         return $this->hasOne(User::class);
+    }
+
+    public function sekolah()
+    {
+        return $this->belongsTo(Sekolah::class);
+    }
+    
+    public function pondok()
+    {
+        return $this->belongsTo(Pondok::class);
     }
     
     

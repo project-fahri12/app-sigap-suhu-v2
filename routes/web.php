@@ -18,6 +18,7 @@ use App\Http\Controllers\Dashboard\AdminSekolah\RombelController;
 use App\Http\Controllers\Dashboard\AdminSekolah\VerifikasiBerkasController;
 use App\Http\Controllers\Dashboard\Pendaftar\DashboardPendaftar;
 use App\Http\Controllers\Dashboard\Pendaftar\DataPendaftar;
+use App\Http\Controllers\Dashboard\Pendaftar\SekolahdanPondokController;
 use App\Http\Controllers\Dashboard\Pendaftar\UploadBerkasController;
 use App\Http\Controllers\Dashboard\SuperAdmin\AuditLogController;
 use App\Http\Controllers\Dashboard\SuperAdmin\DaftarUlangController;
@@ -110,6 +111,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::patch('verifikasi-berkas/update-item/{id}', [VerifikasiBerkasController::class, 'updateItem'])->name('verifikasi-berkas.update-item');
         Route::put('verifikasi-berkas/final/{id}', [VerifikasiBerkasController::class, 'updateFinal'])->name('verifikasi-berkas.final');
         Route::get('data-siswa', [DataSiswaController::class, 'index'])->name('data-siswa.index');
+        Route::get('calon-siswa', [DataSiswaController::class, 'calonSiswa'])->name('calon-siswa.index');
         Route::resource('kelola-rombel', RombelController::class);
         Route::resource('kelola-kelas', KelasController::class);
         Route::resource('penempatan-rombel', PenempatanRombelController::class);
@@ -139,10 +141,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 Route::middleware(['role:pendaftar', 'auth'])->prefix('pendaftar')->name('pendaftar.')->group(function () {
     Route::get('/dashboard', [DashboardPendaftar::class, 'index'])->name('dashboard');
     Route::get('/data-pendaftar', [DataPendaftar::class, 'index'])->name('data-pendaftar.index');
-
-    // UBAH KE PUT dan TAMBAHKAN {id}
     Route::put('/data-pendaftar/update/{id}', [DataPendaftar::class, 'update'])->name('data-pendaftar.update');
-
     Route::post('/data-pendaftar/finalisasi', [DataPendaftar::class, 'finalisasi'])->name('data-pendaftar.finalisasi');
+    Route::resource('/sekolah-pondok', SekolahdanPondokController::class);
     Route::resource('/upload-berkas', UploadBerkasController::class);
 });

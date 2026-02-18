@@ -34,7 +34,8 @@
             </a>
 
             <div class="nav-header">Monitoring & Laporan</div>
-            <a href="{{ route('superadmin.rekap.index') }}" class="nav-link {{ request()->routeIs('superadmin.rekap.index') ? 'active' : '' }} ">
+            <a href="{{ route('superadmin.rekap.index') }}"
+                class="nav-link {{ request()->routeIs('superadmin.rekap.index') ? 'active' : '' }} ">
                 <i class="fas fa-file-signature"></i> Rekap Pendaftaran
             </a>
             {{-- <a href="{{ route('superadmin.rekap-global.index') }}" class="nav-link {{ request()->routeIs('superadmin.rekap-global.index') ? 'active' : '' }}">
@@ -42,7 +43,8 @@
             </a> --}}
 
             <div class="nav-header">Sistem</div>
-            <a href="{{ route('superadmin.audit.index') }}" class="nav-link {{ request()->routeIs('superadmin.audit.index') ? 'active' : '' }}">
+            <a href="{{ route('superadmin.audit.index') }}"
+                class="nav-link {{ request()->routeIs('superadmin.audit.index') ? 'active' : '' }}">
                 <i class="fas fa-shield-alt"></i> Audit Log
             </a>
         @endif
@@ -60,9 +62,9 @@
                 class="nav-link {{ request()->routeIs('adminsekolah.verifikasi-berkas.index') ? 'active' : '' }}">
                 <i class="fas fa-check-double"></i> Verifikasi Berkas
             </a>
-            {{-- <a href="#" class="nav-link">
+            <a href="{{ route('adminsekolah.calon-siswa.index') }}" class="nav-link  {{ request()->routeIs('adminsekolah.calon-siswa.index') ? 'active' : '' }}">
                 <i class="fas fa-desktop"></i> Monitoring Pendaftar
-            </a> --}}
+            </a>
             <a href="{{ route('adminsekolah.gelombang-ppdb.index') }}"
                 class="nav-link {{ request()->routeIs('adminsekolah.gelombang-ppdb.index') ? 'active' : '' }}">
                 <i class="fas fa-calendar-alt"></i> Informasi Gelombang
@@ -71,8 +73,11 @@
             <div class="nav-header">Akademik & Siswa</div>
             <a href="{{ route('adminsekolah.data-siswa.index') }}"
                 class="nav-link {{ request()->routeIs('adminsekolah.data-siswa.index') ? 'active' : '' }}">
-                <i class="fas fa-users"></i> Data Siswa (Dapodik)
+                <i class="fas fa-users"></i>
+                Data Siswa
+                <span class="badge bg-warning text-dark ms-1">Baru</span>
             </a>
+
 
             <div class="nav-header">Rombel & Kelas</div>
             <a href="{{ route('adminsekolah.kelola-kelas.index') }}"
@@ -89,7 +94,8 @@
             </a>
 
             <div class="nav-header">Laporan</div>
-            <a href="{{ route('adminsekolah.laporan-sekolah') }}" class="nav-link {{ request()->routeIs('adminsekolah.laporan-sekolah') ? 'active' : '' }}">
+            <a href="{{ route('adminsekolah.laporan-sekolah') }}"
+                class="nav-link {{ request()->routeIs('adminsekolah.laporan-sekolah') ? 'active' : '' }}">
                 <i class="fas fa-print"></i> Laporan PPDB
             </a>
         @endif
@@ -108,6 +114,10 @@
             <a href="{{ route('pendaftar.data-pendaftar.index') }}"
                 class="nav-link {{ request()->routeIs('pendaftar.data-pendaftar*') ? 'active' : '' }}">
                 <i class="fas fa-book"></i> Data Pendaftar
+            </a>
+            <a href="{{ route('pendaftar.sekolah-pondok.index') }}"
+                class="nav-link {{ request()->routeIs('pendaftar.sekolah-pondok*') ? 'active' : '' }}">
+                <i class="fas fa-book"></i> Sekolah & Pondok
             </a>
             <a href="{{ route('pendaftar.upload-berkas.index') }}"
                 class="nav-link {{ request()->routeIs('pendaftar.upload-berkas*') ? 'active' : '' }}">
@@ -141,7 +151,8 @@
                 <i class="fas fa-users-cog"></i>
                 <span>Plotting Kamar SB</span>
                 @if ($jumlahBelumPlot > 0)
-                    <span class="badge badge-sm bg-danger ms-auto shadow-sm animate__animated animate__pulse animate__infinite"
+                    <span
+                        class="badge badge-sm bg-danger ms-auto shadow-sm animate__animated animate__pulse animate__infinite"
                         style="font-size: 0.7rem; border-radius: 50px;">
                         {{ $jumlahBelumPlot }}
                     </span>
@@ -154,10 +165,10 @@
                 <i class="fas fa-user-graduate"></i> Database Santri
             </a>
 
-             <a href="{{ route('adminpondok.laporan-pondok.index') }}" class="nav-link {{ request()->routeIs('adminpondok.laporan-pondok.index') ? 'active' : '' }} ">
-                <i class="fas fa-file-signature"></i> Laporan Pondok 
+            <a href="{{ route('adminpondok.laporan-pondok.index') }}"
+                class="nav-link {{ request()->routeIs('adminpondok.laporan-pondok.index') ? 'active' : '' }} ">
+                <i class="fas fa-file-signature"></i> Laporan Pondok
             </a>
-        
         @endif
 
 
