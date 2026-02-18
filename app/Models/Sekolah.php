@@ -43,4 +43,7 @@ class Sekolah extends Model
         return $this->hasMany(Santri::class, 'pondok_id', 'id');
     }
 
+
+
+
 }

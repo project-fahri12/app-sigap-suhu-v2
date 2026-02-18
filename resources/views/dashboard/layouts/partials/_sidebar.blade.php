@@ -109,6 +109,10 @@
                 class="nav-link {{ request()->routeIs('pendaftar.data-pendaftar*') ? 'active' : '' }}">
                 <i class="fas fa-book"></i> Data Pendaftar
             </a>
+            <a href="{{ route('pendaftar.pilih-sekolah-pondok.index') }}"
+                class="nav-link {{ request()->routeIs('pendaftar.pilih-sekolah-pondok*') ? 'active' : '' }}">
+                <i class="fas fa-book"></i> Pilih Sekolah & Pondok
+            </a>
             <a href="{{ route('pendaftar.upload-berkas.index') }}"
                 class="nav-link {{ request()->routeIs('pendaftar.upload-berkas*') ? 'active' : '' }}">
                 <i class="fas fa-cloud-upload-alt"></i> Upload Berkas

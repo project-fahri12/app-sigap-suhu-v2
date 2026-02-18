@@ -19,6 +19,7 @@ use App\Http\Controllers\Dashboard\AdminSekolah\VerifikasiBerkasController;
 use App\Http\Controllers\Dashboard\Pendaftar\DashboardPendaftar;
 use App\Http\Controllers\Dashboard\Pendaftar\DataPendaftar;
 use App\Http\Controllers\Dashboard\Pendaftar\UploadBerkasController;
+use App\Http\Controllers\Dashboard\Pendaftar\SekolahDanPondokController;
 use App\Http\Controllers\Dashboard\SuperAdmin\AuditLogController;
 use App\Http\Controllers\Dashboard\SuperAdmin\DaftarUlangController;
 use App\Http\Controllers\Dashboard\SuperAdmin\DashboardSuperAdminController;
@@ -139,10 +140,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 Route::middleware(['role:pendaftar', 'auth'])->prefix('pendaftar')->name('pendaftar.')->group(function () {
     Route::get('/dashboard', [DashboardPendaftar::class, 'index'])->name('dashboard');
     Route::get('/data-pendaftar', [DataPendaftar::class, 'index'])->name('data-pendaftar.index');
-
-    // UBAH KE PUT dan TAMBAHKAN {id}
     Route::put('/data-pendaftar/update/{id}', [DataPendaftar::class, 'update'])->name('data-pendaftar.update');
-
     Route::post('/data-pendaftar/finalisasi', [DataPendaftar::class, 'finalisasi'])->name('data-pendaftar.finalisasi');
     Route::resource('/upload-berkas', UploadBerkasController::class);
+    Route::resource('/pilih-sekolah-pondok', SekolahDanPondokController::class);
 });

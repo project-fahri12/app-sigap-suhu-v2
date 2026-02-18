@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.app')
 
-@if ( $pendaftar->status_pendaftaran == 'draf' )
+@if ( $pendaftar->status_pendaftaran === 'draft' )
     @push('css')
     <style>
         /* Container Stepper */
@@ -357,5 +357,175 @@
     </script>
 @endpush
 @else
-    
+   @section('content')
+    @push('css')
+    <style>
+        /* Kontainer utama untuk scroll vertikal pada detail */
+        .scrollable-detail {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Mempercantik tampilan scrollbar */
+        .scrollable-detail::-webkit-scrollbar {
+            width: 4px;
+        }
+        .scrollable-detail::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .scrollable-detail::-webkit-scrollbar-thumb {
+            background: #198754;
+            border-radius: 10px;
+        }
+
+        /* CSS KHUSUS MOBILE (RESPONSIVE) */
+        @media (max-width: 768px) {
+            /* Membuat Nav Pills bisa di-slide ke samping di HP */
+            .nav-pills-custom {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 5px;
+            }
+            .nav-pills-custom .nav-item {
+                flex: 0 0 auto;
+            }
+            
+            /* Menyesuaikan border dan padding kolom di HP */
+            .border-end {
+                border-end: none !important;
+                border-bottom: 1px solid #dee2e6 !important;
+                margin-bottom: 15px;
+                padding-bottom: 15px;
+            }
+
+            .table td, .table th {
+                white-space: nowrap; /* Mencegah teks turun ke bawah di layar kecil */
+            }
+        }
+    </style>
+    @endpush
+
+    {{-- TAMPILAN JIKA SUDAH DIFINALISASI --}}
+    <div class="card shadow-sm border-0 rounded-4 m-2 m-md-4 overflow-hidden">
+        <div class="card-header bg-success py-3 text-white text-center">
+            <h5 class="mb-0 fw-bold small-mobile"><i class="fas fa-lock me-2"></i> PENDAFTARAN TERKUNCI</h5>
+        </div>
+        <div class="card-body p-3 p-md-4">
+            <div class="row g-4">
+                {{-- KOLOM KIRI: FOTO (DI ATAS SAAT MOBILE) --}}
+                <div class="col-lg-3 text-center border-end">
+                    <div class="d-inline-block p-2 bg-light border rounded shadow-sm mb-3">
+                        <img src="{{ $pendaftar->foto ? asset('storage/'.$pendaftar->foto) : 'https://ui-avatars.com/api/?name='.urlencode($pendaftar->nama_lengkap).'&background=random&size=300' }}" 
+                             alt="Foto Santri" 
+                             class="img-fluid rounded shadow-sm" 
+                             style="width: 120px; height: 160px; object-fit: cover; border: 2px solid #ddd;">
+                    </div>
+                    <h6 class="fw-bold mb-1 small">{{ $pendaftar->nama_lengkap }}</h6>
+                    <span class="badge bg-success mb-3" style="font-size: 0.7rem;">TERVERIFIKASI SISTEM</span>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('pendaftar.dashboard') }}" class="btn btn-primary btn-sm rounded-pill">
+                            <i class="fas fa-home me-1"></i> Beranda
+                        </a>
+                        <a href="#" class="btn btn-outline-success btn-sm rounded-pill">
+                            <i class="fas fa-print me-1"></i> Cetak Kartu
+                        </a>
+                    </div>
+                </div>
+
+                {{-- KOLOM KANAN: DATA --}}
+                <div class="col-lg-9">
+                    <div class="alert alert-success border-0 shadow-sm mb-4 p-2 p-md-3">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle fs-5 me-2 me-md-3"></i>
+                            <div>
+                                <h6 class="alert-heading fw-bold mb-1 small">Pendaftaran Berhasil!</h6>
+                                <p class="mb-0 text-xs" style="font-size: 0.75rem;">Data dikunci & dalam antrean verifikasi. Silakan cetak kartu sebagai bukti.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- {{-- Nav Tab yang bisa di-scroll di Mobile --}}
+                    <ul class="nav nav-pills nav-fill nav-pills-custom mb-3 bg-light p-1 rounded-pill" id="detailTab" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active rounded-pill small fw-bold px-3" data-bs-toggle="tab" data-bs-target="#detail-diri">DIRI</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link rounded-pill small fw-bold px-3" data-bs-toggle="tab" data-bs-target="#detail-ortu">ORTU</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link rounded-pill small fw-bold px-3" data-bs-toggle="tab" data-bs-target="#detail-sekolah">SEKOLAH</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link rounded-pill small fw-bold px-3" data-bs-toggle="tab" data-bs-target="#detail-alamat">ALAMAT</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content border p-2 p-md-3 rounded-3" style="background-color: #fafafa;">
+                        {{-- TAB DATA DIRI --}}
+                        <div class="tab-pane fade show active" id="detail-diri">
+                            <div class="scrollable-detail">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-borderless mb-0 small">
+                                        <tr><th width="35%">NISN</th><td>: {{ $pendaftar->nisn }}</td></tr>
+                                        <tr><th>NIK</th><td>: {{ $pendaftar->nik }}</td></tr>
+                                        <tr><th>TTL</th><td>: {{ $pendaftar->tempat_lahir }}, {{ \Carbon\Carbon::parse($pendaftar->tanggal_lahir)->format('d/m/Y') }}</td></tr>
+                                        <tr><th>JK</th><td>: {{ $pendaftar->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td></tr>
+                                        <tr><th>DOMISILI</th><td>: {{ $pendaftar->domisili_santri }}</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- TAB DATA ORANG TUA --}}
+                        <div class="tab-pane fade" id="detail-ortu">
+                            <div class="scrollable-detail">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-borderless mb-0 small">
+                                        <tr><th width="35%">AYAH</th><td>: {{ $pendaftar->nama_ayah ?? '-' }}</td></tr>
+                                        <tr><th>KERJA AYAH</th><td>: {{ $pendaftar->pekerjaan_ayah ?? '-' }}</td></tr>
+                                        <tr><th>IBU</th><td>: {{ $pendaftar->nama_ibu ?? '-' }}</td></tr>
+                                        <tr><th>KERJA IBU</th><td>: {{ $pendaftar->pekerjaan_ibu ?? '-' }}</td></tr>
+                                        <tr><th>WA ORTU</th><td>: {{ $pendaftar->no_hp_ortu ?? '-' }}</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- TAB SEKOLAH --}}
+                        <div class="tab-pane fade" id="detail-sekolah">
+                            <div class="scrollable-detail">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-borderless mb-0 small">
+                                        <tr><th width="35%">ASAL</th><td>: {{ $pendaftar->sekolah_asal }}</td></tr>
+                                        <tr><th>NPSN</th><td>: {{ $pendaftar->npsn_sekolah }}</td></tr>
+                                        <tr><th>STATUS</th><td>: {{ $pendaftar->status_sekolah }}</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- TAB ALAMAT --}}
+                        <div class="tab-pane fade" id="detail-alamat">
+                            <div class="scrollable-detail">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-borderless mb-0 small">
+                                        <tr><th width="35%">ALAMAT</th><td>: {{ $pendaftar->alamat_lengkap }}</td></tr>
+                                        <tr><th>PROVINSI</th><td>: {{ $pendaftar->provinsi }}</td></tr>
+                                        <tr><th>KAB/KOTA</th><td>: {{ $pendaftar->kabupaten }}</td></tr>
+                                        <tr><th>KEC</th><td>: {{ $pendaftar->kecamatan }}</td></tr>
+                                        <tr><th>DESA</th><td>: {{ $pendaftar->desa }}</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
 @endif

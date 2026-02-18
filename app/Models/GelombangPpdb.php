@@ -41,4 +41,10 @@ class GelombangPPDB extends Model
         return 'TUTUP';
     }
 
+    public function sekolah()
+{
+    return $this->belongsTo(Sekolah::class, 'sekolah_id');
+}
+
+
 }
