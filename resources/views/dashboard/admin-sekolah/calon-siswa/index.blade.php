@@ -4,7 +4,7 @@
 <div class="content-body">
     <div class="mb-3">
         <h5 class="fw-800 text-dark mb-1">Calon Siswa</h5>
-        <p class="text-xs text-muted">Daftar pendaftar yang sedang dalam proses seleksi/pembayaran.</p>
+        <p class="text-xs text-muted">Daftar pendaftar yang sedang dalam proses seleksi atau administrasi.</p>
     </div>
 
     <div class="mb-3">
@@ -13,7 +13,7 @@
                 <i class="fas fa-search text-muted"></i>
             </span>
             <input type="text" id="liveSearch" class="form-control border-0 py-2 text-sm shadow-none" 
-                   placeholder="Ketik nama atau nomor pendaftaran untuk mencari...">
+                   placeholder="Cari nama atau nomor pendaftaran...">
         </div>
     </div>
 
@@ -25,8 +25,7 @@
                         <th class="ps-4">NAMA / ID</th>
                         <th>KONTAK</th>
                         <th>ASRAMA</th>
-                        <th>STATUS</th>
-                        <th class="text-center pe-4">AKSI</th>
+                        <th>STATUS DAFTAR</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">

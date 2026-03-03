@@ -20,7 +20,7 @@ class Sekolah extends Model
     public function gelombang()
     {
         // Menghubungkan Sekolah ke banyak Gelombang PPDB
-        return $this->hasMany(GelombangPPDB::class, 'sekolah_id');
+        return $this->hasMany(GelombangPpdb::class, 'sekolah_id');
     }
 
     public function users()

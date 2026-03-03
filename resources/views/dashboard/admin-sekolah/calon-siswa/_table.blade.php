@@ -6,43 +6,52 @@
     </td>
     <td>
         <div class="text-xs">
-            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $p->no_wa) }}" target="_blank" class="text-success fw-bold text-decoration-none">
-                <i class="fab fa-whatsapp me-1"></i>{{ $p->no_wa }}
-            </a>
+            @if($p->informasiKontak->no_wa)
+                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $p->no_wa) }}" target="_blank" class="text-success fw-bold text-decoration-none">
+                    <i class="fab fa-whatsapp me-1"></i>{{ $p->no_wa }}
+                </a>
+            @else
+                <span class="text-muted small">Tidak ada WA</span>
+            @endif
         </div>
     </td>
     <td>
         <span class="text-xs">{{ $p->pondok->nama_pondok ?? 'Laju' }}</span>
     </td>
     <td>
-        {{-- Logika Status Pembayaran dari Tabel Relasi --}}
-        @if(!$p->daftarUlang)
-            <span class="badge bg-secondary rounded-pill" style="font-size: 9px;">BELUM ADA TAGIHAN</span>
-        @elseif($p->daftarUlang->status_pembayaran == 'lunas')
-            <span class="badge bg-success rounded-pill" style="font-size: 9px;">LUNAS</span>
-        @else
-            <span class="badge bg-danger rounded-pill" style="font-size: 9px;">BELUM BAYAR</span>
-        @endif
-    </td>
-    <td class="pe-4 text-center">
-        <div class="dropdown">
-            <button class="btn btn-light btn-sm border dropdown-toggle text-xs" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
-                AKSI
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end shadow border-0 text-xs">
-                <li><a class="dropdown-item py-2" href="#"><i class="fas fa-eye me-2"></i>Detail</a></li>
-                @if(!$p->daftarUlang)
-                    <li><a class="dropdown-item py-2 text-primary" href="#"><i class="fas fa-plus me-2"></i>Buat Tagihan</a></li>
-                @endif
-                <li><a class="dropdown-item py-2 text-success" href="#"><i class="fas fa-check me-2"></i>Terima Siswa</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item py-2 text-danger" href="#"><i class="fas fa-trash me-2"></i>Hapus</a></li>
-            </ul>
-        </div>
+        @php
+            $status = strtolower($p->status_pendaftaran);
+            // Pemetaan warna berdasarkan status
+            $colors = [
+                'pendaftaran' => 'bg-info-subtle text-info border-info',
+                'seleksi'     => 'bg-warning-subtle text-warning border-warning',
+                'diterima'    => 'bg-success-subtle text-success border-success',
+                'ditolak'     => 'bg-danger-subtle text-danger border-danger',
+            ];
+            $badgeStyle = $colors[$status] ?? 'bg-secondary-subtle text-secondary border-secondary';
+        @endphp
+        <span class="badge {{ $badgeStyle }} border px-2 py-1 rounded-pill text-uppercase" style="font-size: 9px; letter-spacing: 0.5px;">
+            {{ $p->status_pendaftaran }}
+        </span>
     </td>
 </tr>
 @empty
 <tr>
-    <td colspan="5" class="text-center py-4 text-muted text-xs">Data pendaftar tidak ditemukan</td>
+    <td colspan="5" class="text-center py-5">
+        <div class="text-muted">
+            <i class="fas fa-user-slash fa-2x mb-2 opacity-25"></i>
+            <p class="text-xs mb-0">Tidak ada calon siswa yang ditemukan</p>
+        </div>
+    </td>
 </tr>
 @endforelse
+
+@if($pendaftar->hasPages())
+<tr>
+    <td colspan="5" class="p-3 border-0">
+        <div class="d-flex justify-content-center">
+            {{ $pendaftar->links('pagination::bootstrap-4') }}
+        </div>
+    </td>
+</tr>
+@endif

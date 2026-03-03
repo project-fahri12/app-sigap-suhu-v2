@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('pendaftar_id')->constrained('pendaftars')->cascadeOnDelete();
             $table->integer('tagihan');
             $table->integer('dibayar')->default(0);
-            $table->enum('status_pembayaran', ['belum_bayar','dispensasi','lunas',])->default('belum_bayar');
+            $table->enum('status_pembayaran', ['belum_bayar','dispensasi','lunas', 'cicilan'])->default('belum_bayar');
             $table->string('keterangan', 150)->nullable();
             $table->timestamps();
         });

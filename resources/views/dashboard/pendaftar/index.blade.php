@@ -179,8 +179,8 @@
                             <p class="text-xs text-muted mb-0">Info Gelombang 1</p>
                         </div>
                     </div>
-                    @if($statusBerkas == 'lengkap')
-                        <a href="https://chat.whatsapp.com/XXXX" target="_blank" class="btn-wa shadow-sm"><i class="fas fa-link me-1"></i> GABUNG</a>
+                    @if($statusBerkas == 'lulus_verifikasi')
+                        <a href="https://chat.whatsapp.com/6285792336956" target="_blank" class="btn-wa shadow-sm"><i class="fas fa-link me-1"></i> GABUNG</a>
                     @else
                         <button class="btn-wa disabled shadow-sm border-0"><i class="fas fa-lock me-1"></i> TERKUNCI</button>
                     @endif
@@ -192,7 +192,7 @@
                             <p class="text-xs mb-0 opacity-75">Butuh Bantuan?</p>
                             <h6 class="text-xs fw-bold mb-0">Admin PPDB</h6>
                         </div>
-                        <a href="https://wa.me/628123456789" class="btn btn-sm btn-light py-1 px-2 fw-bold text-xs">HUBUNGI</a>
+                        <a href="https://wa.me/6285792336956" class="btn btn-sm btn-light py-1 px-2 fw-bold text-xs">HUBUNGI</a>
                     </div>
                 </div>
             </div>

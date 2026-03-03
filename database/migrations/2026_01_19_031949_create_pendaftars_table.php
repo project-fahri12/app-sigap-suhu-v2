@@ -45,11 +45,12 @@ return new class extends Migration
             $table->string('kode_pos', 10)->nullable();
 
             // Sekolah Asal
-            $table->string('sekolah_asal'); // Wajib di awal
+            $table->string('sekolah_asal'); 
             $table->string('npsn_sekolah')->nullable();
             $table->string('status_sekolah')->nullable();
 
             $table->string('status_pendaftaran')->default('draft');
+            $table->string('pilih_lembaga')->default('belum');
             $table->string('status_berkas')->default('belum');
             $table->string('last_step')->nullable();
             $table->timestamps();

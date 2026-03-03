@@ -68,23 +68,15 @@ class DataSiswaController extends Controller
 {
     $sekolahId = Auth::user()->sekolah_id;
 
-    // Ambil pendaftar berdasarkan sekolah_id dan status belum diterima
+    // Ambil semua pendaftar kecuali yang statusnya 'selesai'
     $query = Pendaftar::where('sekolah_id', $sekolahId)
-        ->where('status_pendaftaran', '!=', 'diterima')
-        ->where(function($q) {
-            // Filter: Tampilkan yang BELUM ADA di tabel daftar_ulangs
-            // ATAU yang SUDAH ADA tapi status_pembayaran-nya BUKAN 'lunas'
-            $q->whereDoesntHave('daftarUlang') 
-              ->orWhereHas('daftarUlang', function($queryDU) {
-                  $queryDU->where('status_pembayaran', '!=', 'lunas');
-              });
-        })
-        ->with(['daftarUlang', 'pondok']); // Eager load relasi
+        ->where('status_pendaftaran', '!=', 'selesai')
+        ->with(['daftarUlang', 'pondok']);
 
-    // Live Search Logic
+    // Live Search
     if ($request->search) {
         $search = $request->search;
-        $query->where(function($q) use ($search) {
+        $query->where(function ($q) use ($search) {
             $q->where('nama_lengkap', 'like', "%$search%")
               ->orWhere('kode_pendaftaran', 'like', "%$search%");
         });

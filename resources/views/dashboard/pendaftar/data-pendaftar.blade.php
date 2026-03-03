@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.app')
 
-@if ($pendaftar->status_pendaftaran == 'draf')
+@if ($pendaftar->status_pendaftaran == 'draft')
     @push('css')
         <style>
             /* Container Stepper */
